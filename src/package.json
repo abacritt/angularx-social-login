@@ -1,6 +1,6 @@
 {
   "name": "angular4-social-login",
-  "version": "0.1.0",
+  "version": "1.0.12",
   "repository": {
     "type": "git",
     "url": "https://github.com/abacritt/angular4-social-login"
@@ -10,7 +10,13 @@
     "email": "jaibatrik@gmail.com"
   },
   "keywords": [
-    "angular"
+    "angular",
+    "angular4",
+    "angular-social-login",
+    "social-authentication",
+    "social-login",
+    "google-authentication",
+    "facebook-authentication"
   ],
   "license": "MIT",
   "bugs": {

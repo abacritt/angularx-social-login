@@ -1,6 +1,6 @@
 {
   "name": "angular4-social-login",
-  "version": "1.0.11",
+  "version": "0.0.1",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -20,7 +20,13 @@
     "email": "jaibatrik@gmail.com"
   },
   "keywords": [
-    "angular"
+    "angular",
+    "angular4",
+    "angular-social-login",
+    "social-authentication",
+    "social-login",
+    "google-authentication",
+    "facebook-authentication"
   ],
   "license": "MIT",
   "bugs": {
