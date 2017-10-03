@@ -232,6 +232,8 @@ var GoogleLoginProvider = (function (_super) {
                             user.name = profile.getName();
                             user.email = profile.getEmail();
                             user.photoUrl = profile.getImageUrl();
+                            user.firstName = profile.getGivenName();
+                            user.lastName = profile.getFamilyName();
                             resolve(user);
                         }
                     });
@@ -314,12 +316,14 @@ var FacebookLoginProvider = (function (_super) {
                 FB.AppEvents.logPageView();
                 FB.getLoginStatus(function (response) {
                     if (response.status === 'connected') {
-                        FB.api('/me?fields=name,email,picture', function (response) {
+                        FB.api('/me?fields=name,email,picture,first_name,last_name', function (response) {
                             var /** @type {?} */ user = new SocialUser();
                             user.id = response.id;
                             user.name = response.name;
                             user.email = response.email;
                             user.photoUrl = "https://graph.facebook.com/" + response.id + "/picture?type=normal";
+                            user.firstName = response.first_name;
+                            user.lastName = response.last_name;
                             resolve(user);
                         });
                     }
@@ -334,12 +338,14 @@ var FacebookLoginProvider = (function (_super) {
         return new Promise(function (resolve, reject) {
             FB.login(function (response) {
                 if (response.authResponse) {
-                    FB.api('/me?fields=name,email,picture', function (response) {
+                    FB.api('/me?fields=name,email,picture,first_name,last_name', function (response) {
                         var /** @type {?} */ user = new SocialUser();
                         user.id = response.id;
                         user.name = response.name;
                         user.email = response.email;
                         user.photoUrl = "https://graph.facebook.com/" + response.id + "/picture?type=normal";
+                        user.firstName = response.first_name;
+                        user.lastName = response.last_name;
                         resolve(user);
                     });
                 }

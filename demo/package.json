@@ -21,8 +21,7 @@
     "@angular/platform-browser": "^4.3.2",
     "@angular/platform-browser-dynamic": "^4.3.2",
     "@angular/router": "^4.3.2",
-    "angular2-social-login": "^3.1.1",
-    "angular4-social-login": "^1.0.9",
+    "angular4-social-login": "^1.0.13",
     "core-js": "^2.4.1",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.16"
