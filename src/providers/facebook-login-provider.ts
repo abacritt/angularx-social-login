@@ -21,7 +21,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             xfbml: true,
             version: 'v2.9'
           });
-          FB.AppEvents.logPageView();
+          // FB.AppEvents.logPageView(); #FIX for #18
 
           FB.getLoginStatus(function (response: any) {
             if (response.status === 'connected') {
