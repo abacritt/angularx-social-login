@@ -7,7 +7,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
 
   public static readonly PROVIDER_ID: string = "FACEBOOK";
 
-  constructor(private clientId: string) { super(); }
+  constructor(private clientId: string, private scope = 'email,public_profile') { super(); }
 
   initialize(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
@@ -60,7 +60,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             resolve(user);
           });
         }
-      }, { scope: 'email,public_profile' });
+      }, {scope: this.scope});
     });
   }
 
