@@ -34,6 +34,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
                 user.photoUrl = "https://graph.facebook.com/" + response.id + "/picture?type=normal";
                 user.firstName = response.first_name;
                 user.lastName = response.last_name;
+                user.authToken = response.authResponse.accessToken;
 
                 resolve(user);
               });
@@ -56,6 +57,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             user.photoUrl = "https://graph.facebook.com/" + response.id + "/picture?type=normal";
             user.firstName = response.first_name;
             user.lastName = response.last_name;
+            user.authToken = response.authResponse.accessToken;
 
             resolve(user);
           });

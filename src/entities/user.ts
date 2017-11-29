@@ -6,4 +6,5 @@ export class SocialUser {
   photoUrl: string;
   firstName: string;
   lastName: string;
+  authToken: string;
 }
