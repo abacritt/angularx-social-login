@@ -7,7 +7,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
   public static readonly PROVIDER_ID: string = "GOOGLE";
 
-  private auth2: any;
+  protected auth2: any;
 
   constructor(private clientId: string) { super(); }
 
