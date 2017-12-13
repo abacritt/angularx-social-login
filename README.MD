@@ -122,6 +122,7 @@ If you are facing issue in building your app with AoT, check [this document](htt
 ## Running the demo app
 
 ```sh
-npm run localdeploy
-cd demo && ng serve
+cd demo
+npm install
+ng serve
 ```
