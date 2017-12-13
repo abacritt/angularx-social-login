@@ -25,7 +25,8 @@ export class FacebookLoginProvider extends BaseLoginProvider {
 
           FB.getLoginStatus(function (response: any) {
             if (response.status === 'connected') {
-              FB.api('/me?fields=name,email,picture,first_name,last_name', (response: any) => {
+                let authResponse = response.authResponse;
+                FB.api('/me?fields=name,email,picture,first_name,last_name', (response: any) => {
                 let user: SocialUser = new SocialUser();
 
                 user.id = response.id;
@@ -34,6 +35,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
                 user.photoUrl = "https://graph.facebook.com/" + response.id + "/picture?type=normal";
                 user.firstName = response.first_name;
                 user.lastName = response.last_name;
+                user.authToken = authResponse.accessToken;
 
                 resolve(user);
               });
@@ -47,6 +49,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
     return new Promise((resolve, reject) => {
       FB.login((response: any) => {
         if (response.authResponse) {
+          let authResponse = response.authResponse;
           FB.api('/me?fields=name,email,picture,first_name,last_name', (response: any) => {
             let user: SocialUser = new SocialUser();
 
@@ -56,6 +59,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             user.photoUrl = "https://graph.facebook.com/" + response.id + "/picture?type=normal";
             user.firstName = response.first_name;
             user.lastName = response.last_name;
+            user.authToken = authResponse.accessToken;
 
             resolve(user);
           });
