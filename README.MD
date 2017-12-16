@@ -1,6 +1,6 @@
-# Angular 4/5 Social Login
+# Angular 4 / 5 Social Login
 
-Social login and authentication module for Angular 4/5. Supports authentication with **Google** and **Facebook**. Can be extended to other providers also.
+Social login and authentication module for Angular 4 / 5. Supports authentication with **Google** and **Facebook**. Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angular4-social-login/).
 
