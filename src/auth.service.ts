@@ -2,20 +2,20 @@ import { Injectable } from '@angular/core';
 
 import { Observable, BehaviorSubject } from 'rxjs';
 
-import { LoginProvider } from "./entities/login-provider";
-import { SocialUser } from "./entities/user";
+import { LoginProvider } from './entities/login-provider';
+import { SocialUser } from './entities/user';
 
 export interface AuthServiceConfigItem {
-  id: string,
-  provider: LoginProvider
+  id: string;
+  provider: LoginProvider;
 }
 
 export class AuthServiceConfig {
   providers: Map<string, LoginProvider> = new Map<string, LoginProvider>();
 
   constructor(providers: AuthServiceConfigItem[]) {
-    for (var i = 0; i < providers.length; i++) {
-      var element = providers[i];
+    for (let i = 0; i < providers.length; i++) {
+      let element = providers[i];
       this.providers.set(element.id, element.provider);
     }
   }
@@ -24,7 +24,8 @@ export class AuthServiceConfig {
 @Injectable()
 export class AuthService {
 
-  private static readonly LOGIN_PROVIDER_NOT_FOUND: string = "Login provider not found";
+  private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND = 'Login provider not found';
+  private static readonly ERR_NOT_LOGGED_IN = 'Not logged in';
 
   private providers: Map<string, LoginProvider>;
 
@@ -62,24 +63,28 @@ export class AuthService {
           this._authState.next(user);
         });
       } else {
-        reject(AuthService.LOGIN_PROVIDER_NOT_FOUND);
+        reject(AuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
       }
     });
   }
 
   signOut(): Promise<any> {
     return new Promise((resolve, reject) => {
-      let providerId = this._user.provider;
-      let providerObject = this.providers.get(providerId);
-      if (providerObject) {
-        providerObject.signOut().then(() => {
-          resolve();
-
-          this._user = null;
-          this._authState.next(null);
-        });
+      if (!this._user) {
+        reject(AuthService.ERR_NOT_LOGGED_IN);
       } else {
-        reject(AuthService.LOGIN_PROVIDER_NOT_FOUND);
+        let providerId = this._user.provider;
+        let providerObject = this.providers.get(providerId);
+        if (providerObject) {
+          providerObject.signOut().then(() => {
+            resolve();
+
+            this._user = null;
+            this._authState.next(null);
+          });
+        } else {
+          reject(AuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
+        }
       }
     });
   }
