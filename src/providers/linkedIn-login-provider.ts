@@ -24,7 +24,12 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
             this.loadScript(LinkedInLoginProvider.PROVIDER_ID,
                 '//platform.linkedin.com/in.js',
                 () => {
-                    resolve();
+                    let that = this;
+                    setTimeout(() => {
+                        that.signIn().then(
+                            user => resolve(user)
+                        )
+                    }, 800);
                 }, false, inner_text);
         });
     }
