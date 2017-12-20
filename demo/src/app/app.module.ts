@@ -8,7 +8,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { DemoComponent } from './demo/demo.component';
 
 import { SocialLoginModule } from "angular4-social-login";
-import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'angular4-social-login';
+import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider } from 'angular4-social-login';
 
 let config = new AuthServiceConfig([
   {
@@ -18,7 +18,11 @@ let config = new AuthServiceConfig([
   {
     id: FacebookLoginProvider.PROVIDER_ID,
     provider: new FacebookLoginProvider("561602290896109")
-  }
+  },
+   {
+       id: LinkedInLoginProvider.PROVIDER_ID,
+       provider: new LinkedInLoginProvider("78iqy5cu2e1fgr")
+   }
 ]);
 
 export function provideConfig() {
