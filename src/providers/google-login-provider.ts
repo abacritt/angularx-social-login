@@ -26,14 +26,15 @@ export class GoogleLoginProvider extends BaseLoginProvider {
               if (this.auth2.isSignedIn.get()) {
                 let user: SocialUser = new SocialUser();
                 let profile = this.auth2.currentUser.get().getBasicProfile();
-
+                let token = this.auth2.currentUser.get().getAuthResponse(true).access_token;
+    
                 user.id = profile.getId();
                 user.name = profile.getName();
                 user.email = profile.getEmail();
                 user.photoUrl = profile.getImageUrl();
                 user.firstName = profile.getGivenName();
                 user.lastName = profile.getFamilyName();
-
+                user.authToken = token;
                 resolve(user);
               }
             });
@@ -49,12 +50,14 @@ export class GoogleLoginProvider extends BaseLoginProvider {
       promise.then(() => {
         let user: SocialUser = new SocialUser();
         let profile = this.auth2.currentUser.get().getBasicProfile();
+        let token = this.auth2.currentUser.get().getAuthResponse(true).access_token;
+        
 
         user.id = profile.getId();
         user.name = profile.getName();
         user.email = profile.getEmail();
         user.photoUrl = profile.getImageUrl();
-
+        user.authToken = token;
         resolve(user);
       });
     });
