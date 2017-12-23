@@ -40,10 +40,10 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
                 IN.API.Raw('/people/~:(id,first-name,last-name,email-address,picture-url)').result(function(res: any){
                     let user: SocialUser = new SocialUser();
                     user.id = res.id;
-                    user.name = res.firstName + " " + res.lastName;
-                    user.email =res.emailAddress;
+                    user.name = res.firstName + ' ' + res.lastName;
+                    user.email = res.emailAddress;
                     user.photoUrl = res.pictureUrl;
-                    user.firstName = res.lastName;
+                    user.firstName = res.firstName;
                     user.lastName = res.lastName;
                     resolve(user);
                 });
