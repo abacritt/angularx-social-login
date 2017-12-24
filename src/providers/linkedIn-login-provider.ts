@@ -45,6 +45,7 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
                     user.photoUrl = res.pictureUrl;
                     user.firstName = res.firstName;
                     user.lastName = res.lastName;
+                    user.authToken = IN.ENV.auth.oauth_token;
                     resolve(user);
                 });
             });
