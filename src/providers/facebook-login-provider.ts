@@ -1,5 +1,6 @@
 import { BaseLoginProvider } from "../entities/base-login-provider";
 import { SocialUser } from "../entities/user";
+import { LoginOpt } from '../auth.service';
 
 declare let FB: any;
 
@@ -7,12 +8,12 @@ export class FacebookLoginProvider extends BaseLoginProvider {
 
   public static readonly PROVIDER_ID: string = "FACEBOOK";
 
-  constructor(private clientId: string, private scope = 'email,public_profile') { super(); }
+  constructor(private clientId: string, private opt: LoginOpt = { scope: 'email,public_profile'}, private locale: string = 'en_US') { super(); }
 
   initialize(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       this.loadScript(FacebookLoginProvider.PROVIDER_ID,
-        "//connect.facebook.net/en_US/sdk.js",
+        `//connect.facebook.net/${this.locale}/sdk.js`,
         () => {
           FB.init({
             appId: this.clientId,
@@ -64,7 +65,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             resolve(user);
           });
         }
-      }, {scope: this.scope});
+      }, this.opt);
     });
   }
 

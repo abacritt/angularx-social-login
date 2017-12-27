@@ -1,5 +1,6 @@
 import { BaseLoginProvider } from "../entities/base-login-provider";
 import { SocialUser } from "../entities/user";
+import { LoginOpt } from '../auth.service';
 
 declare let gapi: any;
 
@@ -9,7 +10,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
   protected auth2: any;
 
-  constructor(private clientId: string) { super(); }
+  constructor(private clientId: string, private opt: LoginOpt = { client_id: clientId, scope: 'email'}) { super(); }
 
   initialize(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
@@ -17,10 +18,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         "//apis.google.com/js/platform.js",
         () => {
           gapi.load('auth2', () => {
-            this.auth2 = gapi.auth2.init({
-              client_id: this.clientId,
-              scope: 'email'
-            });
+            this.auth2 = gapi.auth2.init(this.opt);
 
             this.auth2.then(() => {
               if (this.auth2.isSignedIn.get()) {

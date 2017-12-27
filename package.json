@@ -61,6 +61,7 @@
     "node-watch": "^0.5.2",
     "protractor": "~5.2.2",
     "rollup": "^0.52.2",
+    "rollup-plugin-local-resolve": "^1.0.7",
     "run-sequence": "^2.2.0",
     "rxjs": "^5.1.0",
     "ts-node": "~4.0.2",

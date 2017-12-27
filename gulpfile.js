@@ -6,6 +6,7 @@ var gulp = require('gulp'),
   rename = require('gulp-rename'),
   del = require('del'),
   runSequence = require('run-sequence'),
+  localResolve = require('rollup-plugin-local-resolve'),
   inlineResources = require('./tools/gulp/inline-resources');
 
 const rootFolder = path.join(__dirname);
@@ -49,16 +50,11 @@ gulp.task('inline-resources', function () {
  *    compiled modules to the /build folder.
  */
 gulp.task('ngc', function () {
-  return ngc({
-    project: `${tmpFolder}/tsconfig.es5.json`
-  })
-    .then((exitCode) => {
-      if (exitCode === 1) {
-        // This error is caught in the 'compile' task by the runSequence method callback
-        // so that when ngc fails to compile, the whole compile process stops running
-        throw new Error('ngc compilation failed');
-      }
-    });
+  return ngc(['-p', `${tmpFolder}/tsconfig.es5.json`], (error) => {
+    if (error) {
+      throw new Error('ngc compilation failed: ' + error);
+    }
+  });
 });
 
 /**
@@ -84,12 +80,14 @@ gulp.task('rollup:fesm', function () {
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#external
       external: [
         '@angular/core',
-        '@angular/common'
+        '@angular/common',
+        'rxjs'
       ],
 
       // Format of generated bundle
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#format
-      format: 'es'
+      format: 'es',
+      plugins: [localResolve()]
     }))
     .pipe(gulp.dest(distFolder));
 });
@@ -117,7 +115,8 @@ gulp.task('rollup:umd', function () {
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#external
       external: [
         '@angular/core',
-        '@angular/common'
+        '@angular/common',
+        'rxjs'
       ],
 
       // Format of generated bundle
@@ -136,7 +135,8 @@ gulp.task('rollup:umd', function () {
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#globals
       globals: {
         typescript: 'ts'
-      }
+      },
+      plugins: [localResolve()]
 
     }))
     .pipe(rename('angular4-social-login.umd.js'))

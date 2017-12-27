@@ -30,3 +30,4 @@ Desktop.ini
 
 # Build files
 dist/*
+build/*
