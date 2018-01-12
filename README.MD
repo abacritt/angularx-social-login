@@ -28,7 +28,6 @@ const fbLoginOptions: LoginOpt = {
 }; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
 
 const googleLoginOptions: LoginOpt = {
-  client_id: "Google-OAuth-Client-Id", //required
   scope: 'profile email'
 }; // https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2clientconfig
 
