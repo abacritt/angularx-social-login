@@ -7,4 +7,8 @@ export class SocialUser {
   firstName: string;
   lastName: string;
   authToken: string;
+  
+  //This token will be used by google provider. 
+  //Reference https://developers.google.com/identity/sign-in/web/backend-auth
+  tokenId: string; 
 }
