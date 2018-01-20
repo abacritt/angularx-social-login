@@ -1,12 +1,9 @@
-/* eslint-disable */
-// https://github.com/filipesilva/angular-quickstart-lib/blob/master/inline-resources.js
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
-const sass = require('node-sass');
-const tildeImporter = require('node-sass-tilde-importer');
+
 
 /**
  * Simple Promiseify function that takes a Node API and return a version that supports promises.
@@ -65,8 +62,7 @@ function inlineResourcesFromString(content, urlResolver) {
   // Curry through the inlining functions.
   return [
     inlineTemplate,
-    inlineStyle,
-    removeModuleId
+    inlineStyle
   ].reduce((content, fn) => fn(content, urlResolver), content);
 }
 
@@ -97,13 +93,12 @@ function inlineTemplate(content, urlResolver) {
  * @return {string} The content with all styles inlined.
  */
 function inlineStyle(content, urlResolver) {
-  return content.replace(/styleUrls\s*:\s*(\[[\s\S]*?\])/gm, function (m, styleUrls) {
+  return content.replace(/styleUrls:\s*(\[[\s\S]*?\])/gm, function (m, styleUrls) {
     const urls = eval(styleUrls);
     return 'styles: ['
       + urls.map(styleUrl => {
         const styleFile = urlResolver(styleUrl);
-        const originContent = fs.readFileSync(styleFile, 'utf-8');
-        const styleContent = styleFile.endsWith('.scss') ? buildSass(originContent, styleFile) : originContent;
+        const styleContent = fs.readFileSync(styleFile, 'utf-8');
         const shortenedStyle = styleContent
           .replace(/([\n\r]\s*)+/gm, ' ')
           .replace(/"/g, '\\"');
@@ -112,38 +107,6 @@ function inlineStyle(content, urlResolver) {
         .join(',\n')
       + ']';
   });
-}
-
-/**
- * build sass content to css
- * @param content {string} the css content
- * @param sourceFile {string} the scss file sourceFile
- * @return {string} the generated css, empty string if error occured
- */
-function buildSass(content, sourceFile) {
-  try {
-    const result = sass.renderSync({
-      data: content,
-      file: sourceFile,
-      importer: tildeImporter
-    });
-    return result.css.toString()
-  } catch (e) {
-    console.error('\x1b[41m');
-    console.error('at ' + sourceFile + ':' + e.line + ":" + e.column);
-    console.error(e.formatted);
-    console.error('\x1b[0m');
-    return "";
-  }
-}
-
-/**
- * Remove every mention of `moduleId: module.id`.
- * @param content {string} The source file's content.
- * @returns {string} The content with all moduleId: mentions removed.
- */
-function removeModuleId(content) {
-  return content.replace(/\s*moduleId:\s*module\.id\s*,?\s*/gm, '');
 }
 
 module.exports = inlineResources;
