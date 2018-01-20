@@ -30,4 +30,6 @@ Desktop.ini
 
 # Build files
 dist/*
-build/*
+build/
+.tmp
+out-tsc/
