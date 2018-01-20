@@ -3,6 +3,7 @@ var gulp = require('gulp'),
   path = require('path'),
   ngc = require('@angular/compiler-cli/src/main').main,
   rollup = require('gulp-rollup'),
+  nodeResolve = require('rollup-plugin-node-resolve'),
   rename = require('gulp-rename'),
   del = require('del'),
   runSequence = require('run-sequence'),
@@ -49,16 +50,13 @@ gulp.task('inline-resources', function () {
  *    compiled modules to the /build folder.
  */
 gulp.task('ngc', function () {
-  return ngc({
-    project: `${tmpFolder}/tsconfig.es5.json`
-  })
-    .then((exitCode) => {
-      if (exitCode === 1) {
-        // This error is caught in the 'compile' task by the runSequence method callback
-        // so that when ngc fails to compile, the whole compile process stops running
-        throw new Error('ngc compilation failed');
-      }
-    });
+  if(ngc([
+    '--project', `${tmpFolder}/tsconfig.es5.json`
+  ]) == 1) {
+    // This error is caught in the 'compile' task by the runSequence method callback
+    // so that when ngc fails to compile, the whole compile process stops running
+    throw new Error('ngc compilation failed');
+  }
 });
 
 /**
@@ -72,7 +70,7 @@ gulp.task('rollup:fesm', function () {
 
       // Bundle's entry point
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#entry
-      entry: `${buildFolder}/index.js`,
+      input: `${buildFolder}/index.js`,
 
       // Allow mixing of hypothetical and actual files. "Actual" files can be files
       // accessed by Rollup or produced by plugins further down the chain.
@@ -84,12 +82,17 @@ gulp.task('rollup:fesm', function () {
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#external
       external: [
         '@angular/core',
-        '@angular/common'
+        '@angular/common',
+        'rxjs'
       ],
 
       // Format of generated bundle
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#format
-      format: 'es'
+      format: 'es',
+
+      plugins: [
+        nodeResolve()
+      ]
     }))
     .pipe(gulp.dest(distFolder));
 });
@@ -105,7 +108,7 @@ gulp.task('rollup:umd', function () {
 
       // Bundle's entry point
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#entry
-      entry: `${buildFolder}/index.js`,
+      input: `${buildFolder}/index.js`,
 
       // Allow mixing of hypothetical and actual files. "Actual" files can be files
       // accessed by Rollup or produced by plugins further down the chain.
@@ -117,7 +120,8 @@ gulp.task('rollup:umd', function () {
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#external
       external: [
         '@angular/core',
-        '@angular/common'
+        '@angular/common',
+        'rxjs'
       ],
 
       // Format of generated bundle
@@ -131,15 +135,18 @@ gulp.task('rollup:umd', function () {
       // The name to use for the module for UMD/IIFE bundles
       // (required for bundles with exports)
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#modulename
-      moduleName: 'angular4-social-login',
+      name: 'angularx-social-login',
 
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#globals
       globals: {
         typescript: 'ts'
-      }
+      },
 
+      plugins: [
+        nodeResolve()
+      ]
     }))
-    .pipe(rename('angular4-social-login.umd.js'))
+    .pipe(rename('angularx-social-login.umd.js'))
     .pipe(gulp.dest(distFolder));
 });
 
