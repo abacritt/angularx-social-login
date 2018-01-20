@@ -1,7 +1,5 @@
 # Angular 4 / 5 Social Login
 
-> With dependency upgrade, AoT has broken. Please help if you have any idea on how to fix it.
-
 Social login and authentication module for Angular 4 / 5. Supports authentication with **Google** and **Facebook**. Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
