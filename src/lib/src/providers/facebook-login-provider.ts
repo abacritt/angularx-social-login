@@ -1,14 +1,17 @@
-import { BaseLoginProvider } from "../entities/base-login-provider";
-import { SocialUser } from "../entities/user";
+import { BaseLoginProvider } from '../entities/base-login-provider';
+import { SocialUser } from '../entities/user';
 import { LoginOpt } from '../auth.service';
 
 declare let FB: any;
 
 export class FacebookLoginProvider extends BaseLoginProvider {
 
-  public static readonly PROVIDER_ID: string = "FACEBOOK";
+  public static readonly PROVIDER_ID = 'FACEBOOK';
 
-  constructor(private clientId: string, private opt: LoginOpt = { scope: 'email,public_profile'}, private locale: string = 'en_US') { super(); }
+  constructor(
+    private clientId: string, private opt: LoginOpt = { scope: 'email,public_profile'}, 
+    private locale: string = 'en_US'
+  ) { super(); }
 
   initialize(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
@@ -26,16 +29,16 @@ export class FacebookLoginProvider extends BaseLoginProvider {
 
           FB.getLoginStatus(function (response: any) {
             if (response.status === 'connected') {
-                let authResponse = response.authResponse;
-                FB.api('/me?fields=name,email,picture,first_name,last_name', (response: any) => {
+              let authResponse = response.authResponse;
+              FB.api('/me?fields=name,email,picture,first_name,last_name', (fbUser: any) => {
                 let user: SocialUser = new SocialUser();
 
-                user.id = response.id;
-                user.name = response.name;
-                user.email = response.email;
-                user.photoUrl = "https://graph.facebook.com/" + response.id + "/picture?type=normal";
-                user.firstName = response.first_name;
-                user.lastName = response.last_name;
+                user.id = fbUser.id;
+                user.name = fbUser.name;
+                user.email = fbUser.email;
+                user.photoUrl = 'https://graph.facebook.com/' + fbUser.id + '/picture?type=normal';
+                user.firstName = fbUser.first_name;
+                user.lastName = fbUser.last_name;
                 user.authToken = authResponse.accessToken;
 
                 resolve(user);

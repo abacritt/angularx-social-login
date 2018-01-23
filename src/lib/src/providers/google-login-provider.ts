@@ -1,5 +1,5 @@
-import { BaseLoginProvider } from "../entities/base-login-provider";
-import { SocialUser } from "../entities/user";
+import { BaseLoginProvider } from '../entities/base-login-provider';
+import { SocialUser } from '../entities/user';
 import { LoginOpt } from '../auth.service';
 
 declare let gapi: any;
@@ -15,7 +15,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
   initialize(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       this.loadScript(GoogleLoginProvider.PROVIDER_ID,
-        "//apis.google.com/js/platform.js",
+        '//apis.google.com/js/platform.js',
         () => {
           gapi.load('auth2', () => {
             this.auth2 = gapi.auth2.init({
@@ -29,7 +29,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                 let profile = this.auth2.currentUser.get().getBasicProfile();
                 let token = this.auth2.currentUser.get().getAuthResponse(true).access_token;
                 let backendToken = this.auth2.currentUser.get().getAuthResponse(true).id_token;
-    
+
                 user.id = profile.getId();
                 user.name = profile.getName();
                 user.email = profile.getEmail();
@@ -79,18 +79,16 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     });
   }
 
-revokeAuth(): Promise<any> {
- +    return new Promise((resolve, reject) => {
- +      this.auth2.disconnect().then((err: any) => {
- +        if (err) {
- +          reject(err);
- +        } else {
- +          resolve();
- +        }
- +      });
- +    });
- +  }
- +  
+  revokeAuth(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.auth2.disconnect().then((err: any) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
   }
 
 }
