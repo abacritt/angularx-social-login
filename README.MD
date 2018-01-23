@@ -17,17 +17,29 @@ npm install --save angularx-social-login
 In your `AppModule`, import the `SocialLoginModule`
 
 ```javascript
-import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
-import { GoogleLoginProvider, FacebookLoginProvider } from "angularx-social-login";
+
+import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider, LoginOpt } from "angular4-social-login";
+
+// OPTIONAL: custom config for login
+const fbLoginOptions: LoginOpt = {
+  scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages',
+  return_scopes: true,
+  enable_profile_selector: true
+}; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
+
+const googleLoginOptions: LoginOpt = {
+  scope: 'profile email'
+}; // https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2clientconfig
+
 
 let config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider("Google-OAuth-Client-Id")
+    provider: new GoogleLoginProvider("Google-OAuth-Client-Id", googleLoginOptions)
   },
   {
     id: FacebookLoginProvider.PROVIDER_ID,
-    provider: new FacebookLoginProvider("Facebook-App-Id")
+    provider: new FacebookLoginProvider("Facebook-App-Id", fbLoginOptions)
   }
 ]);
 
