@@ -17,29 +17,17 @@ npm install --save angularx-social-login
 In your `AppModule`, import the `SocialLoginModule`
 
 ```javascript
-
-import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider, LoginOpt } from "angular4-social-login";
-
-// OPTIONAL: custom config for login
-const fbLoginOptions: LoginOpt = {
-  scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages',
-  return_scopes: true,
-  enable_profile_selector: true
-}; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
-
-const googleLoginOptions: LoginOpt = {
-  scope: 'profile email'
-}; // https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2clientconfig
-
+import { SocialLoginModule, AuthServiceConfig } from "angular4-social-login";
+import { GoogleLoginProvider, FacebookLoginProvider } from "angular4-social-login";
 
 let config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider("Google-OAuth-Client-Id", googleLoginOptions)
+    provider: new GoogleLoginProvider("Google-OAuth-Client-Id")
   },
   {
     id: FacebookLoginProvider.PROVIDER_ID,
-    provider: new FacebookLoginProvider("Facebook-App-Id", fbLoginOptions)
+    provider: new FacebookLoginProvider("Facebook-App-Id")
   }
 ]);
 
@@ -125,6 +113,31 @@ export class DemoComponent implements OnInit {
   <h4>{{ user.name }}</h4>
   <p>{{ user.email }}</p>
 </div>
+```
+
+## Specifying custom scope
+
+```javascript
+const fbLoginOptions: LoginOpt = {
+  scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages',
+  return_scopes: true,
+  enable_profile_selector: true
+}; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
+
+const googleLoginOptions: LoginOpt = {
+  scope: 'profile email'
+}; // https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2clientconfig
+
+let config = new AuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider("Google-OAuth-Client-Id", googleLoginOptions)
+  },
+  {
+    id: FacebookLoginProvider.PROVIDER_ID,
+    provider: new FacebookLoginProvider("Facebook-App-Id", fbLoginOptions)
+  }
+]);
 ```
 
 ## Building with AoT
