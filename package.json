@@ -1,7 +1,7 @@
 {
   "name": "angularx-social-login",
   "version": "1.1.4",
-  "description": "Library QuickStart package.json from the documentation, supplemented with testing support",
+  "description": "Social login and authentication module for Angular 4 / 5. Supports authentication with Google and Facebook. Can be extended to other providers also.",
   "repository": {
     "type": "git",
     "url": "https://github.com/abacritt/angularx-social-login"
