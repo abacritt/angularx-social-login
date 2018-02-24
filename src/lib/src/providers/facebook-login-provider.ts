@@ -9,7 +9,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID = 'FACEBOOK';
 
   constructor(
-    private clientId: string, private opt: LoginOpt = { scope: 'email,public_profile'}, 
+    private clientId: string, private opt: LoginOpt = { scope: 'email,public_profile'},
     private locale: string = 'en_US'
   ) { super(); }
 

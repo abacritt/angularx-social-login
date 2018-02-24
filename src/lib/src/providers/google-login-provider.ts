@@ -6,7 +6,7 @@ declare let gapi: any;
 
 export class GoogleLoginProvider extends BaseLoginProvider {
 
-  public static readonly PROVIDER_ID: string = "GOOGLE";
+  public static readonly PROVIDER_ID: string = 'GOOGLE';
 
   protected auth2: any;
 
