@@ -40,9 +40,11 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                 user.idToken = backendToken;
                 resolve(user);
               }
+            }).catch((err: any) => {
+              reject(err);
             });
           });
-      });
+        });
     });
   }
 
@@ -63,6 +65,8 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         user.authToken = token;
         user.idToken = backendToken;
         resolve(user);
+      }).catch((err: any) => {
+        reject(err);
       });
     });
   }
@@ -75,6 +79,8 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         } else {
           resolve();
         }
+      }).catch((err: any) => {
+        reject(err);
       });
     });
   }
@@ -87,6 +93,8 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         } else {
           resolve();
         }
+      }).catch((err: any) => {
+        reject(err);
       });
     });
   }
