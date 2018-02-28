@@ -1,4 +1,4 @@
-import { SocialUser } from "./user";
+import { SocialUser } from './user';
 
 export interface LoginProvider {
   initialize(): Promise<SocialUser>;
