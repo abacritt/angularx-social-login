@@ -1,6 +1,6 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/user';
-
+import { LoginOpt } from '../auth.service';
 
 declare let IN: any;
 
