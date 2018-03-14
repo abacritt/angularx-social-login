@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from 'angularx-social-login';
 import { SocialUser } from 'angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
+import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider } from 'angularx-social-login';
+
 
 @Component({
   selector: 'app-demo',
@@ -27,6 +28,10 @@ export class DemoComponent implements OnInit {
 
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithLinkedIn(): void {
+    this.authService.signIn(LinkedInLoginProvider.PROVIDER_ID);
   }
 
   signOut(): void {

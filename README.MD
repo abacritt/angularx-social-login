@@ -18,7 +18,8 @@ In your `AppModule`, import the `SocialLoginModule`
 
 ```javascript
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
-import { GoogleLoginProvider, FacebookLoginProvider } from "angularx-social-login";
+import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider} from "angularx-social-login";
+
 
 let config = new AuthServiceConfig([
   {
@@ -28,6 +29,10 @@ let config = new AuthServiceConfig([
   {
     id: FacebookLoginProvider.PROVIDER_ID,
     provider: new FacebookLoginProvider("Facebook-App-Id")
+  },
+  {
+    id: LinkedInLoginProvider.PROVIDER_ID,
+    provider: new FacebookLoginProvider("LinkedIn-client-Id", false, 'en_US')
   }
 ]);
 
@@ -48,8 +53,10 @@ export class AppModule { }
 ### Sign in and out users
 
 ```javascript
+
 import { AuthService } from "angularx-social-login";
-import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
+import { FacebookLoginProvider, GoogleLoginProvider, LinkedInLoginProvider } from "angularx-social-login";
+
 
 @Component({
   selector: 'app-demo',
@@ -67,6 +74,10 @@ export class DemoComponent implements OnInit {
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
+  
+  signInWithLinkedIn(): void {
+    this.authService.signIn(LinkedInLoginProvider.PROVIDER_ID);
+  }  
 
   signOut(): void {
     this.authService.signOut();
