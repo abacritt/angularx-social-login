@@ -48,6 +48,22 @@ export interface LoginOpt {
   The default redirect_uri is the current URL stripped of query parameters
   and hash fragment. */
   redirect_uri?: string;
+  /*
+   A space-delimited list of string values that specifies whether the authorization server prompts the user for reauthentication
+   and consent. The possible values are:
+    none
+      The authorization server does not display any authentication or user consent screens; it will return an error if the user is not
+      already authenticated and has not pre-configured consent for the requested scopes. You can use none to check for existing
+      authentication and/or consent.
+    consent
+      The authorization server prompts the user for consent before returning information to the client.
+    select_account
+      The authorization server prompts the user to select a user account. This allows a user who has multiple accounts at the authorization
+      server to select amongst the multiple accounts that they may have current sessions for.
+
+   If no value is specified and the user has not previously authorized access, then the user is shown a consent screen.
+  */
+  prompt?: string;
 }
 
 export class AuthServiceConfig {
@@ -95,7 +111,7 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       let providerObject = this.providers.get(providerId);
       if (providerObject) {
-        providerObject.signIn().then((user: SocialUser) => {
+        providerObject.signIn(opt).then((user: SocialUser) => {
           user.provider = providerId;
           resolve(user);
 
