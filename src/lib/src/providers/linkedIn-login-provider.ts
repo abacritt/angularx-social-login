@@ -13,12 +13,11 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
     }
 
     initialize(): Promise<SocialUser> {
-
         let inner_text = '';
 
         inner_text += 'api_key: ' + this.clientId + '\r\n';
-        inner_text += 'authorize:' +  (this.authorize? 'true' : 'false') +  '\r\n';
-        inner_text += 'lang: ' + (this.lang? this.lang : 'fr_FR') +  '\r\n';
+        inner_text += 'authorize:' +  (this.authorize ? 'true' : 'false') +  '\r\n';
+        inner_text += 'lang: ' + (this.lang ? this.lang : 'fr_FR') +  '\r\n';
 
         return new Promise((resolve, reject) => {
             this.loadScript(LinkedInLoginProvider.PROVIDER_ID,
@@ -36,8 +35,8 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
 
     signIn(): Promise<SocialUser> {
         return new Promise((resolve, reject) => {
-            IN.User.authorize(function(){
-                IN.API.Raw('/people/~:(id,first-name,last-name,email-address,picture-url)').result(function(res: any){
+            IN.User.authorize(function() {
+                IN.API.Raw('/people/~:(id,first-name,last-name,email-address,picture-url)').result(function(res: any) {
                     let user: SocialUser = new SocialUser();
                     user.id = res.id;
                     user.name = res.firstName + ' ' + res.lastName;
@@ -54,11 +53,10 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
 
     signOut(): Promise<any> {
         return new Promise((resolve, reject) => {
-            IN.User.logout(function(){
+            IN.User.logout(function() {
                 resolve();
             }, {});
 
         });
     }
-
 }

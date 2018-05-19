@@ -32,7 +32,7 @@ let config = new AuthServiceConfig([
   },
   {
     id: LinkedInLoginProvider.PROVIDER_ID,
-    provider: new FacebookLoginProvider("LinkedIn-client-Id", false, 'en_US')
+    provider: new LinkedInLoginProvider("LinkedIn-client-Id", false, 'en_US')
   }
 ]);
 
