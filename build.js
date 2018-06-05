@@ -57,9 +57,7 @@ return Promise.resolve()
           '@angular/core'
         ],
         plugins: [
-          commonjs({
-            include: ['node_modules/rxjs/**']
-          }),
+          commonjs({}),
           sourcemaps(),
           nodeResolve({ jsnext: true, module: true })
         ]
