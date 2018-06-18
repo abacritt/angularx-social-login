@@ -13,7 +13,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
     private locale: string = 'en_US'
   ) { super(); }
 
-  initialize(): Promise<SocialUser> {
+  initialize(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.loadScript(FacebookLoginProvider.PROVIDER_ID,
         `//connect.facebook.net/${this.locale}/sdk.js`,
@@ -27,55 +27,68 @@ export class FacebookLoginProvider extends BaseLoginProvider {
           });
           // FB.AppEvents.logPageView(); #FIX for #18
 
-          FB.getLoginStatus(function (response: any) {
-            if (response.status === 'connected') {
-              let authResponse = response.authResponse;
-              FB.api('/me?fields=name,email,picture,first_name,last_name', (fbUser: any) => {
-                let user: SocialUser = new SocialUser();
-
-                user.id = fbUser.id;
-                user.name = fbUser.name;
-                user.email = fbUser.email;
-                user.photoUrl = 'https://graph.facebook.com/' + fbUser.id + '/picture?type=normal';
-                user.firstName = fbUser.first_name;
-                user.lastName = fbUser.last_name;
-                user.authToken = authResponse.accessToken;
-
-                resolve(user);
-              });
-            }
-          });
+          this._readyState.next(true);
+          resolve();
         });
+    });
+  }
+
+  getLoginStatus(): Promise<SocialUser> {
+    return new Promise((resolve, reject) => {
+      this.onReady().then(() => {
+        FB.getLoginStatus(function (response: any) {
+          if (response.status === 'connected') {
+            let authResponse = response.authResponse;
+            FB.api('/me?fields=name,email,picture,first_name,last_name', (fbUser: any) => {
+              let user: SocialUser = new SocialUser();
+
+              user.id = fbUser.id;
+              user.name = fbUser.name;
+              user.email = fbUser.email;
+              user.photoUrl = 'https://graph.facebook.com/' + fbUser.id + '/picture?type=normal';
+              user.firstName = fbUser.first_name;
+              user.lastName = fbUser.last_name;
+              user.authToken = authResponse.accessToken;
+
+              resolve(user);
+            });
+          }
+        });
+      });
     });
   }
 
   signIn(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
-      FB.login((response: any) => {
-        if (response.authResponse) {
-          let authResponse = response.authResponse;
-          FB.api('/me?fields=name,email,picture,first_name,last_name', (fbUser: any) => {
-            let user: SocialUser = new SocialUser();
+      this.onReady().then(() => {
+        FB.login((response: any) => {
+          if (response.authResponse) {
+            let authResponse = response.authResponse;
+            FB.api('/me?fields=name,email,picture,first_name,last_name', (fbUser: any) => {
+              let user: SocialUser = new SocialUser();
 
-            user.id = fbUser.id;
-            user.name = fbUser.name;
-            user.email = fbUser.email;
-            user.photoUrl = 'https://graph.facebook.com/' + fbUser.id + '/picture?type=normal';
-            user.firstName = fbUser.first_name;
-            user.lastName = fbUser.last_name;
-            user.authToken = authResponse.accessToken;
+              user.id = fbUser.id;
+              user.name = fbUser.name;
+              user.email = fbUser.email;
+              user.photoUrl = 'https://graph.facebook.com/' + fbUser.id + '/picture?type=normal';
+              user.firstName = fbUser.first_name;
+              user.lastName = fbUser.last_name;
+              user.authToken = authResponse.accessToken;
 
-            resolve(user);
-          });
-        }
-      }, this.opt);
+              resolve(user);
+            });
+          }
+        }, this.opt);
+      });
     });
   }
 
   signOut(): Promise<any> {
     return new Promise((resolve, reject) => {
-      FB.logout((response: any) => {
-        resolve();
+      this.onReady().then(() => {
+        FB.logout((response: any) => {
+          resolve();
+        });
       });
     });
   }
