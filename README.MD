@@ -1,3 +1,5 @@
+<p align="left"><img src="logo/horizontalversion.png" alt="angularx-social-login" height="100px"></p>
+
 # Angular 4 / 5 / 6 Social Login
 
 Social login and authentication module for Angular 4 / 5 / 6. Supports authentication with **Google** and **Facebook**. Can be extended to other providers also.
