@@ -8,7 +8,12 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
 
     public static readonly PROVIDER_ID: string = 'LINKEDIN';
 
-    constructor(private clientId: string, private authorize?: boolean, private lang?: string) {
+    constructor(
+        private clientId: string,
+        private authorize?: boolean,
+        private lang?: string,
+        private fields: string = 'id,first-name,last-name,email-address,picture-url'
+    ) {
         super();
     }
 
@@ -46,7 +51,7 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
         return new Promise((resolve, reject) => {
             this.onReady().then(() => {
                 IN.User.authorize(function () {
-                    IN.API.Raw('/people/~:(id,first-name,last-name,email-address,picture-url)').result(function (res: any) {
+                    IN.API.Raw(`/people/~:(${this.fields})`).result(function (res: any) {
                         let user: SocialUser = new SocialUser();
                         user.id = res.id;
                         user.name = res.firstName + ' ' + res.lastName;
@@ -55,6 +60,9 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
                         user.firstName = res.firstName;
                         user.lastName = res.lastName;
                         user.authToken = IN.ENV.auth.oauth_token;
+
+                        user.linkedIn = res;
+
                         resolve(user);
                     });
                 });
