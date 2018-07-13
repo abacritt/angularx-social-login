@@ -12,7 +12,8 @@ export class FacebookLoginProvider extends BaseLoginProvider {
     private clientId: string,
     private opt: LoginOpt = { scope: 'email,public_profile' },
     private locale: string = 'en_US',
-    private fields: string = 'name,email,picture,first_name,last_name'
+    private fields: string = 'name,email,picture,first_name,last_name',
+    private version: string = 'v2.9'
   ) { super(); }
 
   initialize(): Promise<void> {
@@ -25,7 +26,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             autoLogAppEvents: true,
             cookie: true,
             xfbml: true,
-            version: 'v2.9'
+            version: this.version
           });
           // FB.AppEvents.logPageView(); #FIX for #18
 
