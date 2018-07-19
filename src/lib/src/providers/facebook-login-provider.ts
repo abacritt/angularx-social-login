@@ -84,7 +84,9 @@ export class FacebookLoginProvider extends BaseLoginProvider {
 
               resolve(user);
             });
-          }
+          } else {
+            reject('User cancelled login or did not fully authorize.');
+           }
         }, this.opt);
       });
     });
