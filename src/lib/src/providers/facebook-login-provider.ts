@@ -39,7 +39,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
   getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       this.onReady().then(() => {
-        FB.getLoginStatus(function (response: any) {
+        FB.getLoginStatus((response: any) => {
           if (response.status === 'connected') {
             let authResponse = response.authResponse;
             FB.api(`/me?fields=${this.fields}`, (fbUser: any) => {
