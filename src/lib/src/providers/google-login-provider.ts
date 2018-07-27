@@ -77,6 +77,8 @@ export class GoogleLoginProvider extends BaseLoginProvider {
           user.authToken = token;
           user.idToken = backendToken;
           resolve(user);
+        }, (closed: any) => {
+            reject('User cancelled login or did not fully authorize.');
         }).catch((err: any) => {
           reject(err);
         });
