@@ -42,19 +42,17 @@ export class FacebookLoginProvider extends BaseLoginProvider {
         FB.getLoginStatus((response: any) => {
           if (response.status === 'connected') {
             let authResponse = response.authResponse;
-            FB.api(`/me?fields=${this.fields}`, (fbUser: any) => {
-              let user: SocialUser = new SocialUser();
+            let user: SocialUser = new SocialUser();
+            user.id = authResponse.userID;
+            user.authToken = authResponse.accessToken;
 
-              user.id = fbUser.id;
+            FB.api(`/me?fields=${this.fields}`, (fbUser: any) => {
               user.name = fbUser.name;
               user.email = fbUser.email;
               user.photoUrl = 'https://graph.facebook.com/' + fbUser.id + '/picture?type=normal';
               user.firstName = fbUser.first_name;
               user.lastName = fbUser.last_name;
-              user.authToken = authResponse.accessToken;
-
               user.facebook = fbUser;
-
               resolve(user);
             });
           }
