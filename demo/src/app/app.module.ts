@@ -22,7 +22,7 @@ const config = new AuthServiceConfig([
   },
   {
     id: LinkedInLoginProvider.PROVIDER_ID,
-    provider: new LinkedInLoginProvider("78iqy5cu2e1fgr")
+    provider: new LinkedInLoginProvider('78iqy5cu2e1fgr')
   }
 ]);
 

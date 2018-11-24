@@ -9,11 +9,14 @@ export class FacebookLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID = 'FACEBOOK';
 
   constructor(
-    private clientId: string, private opt: LoginOpt = { scope: 'email,public_profile'},
-    private locale: string = 'en_US'
+    private clientId: string,
+    private opt: LoginOpt = { scope: 'email,public_profile' },
+    private locale: string = 'en_US',
+    private fields: string = 'name,email,picture,first_name,last_name',
+    private version: string = 'v2.9'
   ) { super(); }
 
-  initialize(): Promise<SocialUser> {
+  initialize(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.loadScript(FacebookLoginProvider.PROVIDER_ID,
         `//connect.facebook.net/${this.locale}/sdk.js`,
@@ -23,59 +26,78 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             autoLogAppEvents: true,
             cookie: true,
             xfbml: true,
-            version: 'v2.9'
+            version: this.version
           });
           // FB.AppEvents.logPageView(); #FIX for #18
 
-          FB.getLoginStatus(function (response: any) {
-            if (response.status === 'connected') {
-              let authResponse = response.authResponse;
-              FB.api('/me?fields=name,email,picture,first_name,last_name', (fbUser: any) => {
-                let user: SocialUser = new SocialUser();
-
-                user.id = fbUser.id;
-                user.name = fbUser.name;
-                user.email = fbUser.email;
-                user.photoUrl = 'https://graph.facebook.com/' + fbUser.id + '/picture?type=normal';
-                user.firstName = fbUser.first_name;
-                user.lastName = fbUser.last_name;
-                user.authToken = authResponse.accessToken;
-
-                resolve(user);
-              });
-            }
-          });
+          this._readyState.next(true);
+          resolve();
         });
     });
   }
 
-  signIn(): Promise<SocialUser> {
+  getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
-      FB.login((response: any) => {
-        if (response.authResponse) {
-          let authResponse = response.authResponse;
-          FB.api('/me?fields=name,email,picture,first_name,last_name', (fbUser: any) => {
-            let user: SocialUser = new SocialUser();
+      this.onReady().then(() => {
+        FB.getLoginStatus((response: any) => {
+          if (response.status === 'connected') {
+            let authResponse = response.authResponse;
+            FB.api(`/me?fields=${this.fields}`, (fbUser: any) => {
+              let user: SocialUser = new SocialUser();
 
-            user.id = fbUser.id;
-            user.name = fbUser.name;
-            user.email = fbUser.email;
-            user.photoUrl = 'https://graph.facebook.com/' + fbUser.id + '/picture?type=normal';
-            user.firstName = fbUser.first_name;
-            user.lastName = fbUser.last_name;
-            user.authToken = authResponse.accessToken;
+              user.id = fbUser.id;
+              user.name = fbUser.name;
+              user.email = fbUser.email;
+              user.photoUrl = 'https://graph.facebook.com/' + fbUser.id + '/picture?type=normal';
+              user.firstName = fbUser.first_name;
+              user.lastName = fbUser.last_name;
+              user.authToken = authResponse.accessToken;
 
-            resolve(user);
-          });
-        }
-      }, this.opt);
+              user.facebook = fbUser;
+
+              resolve(user);
+            });
+          }
+        });
+      });
+    });
+  }
+
+  signIn(opt?: LoginOpt): Promise<SocialUser> {
+    return new Promise((resolve, reject) => {
+      this.onReady().then(() => {
+        FB.login((response: any) => {
+          if (response.authResponse) {
+            let authResponse = response.authResponse;
+            FB.api(`/me?fields=${this.fields}`, (fbUser: any) => {
+              let user: SocialUser = new SocialUser();
+
+              user.id = fbUser.id;
+              user.name = fbUser.name;
+              user.email = fbUser.email;
+              user.photoUrl = 'https://graph.facebook.com/' + fbUser.id + '/picture?type=normal';
+              user.firstName = fbUser.first_name;
+              user.lastName = fbUser.last_name;
+              user.authToken = authResponse.accessToken;
+
+              user.facebook = fbUser;
+
+              resolve(user);
+            });
+          } else {
+            reject('User cancelled login or did not fully authorize.');
+           }
+        }, this.opt);
+      });
     });
   }
 
   signOut(): Promise<any> {
     return new Promise((resolve, reject) => {
-      FB.logout((response: any) => {
-        resolve();
+      this.onReady().then(() => {
+        FB.logout((response: any) => {
+          resolve();
+        });
       });
     });
   }

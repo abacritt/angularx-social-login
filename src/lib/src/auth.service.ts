@@ -86,21 +86,33 @@ export class AuthService {
   private providers: Map<string, LoginProvider>;
 
   private _user: SocialUser = null;
+
   private _authState: ReplaySubject<SocialUser> = new ReplaySubject(1);
+  private _readyState: BehaviorSubject<string[]> = new BehaviorSubject([]);
 
   get authState(): Observable<SocialUser> {
     return this._authState.asObservable();
+  }
+  /** Provides an array of provider ID's as they become ready */
+  get readyState(): Observable<string[]> {
+    return this._readyState.asObservable();
   }
 
   constructor(config: AuthServiceConfig) {
     this.providers = config.providers;
 
     this.providers.forEach((provider: LoginProvider, key: string) => {
-      provider.initialize().then((user: SocialUser) => {
-        user.provider = key;
+      provider.initialize().then(() => {
+        let readyProviders = this._readyState.getValue();
+        readyProviders.push(key);
+        this._readyState.next(readyProviders);
 
-        this._user = user;
-        this._authState.next(user);
+        provider.getLoginStatus().then((user) => {
+          user.provider = key;
+
+          this._user = user;
+          this._authState.next(user);
+        });
       }).catch((err) => {
         // this._authState.next(null);
       });
