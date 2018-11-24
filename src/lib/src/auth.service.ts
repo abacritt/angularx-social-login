@@ -86,7 +86,8 @@ export class AuthService {
   private providers: Map<string, LoginProvider>;
 
   private _user: SocialUser = null;
-  private _authState: BehaviorSubject<SocialUser> = new BehaviorSubject(null);
+
+  private _authState: ReplaySubject<SocialUser> = new ReplaySubject(1);
   private _readyState: BehaviorSubject<string[]> = new BehaviorSubject([]);
 
   get authState(): Observable<SocialUser> {
