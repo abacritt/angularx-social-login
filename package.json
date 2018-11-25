@@ -1,6 +1,6 @@
 {
   "name": "angularx-social-login",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Social login and authentication module for Angular 4 / 5. Supports authentication with Google and Facebook. Can be extended to other providers also.",
   "repository": {
     "type": "git",
