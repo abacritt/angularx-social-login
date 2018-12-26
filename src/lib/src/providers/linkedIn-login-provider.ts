@@ -41,7 +41,7 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
         return new Promise((resolve, reject) => {
             this.onReady().then(() => {
                 if (IN.User.isAuthorized()) {
-                    IN.API.Raw(`/people/~:(${this.fields})`).result(function (res: any) {
+                    IN.API.Raw(`/people/~:(${this.fields})`).result((res: any) => {
                         let user: SocialUser = new SocialUser();
                         user.id = res.id;
                         user.name = res.firstName + ' ' + res.lastName;
@@ -62,8 +62,8 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
     signIn(): Promise<SocialUser> {
         return new Promise((resolve, reject) => {
             this.onReady().then(() => {
-                IN.User.authorize(function () {
-                    IN.API.Raw(`/people/~:(${this.fields})`).result(function (res: any) {
+                IN.User.authorize(() => {
+                    IN.API.Raw(`/people/~:(${this.fields})`).result((res: any) => {
                         let user: SocialUser = new SocialUser();
                         user.id = res.id;
                         user.name = res.firstName + ' ' + res.lastName;
@@ -85,7 +85,7 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
     signOut(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.onReady().then(() => {
-                IN.User.logout(function () {
+                IN.User.logout(() => {
                     resolve();
                 }, {});
             });
