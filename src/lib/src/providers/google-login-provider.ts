@@ -60,9 +60,10 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     signIn(opt?: LoginOpt): Promise<SocialUser> {
         return new Promise((resolve, reject) => {
             this.onReady().then(() => {
-                let promise = this.auth2.signIn(opt);
+                const offlineAccess: boolean = (opt && opt.offline_access) || (this.opt && this.opt.offline_access);
+                let promise = !offlineAccess ? this.auth2.signIn(opt) : this.auth2.grantOfflineAccess(opt);
 
-                promise.then(() => {
+                promise.then((response: any) => {
                     let user: SocialUser = new SocialUser();
                     let profile = this.auth2.currentUser.get().getBasicProfile();
                     let token = this.auth2.currentUser.get().getAuthResponse(true).access_token;
@@ -76,6 +77,11 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                     user.lastName = profile.getFamilyName();
                     user.authToken = token;
                     user.idToken = backendToken;
+
+                    if (response && response.code) {
+                        user.authorizationCode = response.code;
+                    }
+
                     resolve(user);
                 }, (closed: any) => {
                     reject('User cancelled login or did not fully authorize.');

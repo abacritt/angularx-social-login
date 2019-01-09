@@ -48,6 +48,10 @@ export interface LoginOpt {
   The default redirect_uri is the current URL stripped of query parameters
   and hash fragment. */
   redirect_uri?: string;
+  /* Get permission from the user to access the specified scopes offline,
+   * If using offline_access=true, GoogleAuth.grantOfflineAccess() will be use instead of GoogleAuth.signIn()
+   */
+  offline_access?: boolean;
   /*
    A space-delimited list of string values that specifies whether the authorization server prompts the user for reauthentication
    and consent. The possible values are:
