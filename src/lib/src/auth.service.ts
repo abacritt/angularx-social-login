@@ -8,6 +8,11 @@ import { SocialUser } from './entities/user';
 export interface AuthServiceConfigItem {
   id: string;
   provider: LoginProvider;
+  /**
+   * This field allows to load login providers SDKs lazily.
+   * Lazy loading is activated if it's true and vice versa.
+   */
+  lazyLoad?: boolean;
 }
 
 export interface LoginOpt {
@@ -71,12 +76,14 @@ export interface LoginOpt {
 }
 
 export class AuthServiceConfig {
+  lazyLoad = false;
   providers: Map<string, LoginProvider> = new Map<string, LoginProvider>();
 
   constructor(providers: AuthServiceConfigItem[]) {
     for (let i = 0; i < providers.length; i++) {
       let element = providers[i];
       this.providers.set(element.id, element.provider);
+      this.lazyLoad = this.lazyLoad || element.lazyLoad;
     }
   }
 }
@@ -93,6 +100,8 @@ export class AuthService {
   private _authState: ReplaySubject<SocialUser> = new ReplaySubject(1);
   private _readyState: BehaviorSubject<string[]> = new BehaviorSubject([]);
 
+  private initialized = false;
+
   get authState(): Observable<SocialUser> {
     return this._authState.asObservable();
   }
@@ -104,6 +113,13 @@ export class AuthService {
   constructor(config: AuthServiceConfig) {
     this.providers = config.providers;
 
+    if (!config.lazyLoad) {
+      this.initialize();
+    }
+  }
+
+  private initialize() {
+    this.initialized = true;
     this.providers.forEach((provider: LoginProvider, key: string) => {
       provider.initialize().then(() => {
         let readyProviders = this._readyState.getValue();
@@ -123,6 +139,9 @@ export class AuthService {
   }
 
   signIn(providerId: string, opt?: LoginOpt): Promise<SocialUser> {
+    if (!this.initialized) {
+      this.initialize();
+    }
     return new Promise((resolve, reject) => {
       let providerObject = this.providers.get(providerId);
       if (providerObject) {
@@ -142,6 +161,10 @@ export class AuthService {
   }
 
   signOut(revoke: boolean = false): Promise<any> {
+    if (!this.initialized) {
+      this.initialize();
+    }
+
     return new Promise((resolve, reject) => {
       if (!this._user) {
         reject(AuthService.ERR_NOT_LOGGED_IN);
