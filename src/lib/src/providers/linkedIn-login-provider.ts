@@ -54,6 +54,8 @@ export class LinkedInLoginProvider extends BaseLoginProvider {
 
                         resolve(user);
                     });
+                } else {
+                    reject('No user is currently logged in.');
                 }
             });
         });

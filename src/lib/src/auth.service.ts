@@ -115,9 +115,9 @@ export class AuthService {
 
           this._user = user;
           this._authState.next(user);
+        }).catch((err) => {
+          this._authState.next(null);
         });
-      }).catch((err) => {
-        // this._authState.next(null);
       });
     });
   }
