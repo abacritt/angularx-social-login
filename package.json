@@ -1,6 +1,6 @@
 {
   "name": "angularx-social-login",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Social login and authentication module for Angular 4 / 5. Supports authentication with Google and Facebook. Can be extended to other providers also.",
   "repository": {
     "type": "git",
@@ -55,37 +55,37 @@
     "release": "standard-version"
   },
   "peerDependencies": {
-    "@angular/core": "^7.0.0",
-    "rxjs": "^6.1.0",
-    "zone.js": "^0.8.4"
+    "@angular/core": "^7.2.15",
+    "rxjs": "^6.5.2",
+    "zone.js": "^0.8.29"
   },
   "devDependencies": {
-    "@angular/common": "^6.0.3",
-    "@angular/compiler": "^6.0.3",
-    "@angular/compiler-cli": "^6.0.3",
-    "@angular/core": "^6.0.3",
-    "@angular/platform-browser": "^6.0.3",
-    "@angular/platform-browser-dynamic": "^6.0.3",
-    "@types/jasmine": "2.8.8",
-    "@types/node": "^10.3.1",
-    "camelcase": "^5.0.0",
-    "concurrently": "3.6.1",
-    "core-js": "^2.5.7",
-    "glob": "^7.1.1",
+    "@angular/common": "^7.2.15",
+    "@angular/compiler": "^7.2.15",
+    "@angular/compiler-cli": "^7.2.15",
+    "@angular/core": "^7.2.15",
+    "@angular/platform-browser": "^7.2.15",
+    "@angular/platform-browser-dynamic": "^7.2.15",
+    "@types/jasmine": "3.3.12",
+    "@types/node": "^12.0.1",
+    "camelcase": "^5.3.1",
+    "concurrently": "4.1.0",
+    "core-js": "^3.0.1",
+    "glob": "^7.1.4",
     "lite-server": "^2.4.0",
-    "rimraf": "^2.6.1",
-    "rollup": "^0.63.4",
-    "rollup-plugin-commonjs": "^9.1.3",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-sourcemaps": "^0.4.1",
-    "rollup-plugin-uglify": "^4.0.0",
-    "rxjs": "^6.2.0",
-    "standard-version": "^4.4.0",
-    "systemjs": "^0.21.4",
-    "tslint": "^5.10.0",
-    "zone.js": "^0.8.26"
+    "rimraf": "^2.6.3",
+    "rollup": "^1.11.3",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-node-resolve": "^4.2.4",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-uglify": "^6.0.2",
+    "rxjs": "^6.5.2",
+    "standard-version": "^6.0.1",
+    "systemjs": "^3.1.6",
+    "tsickle": "^0.35.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.2.4",
+    "zone.js": "^0.8.29"
   },
-  "dependencies": {
-    "typescript": "^2.7.2"
-  }
+  "dependencies": {}
 }
