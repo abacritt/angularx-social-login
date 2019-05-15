@@ -10,7 +10,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
 
     constructor(
         private clientId: string,
-        private opt: LoginOpt = { scope: 'email,public_profile' },
+        private scopes = { scope: 'email,public_profile' },
         private locale: string = 'en_US',
         private fields: string = 'name,email,picture,first_name,last_name',
         private version: string = 'v2.9'
@@ -68,6 +68,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
     signIn(opt?: LoginOpt): Promise<SocialUser> {
         return new Promise((resolve, reject) => {
             this.onReady().then(() => {
+                const mergedOpt = opt.scope + "," + this.scopes
                 FB.login((response: any) => {
                     if (response.authResponse) {
                         let authResponse = response.authResponse;
@@ -89,7 +90,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
                     } else {
                         reject('User cancelled login or did not fully authorize.');
                     }
-                }, opt);
+                }, mergedOpt);
             });
         });
     }
