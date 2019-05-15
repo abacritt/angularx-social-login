@@ -10,7 +10,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
 
     constructor(
         private clientId: string,
-        private scopes = { scope: 'email,public_profile' },
+        private scopes: string = 'email,public_profile',
         private locale: string = 'en_US',
         private fields: string = 'name,email,picture,first_name,last_name',
         private version: string = 'v2.9'
