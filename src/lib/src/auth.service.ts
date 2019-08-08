@@ -73,6 +73,12 @@ export interface LoginOpt {
    If no value is specified and the user has not previously authorized access, then the user is shown a consent screen.
   */
   prompt?: string;
+  /*
+    The email, or User ID, of a user to pre-select in the sign-in flow. 
+    This is susceptible to modification by the user, unless prompt: "none" is used.
+  */
+  login_hint?: string;
+
 }
 
 export class AuthServiceConfig {
