@@ -67,21 +67,23 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
                 promise.then((response: any) => {
                     let user: SocialUser = new SocialUser();
-                    let profile = this.auth2.currentUser.get().getBasicProfile();
-                    let token = this.auth2.currentUser.get().getAuthResponse(true).access_token;
-                    let backendToken = this.auth2.currentUser.get().getAuthResponse(true).id_token;
-
-                    user.id = profile.getId();
-                    user.name = profile.getName();
-                    user.email = profile.getEmail();
-                    user.photoUrl = profile.getImageUrl();
-                    user.firstName = profile.getGivenName();
-                    user.lastName = profile.getFamilyName();
-                    user.authToken = token;
-                    user.idToken = backendToken;
 
                     if (response && response.code) {
                         user.authorizationCode = response.code;
+                    }
+                    else {
+                        let profile = this.auth2.currentUser.get().getBasicProfile();
+                        let token = this.auth2.currentUser.get().getAuthResponse(true).access_token;
+                        let backendToken = this.auth2.currentUser.get().getAuthResponse(true).id_token;
+
+                        user.id = profile.getId();
+                        user.name = profile.getName();
+                        user.email = profile.getEmail();
+                        user.photoUrl = profile.getImageUrl();
+                        user.firstName = profile.getGivenName();
+                        user.lastName = profile.getFamilyName();
+                        user.authToken = token;
+                        user.idToken = backendToken;
                     }
 
                     resolve(user);
