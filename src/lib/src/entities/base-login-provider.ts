@@ -1,3 +1,5 @@
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { LoginProvider } from './login-provider';
 import { SocialUser } from './user';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -6,7 +8,7 @@ export abstract class BaseLoginProvider implements LoginProvider {
 
 	protected _readyState: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-	constructor() { }
+	constructor(@Inject(PLATFORM_ID) private platformId?: Object) { }
 
 	protected onReady(): Promise<void> {
 		return new Promise((resolve, reject) => {
@@ -24,13 +26,16 @@ export abstract class BaseLoginProvider implements LoginProvider {
 	abstract signOut(revoke?: boolean): Promise<any>;
 
 	loadScript(id: string, src: string, onload: any, async = true, inner_text_content = ''): void {
-		if (document.getElementById(id)) { return; }
+		// get document if platform is only browser
+		if (isPlatformBrowser(this.platformId)) {
+			if (document.getElementById(id)) { return; }
 
-		let signInJS = document.createElement('script');
-		signInJS.async = async;
-		signInJS.src = src;
-		signInJS.onload = onload;
-		signInJS.text = inner_text_content; // LinkedIn
-		document.head.appendChild(signInJS);
+			let signInJS = document.createElement('script');
+			signInJS.async = async;
+			signInJS.src = src;
+			signInJS.onload = onload;
+			signInJS.text = inner_text_content; // LinkedIn
+			document.head.appendChild(signInJS);
+		}
 	}
 }
