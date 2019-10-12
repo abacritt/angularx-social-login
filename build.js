@@ -5,6 +5,7 @@ const path = require('path');
 const glob = require('glob');
 const camelCase = require('camelcase');
 const ngc = require('@angular/compiler-cli/src/main').main;
+const ngFileSystemUtils = require('@angular/compiler-cli/src/ngtsc/file_system');
 const rollup = require('rollup');
 const uglify = require('rollup-plugin-uglify');
 const sourcemaps = require('rollup-plugin-sourcemaps');
@@ -22,6 +23,13 @@ const tempLibFolder = path.join(compilationFolder, 'lib');
 const es5OutputFolder = path.join(compilationFolder, 'lib-es5');
 const es2015OutputFolder = path.join(compilationFolder, 'lib-es2015');
 
+function ngCompile(param) {
+  ngFileSystemUtils.setFileSystem(new ngFileSystemUtils.NodeJSFileSystem());
+  const result = ngc(param);
+
+  return Promise.resolve(result);
+}
+
 return Promise.resolve()
   // Copy library to temporary folder and inline html/css.
   .then(() => _relativeCopy(`**/*`, srcFolder, tempLibFolder)
@@ -29,15 +37,15 @@ return Promise.resolve()
     .then(() => console.log('Inlining succeeded.'))
   )
   // Compile to ES2015.
-  .then(() => ngc(['--project', `${tempLibFolder}/tsconfig.lib.json`]), console.error)
-    .then(exitCode => exitCode === 0 ? Promise.resolve() : Promise.reject())
-    .then(() => console.log('ES2015 compilation succeeded.'))
-  
+  .then(() => ngCompile(['--project', `${tempLibFolder}/tsconfig.lib.json`]), console.error)
+  .then(exitCode => exitCode === 0 ? Promise.resolve() : Promise.reject())
+  .then(() => console.log('ES2015 compilation succeeded.'))
+
   // Compile to ES5.
-  .then(() => ngc(['--project', `${tempLibFolder}/tsconfig.es5.json`]), console.error)
-    .then(exitCode => exitCode === 0 ? Promise.resolve() : Promise.reject())
-    .then(() => console.log('ES5 compilation succeeded.'))
-  
+  .then(() => ngCompile(['--project', `${tempLibFolder}/tsconfig.es5.json`]), console.error)
+  .then(exitCode => exitCode === 0 ? Promise.resolve() : Promise.reject())
+  .then(() => console.log('ES5 compilation succeeded.'))
+
   // Copy typings and metadata to `dist/` folder.
   .then(() => Promise.resolve()
     .then(() => _relativeCopy('**/*.d.ts', es2015OutputFolder, distFolder))
@@ -123,7 +131,7 @@ return Promise.resolve()
       minifiedUmdConfig,
       fesm5config,
       fesm2015config
-    ].map(cfg => { 
+    ].map(cfg => {
       rollup.rollup(cfg.input).then(bundle => bundle.write(cfg.output));
     });
 
