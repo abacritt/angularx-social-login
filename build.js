@@ -17,7 +17,7 @@ const inlineResources = require('./inline-resources');
 const libName = require('./package.json').name;
 const rootFolder = path.join(__dirname);
 const compilationFolder = path.join(rootFolder, 'out-tsc');
-const srcFolder = path.join(rootFolder, 'src/lib');
+const srcFolder = path.join(rootFolder, 'src');
 const distFolder = path.join(rootFolder, 'dist');
 const tempLibFolder = path.join(compilationFolder, 'lib');
 const es5OutputFolder = path.join(compilationFolder, 'lib-es5');
@@ -67,7 +67,7 @@ return Promise.resolve()
         plugins: [
           commonjs({}),
           sourcemaps(),
-          nodeResolve({ jsnext: true, module: true })
+          nodeResolve()
         ]
       },
       output: {

@@ -1,6 +1,6 @@
 {
   "name": "angularx-social-login",
-  "version": "1.2.7",
+  "version": "2.0.1",
   "description": "Social login and authentication module for Angular 4 / 5. Supports authentication with Google and Facebook. Can be extended to other providers also.",
   "repository": {
     "type": "git",
@@ -56,36 +56,37 @@
     "release": "standard-version"
   },
   "peerDependencies": {
-    "@angular/core": "^8.2.8",
+    "@angular/core": "^8.2.10",
     "rxjs": "^6.5.3"
   },
   "devDependencies": {
-    "@angular/common": "^8.2.8",
-    "@angular/compiler": "^8.2.8",
-    "@angular/compiler-cli": "^8.2.8",
-    "@angular/core": "^8.2.8",
-    "@angular/platform-browser": "^8.2.8",
-    "@angular/platform-browser-dynamic": "^8.2.8",
-    "@types/jasmine": "3.3.12",
-    "@types/node": "^12.0.1",
+    "@angular/common": "^8.2.10",
+    "@angular/compiler": "^8.2.10",
+    "@angular/compiler-cli": "^8.2.10",
+    "@angular/core": "^8.2.10",
+    "@angular/platform-browser": "^8.2.10",
+    "@angular/platform-browser-dynamic": "^8.2.10",
+    "@types/jasmine": "3.4.4",
+    "@types/node": "^12.7.12",
     "camelcase": "^5.3.1",
-    "concurrently": "4.1.0",
-    "core-js": "^2.5.x",
+    "concurrently": "5.0.0",
+    "core-js": "^3.2.x",
     "glob": "^7.1.4",
-    "lite-server": "^2.4.0",
-    "rimraf": "^2.6.3",
-    "rollup": "^1.11.3",
-    "rollup-plugin-commonjs": "^9.3.4",
-    "rollup-plugin-node-resolve": "^4.2.4",
+    "lite-server": "^2.5.4",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.23.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
-    "rollup-plugin-uglify": "^6.0.2",
+    "rollup-plugin-uglify": "^6.0.3",
     "rxjs": "^6.5.3",
-    "standard-version": "^6.0.1",
-    "systemjs": "^3.1.6",
-    "tsickle": "^0.35.0",
-    "tslint": "^5.16.0",
-    "typescript": "^3.5.3",
-    "zone.js": "^0.10.2"
+    "standard-version": "^7.0.0",
+    "systemjs": "^6.1.3",
+    "tsickle": "^0.37.0",
+    "tslint": "^5.20.0",
+    "zone.js": "^0.9.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "typescript": "^3.5.3"
+  }
 }
