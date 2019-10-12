@@ -13,6 +13,7 @@
   "keywords": [
     "angular",
     "angular4",
+    "angular8",
     "angular-social-login",
     "social-authentication",
     "social-login",
@@ -56,8 +57,7 @@
   },
   "peerDependencies": {
     "@angular/core": "^8.2.8",
-    "rxjs": "^6.5.3",
-    "zone.js": "^0.10.2"
+    "rxjs": "^6.5.3"
   },
   "devDependencies": {
     "@angular/common": "^8.2.8",
