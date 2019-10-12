@@ -13,7 +13,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
         private opt: LoginOpt = { scope: 'email,public_profile' },
         private locale: string = 'en_US',
         private fields: string = 'name,email,picture,first_name,last_name',
-        private version: string = 'v2.9'
+        private version: string = 'v4.0'
     ) { super(); }
 
     initialize(): Promise<void> {
