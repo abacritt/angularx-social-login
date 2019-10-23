@@ -138,6 +138,8 @@ return Promise.resolve()
           if (warning.code === 'THIS_IS_UNDEFINED') {
             return;
           }
+
+          console.warn(warning.message);
         }
       };
 
