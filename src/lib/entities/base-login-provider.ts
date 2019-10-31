@@ -8,7 +8,7 @@ export abstract class BaseLoginProvider implements LoginProvider {
 
     protected _readyState: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object,) { }
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
     protected onReady(): Promise<void> {
         return new Promise((resolve, reject) => {
