@@ -62,7 +62,9 @@ return Promise.resolve()
         external: [
           // List of dependencies
           // See https://github.com/rollup/rollup/wiki/JavaScript-API#external for more.
-          '@angular/core'
+          '@angular/core',
+          '@angular/common',
+          'rxjs'
         ],
         plugins: [
           commonjs({}),
@@ -77,7 +79,9 @@ return Promise.resolve()
           // The key here is library name, and the value is the the name of the global variable name
           // the window object.
           // See https://github.com/rollup/rollup/wiki/JavaScript-API#globals for more.
-          '@angular/core': 'ng.core'
+          '@angular/core': 'ng.core',
+          '@angular/common': 'ng.common',
+          'rxjs': 'rxjs'
         }
       }
     };
