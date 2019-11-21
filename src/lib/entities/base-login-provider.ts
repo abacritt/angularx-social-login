@@ -25,7 +25,7 @@ export abstract class BaseLoginProvider implements LoginProvider {
 
     loadScript(id: string, src: string, onload: any, async = true, inner_text_content = ''): void {
         // get document if platform is only browser
-        if (document && !document.getElementById(id)) {
+        if (typeof document !== 'undefined' && !document.getElementById(id)) {
             let signInJS = document.createElement('script');
             signInJS.async = async;
             signInJS.src = src;
