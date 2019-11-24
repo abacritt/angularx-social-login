@@ -136,7 +136,18 @@ return Promise.resolve()
       fesm5config,
       fesm2015config
     ].map(cfg => {
-      rollup.rollup(cfg.input).then(bundle => bundle.write(cfg.output));
+      // Suppress the "The 'this' keyword is equavalent to 'undefined'..." warnings.
+      const inputConfig = {
+        ...cfg.input, onwarn: (warning) => {
+          if (warning.code === 'THIS_IS_UNDEFINED') {
+            return;
+          }
+
+          console.warn(warning.message);
+        }
+      };
+
+      rollup.rollup(inputConfig).then(bundle => bundle.write(cfg.output));
     });
 
     return Promise.all(allBundles)
