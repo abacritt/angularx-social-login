@@ -30,10 +30,10 @@ export abstract class BaseLoginProvider implements LoginProvider {
             signInJS.async = async;
             signInJS.src = src;
             signInJS.onload = onload;
-
+            /*
             if (inner_text_content) // LinkedIn
                 signInJS.text = inner_text_content;
-
+            */
             document.head.appendChild(signInJS);
         }
     }
