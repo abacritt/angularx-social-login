@@ -163,3 +163,59 @@ cd demo
 npm install
 ng serve
 ```
+
+## Dummy provider
+
+There is also a `DummyLoginProvider`, which simulates login / logout without actually 
+requiring an Internet connection.  Useful for certain development situations.
+
+### Usage
+
+#### Simple use case
+
+Just add the `DummyLoginProvider` to your `AuthServiceConfig()` as described above
+and then follow the same model as the other providers.
+
+```
+let config = new AuthServiceConfig([
+  { ... },
+  {
+      id: DummyLoginProvider.PROVIDER_ID,
+      provider: new DummyLoginProvider()
+  },
+  { ... }
+]);
+```
+
+#### Bring your own user
+
+The simple model hard-wires a certain caertoon rodent as the authenticated user. 
+
+If you would like to control the authenticated user identity, you can pass an
+optional `SocialUser` object into the constructor.
+
+For example, if you want to simulate the greatest football referee England has ever produced:
+
+```
+const dummyUser: SocialUser = {
+    id: '0123456789',
+    name: 'Howard Webb',
+    email: 'howard@webb.com',
+    firstName: 'Howard',
+    lastName: 'Webb',
+    authToken: 'dummyAuthToken',
+    photoUrl: 'https://en.wikipedia.org/wiki/Howard_Webb#/media/File:Howard_Webb_march11.jpg',
+    provider: 'DUMMY',
+    idToken: 'dummyIdToken',
+    authorizationCode: 'dummyAuthCode'
+};
+
+let config = new AuthServiceConfig([
+  { ... },
+  {
+      id: DummyLoginProvider.PROVIDER_ID,
+      provider: new DummyLoginProvider(dummyUser)  // Pass your user into the constructor
+  },
+  { ... }
+]);
+```
