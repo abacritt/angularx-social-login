@@ -1,4 +1,7 @@
-import {LoginOpt, SocialUser} from 'angularx-social-login';
+
+import {BaseLoginProvider} from '../entities/base-login-provider';
+import {SocialUser} from '../entities/user';
+import {LoginOpt} from '../auth.service';
 
 export class DummyLoginProvider extends BaseLoginProvider {
 
