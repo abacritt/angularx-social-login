@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-
-import { Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
-
+import { Observable, BehaviorSubject, ReplaySubject, isObservable } from 'rxjs';
+import {first} from 'rxjs/operators'
 import { LoginProvider } from './entities/login-provider';
 import { SocialUser } from './entities/user';
 
@@ -84,15 +83,32 @@ export interface LoginOpt {
 export class AuthServiceConfig {
   lazyLoad = false;
   providers: Map<string, LoginProvider> = new Map<string, LoginProvider>();
+  _ready:ReplaySubject<any> = new ReplaySubject()
 
-  constructor(providers: AuthServiceConfigItem[]) {
+  constructor(providers: AuthServiceConfigItem[] | Observable<AuthServiceConfigItem[]>) {
+    if(isObservable(providers)) {
+      providers.pipe(first()).subscribe(providerList => {
+        this.initialize(providerList)
+      })
+    } else {
+      this.initialize(providers as AuthServiceConfigItem[])
+    }
+  }
+
+  initialize(providers:AuthServiceConfigItem[]) {
     for (let i = 0; i < providers.length; i++) {
       let element = providers[i];
       this.providers.set(element.id, element.provider);
       this.lazyLoad = this.lazyLoad || element.lazyLoad;
+      
     }
+    this._ready.next()
+    this._ready.complete()
   }
+
+
 }
+
 
 @Injectable()
 export class AuthService {
@@ -117,11 +133,13 @@ export class AuthService {
   }
 
   constructor(config: AuthServiceConfig) {
-    this.providers = config.providers;
-
-    if (!config.lazyLoad) {
-      this.initialize();
-    }
+    
+    config._ready.subscribe(() => {    
+      this.providers = config.providers;
+      if (!config.lazyLoad) {
+        this.initialize();
+      }
+    });
   }
 
   private initialize() {
