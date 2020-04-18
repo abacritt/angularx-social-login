@@ -22,6 +22,8 @@ export class DummyLoginProvider extends BaseLoginProvider {
 
     private dummy: SocialUser;
 
+    private loggedIn: boolean;
+
     constructor(dummy?: SocialUser) {
         super();
         if (dummy) {
@@ -29,12 +31,20 @@ export class DummyLoginProvider extends BaseLoginProvider {
         } else {
             this.dummy = DummyLoginProvider.DEFAULT_USER;
         }
+
+        // Start not logged in
+        this.loggedIn = false;
     }
 
     getLoginStatus(): Promise<SocialUser> {
         return new Promise((resolve, reject) => {
             this.onReady().then(() => {
+
+                if (this.loggedIn) {
                     resolve(this.dummy);
+                } else {
+                    reject('No user is currently logged in.');
+                }
             });
         });
     }
@@ -49,6 +59,7 @@ export class DummyLoginProvider extends BaseLoginProvider {
     signIn(opt ?: LoginOpt): Promise<SocialUser> {
         return new Promise((resolve, reject) => {
             this.onReady().then(() => {
+                this.loggedIn = true;
                 resolve(this.dummy);
             });
         });
@@ -57,6 +68,7 @@ export class DummyLoginProvider extends BaseLoginProvider {
     signOut(revoke ?: boolean): Promise<any> {
         return new Promise((resolve, reject) => {
             this.onReady().then(() => {
+                this.loggedIn = false;
                 resolve();
             });
         });

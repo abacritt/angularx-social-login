@@ -192,7 +192,7 @@ let config = new AuthServiceConfig([
 
 #### Bring your own user
 
-The simple model hard-wires a certain caertoon rodent as the authenticated user. 
+The simple model hard-wires a certain cartoon rodent as the authenticated user. 
 
 If you would like to control the authenticated user identity, you can pass an
 optional `SocialUser` object into the constructor.
