@@ -8,10 +8,6 @@ import { CommonModule } from '@angular/common';
 
 import { AuthService, AuthServiceConfig } from './auth.service';
 
-export function configFactory(config: AuthServiceConfig) {
-  return config;
-}
-
 @NgModule({
   imports: [
     CommonModule

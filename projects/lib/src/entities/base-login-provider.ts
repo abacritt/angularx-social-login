@@ -23,18 +23,20 @@ export abstract class BaseLoginProvider implements LoginProvider {
     abstract signIn(): Promise<SocialUser>;
     abstract signOut(revoke?: boolean): Promise<any>;
 
-    loadScript(id: string, src: string, onload: any, async = true, inner_text_content = ''): void {
+    loadScript(id: string, src: string, onload: any, parentElement = null): void {
         // get document if platform is only browser
         if (typeof document !== 'undefined' && !document.getElementById(id)) {
             let signInJS = document.createElement('script');
-            signInJS.async = async;
+
+            signInJS.async = true;
             signInJS.src = src;
             signInJS.onload = onload;
-            /*
-            if (inner_text_content) // LinkedIn
-                signInJS.text = inner_text_content;
-            */
-            document.head.appendChild(signInJS);
+
+            if (!parentElement) {
+                parentElement = document.head;
+            }
+            
+            parentElement.appendChild(signInJS);
         }
     }
 }

@@ -1,6 +1,6 @@
 # Angular 9 Social Login
 
-Social login and authentication module for Angular 8 (supports Angular 4+). Supports authentication with **Google** and **Facebook**. Can be extended to other providers also.
+Social login and authentication module for Angular 8 (supports Angular 4+). Supports authentication with **Google**, **Facebook**, and **Amazon**. Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
@@ -20,22 +20,6 @@ In your `AppModule`, import the `SocialLoginModule`
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
 import { GoogleLoginProvider, FacebookLoginProvider } from "angularx-social-login";
 
-
-let config = new AuthServiceConfig([
-  {
-    id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider("Google-OAuth-Client-Id")
-  },
-  {
-    id: FacebookLoginProvider.PROVIDER_ID,
-    provider: new FacebookLoginProvider("Facebook-App-Id")
-  }
-]);
-
-export function provideConfig() {
-  return config;
-}
-
 @NgModule({
   declarations: [
     ...
@@ -47,7 +31,18 @@ export function provideConfig() {
   providers: [
     {
       provide: AuthServiceConfig,
-      useFactory: provideConfig
+      useFactory: () => {
+        return new AuthServiceConfig([
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider("Google-OAuth-Client-Id")
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider("Facebook-App-Id")
+          }
+        ]);
+      }
     }
   ],
   bootstrap: [...]
@@ -61,7 +56,6 @@ export class AppModule { }
 
 import { AuthService } from "angularx-social-login";
 import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
-
 
 @Component({
   selector: 'app-demo',

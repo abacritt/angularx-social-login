@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, ReplaySubject, isObservable } from 'rxjs';
-import {first} from 'rxjs/operators'
+import { first } from 'rxjs/operators';
 import { LoginProvider } from './entities/login-provider';
 import { SocialUser } from './entities/user';
 
@@ -77,43 +77,42 @@ export interface LoginOpt {
     This is susceptible to modification by the user, unless prompt: "none" is used.
   */
   login_hint?: string;
-
+  scope_data?: any;
 }
 
 export class AuthServiceConfig {
   lazyLoad = false;
+  autoLogin = false;
   providers: Map<string, LoginProvider> = new Map<string, LoginProvider>();
-  _ready:ReplaySubject<any> = new ReplaySubject()
+  _ready: ReplaySubject<any> = new ReplaySubject();
 
-  constructor(providers: AuthServiceConfigItem[] | Observable<AuthServiceConfigItem[]>) {
-    if(isObservable(providers)) {
-      providers.pipe(first()).subscribe(providerList => {
-        this.initialize(providerList)
-      })
+  constructor(
+    providers: AuthServiceConfigItem[] | Observable<AuthServiceConfigItem[]>
+  ) {
+    if (isObservable(providers)) {
+      providers.pipe(first()).subscribe((providerList) => {
+        this.initialize(providerList);
+      });
     } else {
-      this.initialize(providers as AuthServiceConfigItem[])
+      this.initialize(providers as AuthServiceConfigItem[]);
     }
   }
 
-  initialize(providers:AuthServiceConfigItem[]) {
+  initialize(providers: AuthServiceConfigItem[]) {
     for (let i = 0; i < providers.length; i++) {
       let element = providers[i];
       this.providers.set(element.id, element.provider);
       this.lazyLoad = this.lazyLoad || element.lazyLoad;
-      
     }
-    this._ready.next()
-    this._ready.complete()
+    this._ready.next();
+    this._ready.complete();
   }
-
-
 }
-
 
 @Injectable()
 export class AuthService {
-
-  private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND = 'Login provider not found';
+  private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND =
+    'Login provider not found';
   private static readonly ERR_NOT_LOGGED_IN = 'Not logged in';
 
   private providers: Map<string, LoginProvider>;
@@ -132,9 +131,8 @@ export class AuthService {
     return this._readyState.asObservable();
   }
 
-  constructor(config: AuthServiceConfig) {
-    
-    config._ready.subscribe(() => {    
+  constructor(private config: AuthServiceConfig) {
+    config._ready.subscribe(() => {
       this.providers = config.providers;
       if (!config.lazyLoad) {
         this.initialize();
@@ -150,14 +148,19 @@ export class AuthService {
         readyProviders.push(key);
         this._readyState.next(readyProviders);
 
-        provider.getLoginStatus().then((user) => {
-          user.provider = key;
+        if (this.config.autoLogin) {
+          provider
+            .getLoginStatus()
+            .then((user) => {
+              user.provider = key;
 
-          this._user = user;
-          this._authState.next(user);
-        }).catch((err) => {
-          this._authState.next(null);
-        });
+              this._user = user;
+              this._authState.next(user);
+            })
+            .catch((err) => {
+              this._authState.next(null);
+            });
+        }
       });
     });
   }
@@ -169,15 +172,18 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       let providerObject = this.providers.get(providerId);
       if (providerObject) {
-        providerObject.signIn(opt).then((user: SocialUser) => {
-          user.provider = providerId;
-          resolve(user);
+        providerObject
+          .signIn(opt)
+          .then((user: SocialUser) => {
+            user.provider = providerId;
+            resolve(user);
 
-          this._user = user;
-          this._authState.next(user);
-        }).catch(err => {
-          reject(err);
-        });
+            this._user = user;
+            this._authState.next(user);
+          })
+          .catch((err) => {
+            reject(err);
+          });
       } else {
         reject(AuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
       }
@@ -196,19 +202,21 @@ export class AuthService {
         let providerId = this._user.provider;
         let providerObject = this.providers.get(providerId);
         if (providerObject) {
-          providerObject.signOut(revoke).then(() => {
-            resolve();
+          providerObject
+            .signOut(revoke)
+            .then(() => {
+              resolve();
 
-            this._user = null;
-            this._authState.next(null);
-          }).catch((err) => {
-            reject(err);
-          });
+              this._user = null;
+              this._authState.next(null);
+            })
+            .catch((err) => {
+              reject(err);
+            });
         } else {
           reject(AuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
         }
       }
     });
   }
-
 }
