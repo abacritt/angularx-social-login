@@ -4,3 +4,4 @@ export { SocialUser } from './entities/user';
 export { GoogleLoginProvider } from './providers/google-login-provider';
 export { FacebookLoginProvider } from './providers/facebook-login-provider';
 export { AuthServiceConfig } from './auth.service';
+export { BaseLoginProvider } from './entities/base-login-provider';
