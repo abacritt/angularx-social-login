@@ -1,6 +1,6 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
-import { SocialUser } from '../entities/user';
-import { LoginOpt } from '../auth.service';
+import { SocialUser } from '../entities/social-user';
+import { LoginOptions } from '../entities/login-option';
 
 declare let FB: any;
 
@@ -10,7 +10,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
 
     constructor(
         private clientId: string,
-        private opt: LoginOpt = { scope: 'email,public_profile' },
+        private opt: LoginOptions = { scope: 'email,public_profile' },
         private locale: string = 'en_US',
         private fields: string = 'name,email,picture,first_name,last_name',
         private version: string = 'v4.0'
@@ -65,7 +65,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
         });
     }
 
-    signIn(opt?: LoginOpt): Promise<SocialUser> {
+    signIn(opt?: LoginOptions): Promise<SocialUser> {
         return new Promise((resolve, reject) => {
             this.onReady().then(() => {
                 FB.login((response: any) => {

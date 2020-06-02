@@ -1,5 +1,5 @@
 import { LoginProvider } from './login-provider';
-import { SocialUser } from './user';
+import { SocialUser } from './social-user';
 import { BehaviorSubject } from 'rxjs';
 
 export abstract class BaseLoginProvider implements LoginProvider {
@@ -23,7 +23,7 @@ export abstract class BaseLoginProvider implements LoginProvider {
     abstract signIn(): Promise<SocialUser>;
     abstract signOut(revoke?: boolean): Promise<any>;
 
-    loadScript(id: string, src: string, onload: any, parentElement = null): void {
+    protected loadScript(id: string, src: string, onload: any, parentElement = null): void {
         // get document if platform is only browser
         if (typeof document !== 'undefined' && !document.getElementById(id)) {
             let signInJS = document.createElement('script');
@@ -35,7 +35,7 @@ export abstract class BaseLoginProvider implements LoginProvider {
             if (!parentElement) {
                 parentElement = document.head;
             }
-            
+
             parentElement.appendChild(signInJS);
         }
     }

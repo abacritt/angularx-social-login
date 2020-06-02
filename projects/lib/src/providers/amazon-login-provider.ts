@@ -1,6 +1,6 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
-import { SocialUser } from '../entities';
-import { LoginOpt } from '../auth.service';
+import { SocialUser } from '../entities/social-user';
+import { LoginOptions } from '../entities/login-option';
 
 declare let amazon: any, window: any;
 
@@ -9,7 +9,7 @@ export class AmazonLoginProvider extends BaseLoginProvider {
 
   constructor(
     private clientId: string,
-    private options: LoginOpt = {
+    private options: LoginOptions = {
       scope: 'profile',
       scope_data: {
         profile: { essential: false },
@@ -65,16 +65,19 @@ export class AmazonLoginProvider extends BaseLoginProvider {
         if (authResponse.error) {
           reject(authResponse.error);
         } else {
-          amazon.Login.retrieveProfile(authResponse.access_token, (response) => {
-            let user: SocialUser = new SocialUser();
+          amazon.Login.retrieveProfile(
+            authResponse.access_token,
+            (response) => {
+              let user: SocialUser = new SocialUser();
 
-            user.id = response.profile.CustomerId;
-            user.name = response.profile.Name;
-            user.email = response.profile.PrimaryEmail;
-            user.authToken = authResponse.access_token;
+              user.id = response.profile.CustomerId;
+              user.name = response.profile.Name;
+              user.email = response.profile.PrimaryEmail;
+              user.authToken = authResponse.access_token;
 
-            resolve(user);
-          });
+              resolve(user);
+            }
+          );
         }
       });
     });

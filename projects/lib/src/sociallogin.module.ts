@@ -23,7 +23,7 @@ export class SocialLoginModule {
       providers: [
         AuthService,
         {
-          provide: AuthServiceConfig,
+          provide: 'AuthServiceConfig',
           useValue: config
         }
       ]

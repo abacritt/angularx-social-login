@@ -1,10 +1,10 @@
-import { SocialUser } from './user';
-import { LoginOpt } from '../auth.service';
+import { SocialUser } from './social-user';
+import { LoginOptions } from './login-option';
 
 export interface LoginProvider {
-	initialize(): Promise<void>;
+  initialize(): Promise<void>;
 	getLoginStatus(): Promise<SocialUser>;
-	signIn(opt?: LoginOpt): Promise<SocialUser>;
+	signIn(opt?: LoginOptions): Promise<SocialUser>;
 	signOut(revoke?: boolean): Promise<any>;
 }
 
