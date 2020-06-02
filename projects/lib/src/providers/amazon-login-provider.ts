@@ -48,13 +48,17 @@ export class AmazonLoginProvider extends BaseLoginProvider {
   getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       amazon.Login.retrieveProfile('', (response) => {
-        let user: SocialUser = new SocialUser();
+        if (response.success) {
+          let user: SocialUser = new SocialUser();
 
-        user.id = response.profile.CustomerId;
-        user.name = response.profile.Name;
-        user.email = response.profile.PrimaryEmail;
+          user.id = response.profile.CustomerId;
+          user.name = response.profile.Name;
+          user.email = response.profile.PrimaryEmail;
 
-        resolve(user);
+          resolve(user);
+        } else {
+          reject(response.error);
+        }
       });
     });
   }

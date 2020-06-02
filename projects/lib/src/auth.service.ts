@@ -51,20 +51,20 @@ export class AuthService {
       )
     ).then(() => {
       this.initialized = true;
-    });
 
-    this.providers.forEach((provider: LoginProvider, key: string) => {
-      if (this.autoLogin) {
-        provider
-          .getLoginStatus()
-          .then((user: SocialUser) => {
-            user.provider = key;
+      this.providers.forEach((provider: LoginProvider, key: string) => {
+        if (this.autoLogin) {
+          provider
+            .getLoginStatus()
+            .then((user: SocialUser) => {
+              user.provider = key;
 
-            this._user = user;
-            this._authState.next(user);
-          })
-          .catch(console.debug);
-      }
+              this._user = user;
+              this._authState.next(user);
+            })
+            .catch(console.debug);
+        }
+      });
     });
   }
 
