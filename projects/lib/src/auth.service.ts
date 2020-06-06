@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { LoginProvider } from './entities/login-provider';
-import { LoginOptions } from './entities/login-option';
 import { SocialUser } from './entities/social-user';
 
 export interface AuthServiceConfig {
@@ -68,7 +67,7 @@ export class AuthService {
     });
   }
 
-  signIn(providerId: string, opt?: LoginOptions): Promise<SocialUser> {
+  signIn(providerId: string, signInOptions?: any): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       if (!this.initialized) {
         reject(AuthService.ERR_NOT_INITIALIZED);
@@ -76,7 +75,7 @@ export class AuthService {
         let providerObject = this.providers.get(providerId);
         if (providerObject) {
           providerObject
-            .signIn(opt)
+            .signIn(signInOptions)
             .then((user: SocialUser) => {
               user.provider = providerId;
               resolve(user);

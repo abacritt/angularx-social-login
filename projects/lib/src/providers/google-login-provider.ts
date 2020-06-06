@@ -1,6 +1,5 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/social-user';
-import { LoginOptions } from '../entities/login-option';
 
 declare let gapi: any;
 
@@ -11,7 +10,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
   constructor(
     private clientId: string,
-    private opt: LoginOptions = { scope: 'email' }
+    private initOptions: any = { scope: 'email' }
   ) {
     super();
   }
@@ -24,7 +23,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         () => {
           gapi.load('auth2', () => {
             this.auth2 = gapi.auth2.init({
-              ...this.opt,
+              ...this.initOptions,
               client_id: this.clientId,
             });
 
@@ -69,14 +68,14 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     });
   }
 
-  signIn(opt?: LoginOptions): Promise<SocialUser> {
+  signIn(signInOptions?: any): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       this.onReady().then(() => {
         const offlineAccess: boolean =
-          (opt && opt.offline_access) || (this.opt && this.opt.offline_access);
+          (signInOptions && signInOptions.offline_access) || (this.initOptions && this.initOptions.offline_access);
         let promise = !offlineAccess
-          ? this.auth2.signIn(opt)
-          : this.auth2.grantOfflineAccess(opt);
+          ? this.auth2.signIn(signInOptions)
+          : this.auth2.grantOfflineAccess(signInOptions);
 
         promise
           .then(

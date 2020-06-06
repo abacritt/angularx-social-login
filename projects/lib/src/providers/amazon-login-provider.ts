@@ -1,6 +1,5 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/social-user';
-import { LoginOptions } from '../entities/login-option';
 
 declare let amazon: any, window: any;
 
@@ -9,7 +8,7 @@ export class AmazonLoginProvider extends BaseLoginProvider {
 
   constructor(
     private clientId: string,
-    private options: LoginOptions = {
+    private initOptions: any = {
       scope: 'profile',
       scope_data: {
         profile: { essential: false },
@@ -63,9 +62,10 @@ export class AmazonLoginProvider extends BaseLoginProvider {
     });
   }
 
-  signIn(): Promise<SocialUser> {
+  signIn(signInOptions?: any): Promise<SocialUser> {
+    const options = { ...this.initOptions, ...signInOptions };
     return new Promise((resolve, reject) => {
-      amazon.Login.authorize(this.options, (authResponse) => {
+      amazon.Login.authorize(options, (authResponse) => {
         if (authResponse.error) {
           reject(authResponse.error);
         } else {
