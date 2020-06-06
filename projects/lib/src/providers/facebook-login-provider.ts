@@ -32,7 +32,6 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             version: this.initOptions.version,
           });
 
-          this._readyState.next(true);
           resolve();
         }
       );
@@ -41,32 +40,30 @@ export class FacebookLoginProvider extends BaseLoginProvider {
 
   getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
-      this.onReady().then(() => {
-        FB.getLoginStatus((response: any) => {
-          if (response.status === 'connected') {
-            let authResponse = response.authResponse;
-            FB.api(`/me?fields=${this.initOptions.fields}`, (fbUser: any) => {
-              let user: SocialUser = new SocialUser();
+      FB.getLoginStatus((response: any) => {
+        if (response.status === 'connected') {
+          let authResponse = response.authResponse;
+          FB.api(`/me?fields=${this.initOptions.fields}`, (fbUser: any) => {
+            let user: SocialUser = new SocialUser();
 
-              user.id = fbUser.id;
-              user.name = fbUser.name;
-              user.email = fbUser.email;
-              user.photoUrl =
-                'https://graph.facebook.com/' +
-                fbUser.id +
-                '/picture?type=normal';
-              user.firstName = fbUser.first_name;
-              user.lastName = fbUser.last_name;
-              user.authToken = authResponse.accessToken;
+            user.id = fbUser.id;
+            user.name = fbUser.name;
+            user.email = fbUser.email;
+            user.photoUrl =
+              'https://graph.facebook.com/' +
+              fbUser.id +
+              '/picture?type=normal';
+            user.firstName = fbUser.first_name;
+            user.lastName = fbUser.last_name;
+            user.authToken = authResponse.accessToken;
 
-              user.facebook = fbUser;
+            user.facebook = fbUser;
 
-              resolve(user);
-            });
-          } else {
-            reject('No user is currently logged in.');
-          }
-        });
+            resolve(user);
+          });
+        } else {
+          reject('No user is currently logged in.');
+        }
       });
     });
   }
@@ -74,42 +71,38 @@ export class FacebookLoginProvider extends BaseLoginProvider {
   signIn(signInOptions?: any): Promise<SocialUser> {
     const options = { ...this.initOptions, ...signInOptions };
     return new Promise((resolve, reject) => {
-      this.onReady().then(() => {
-        FB.login((response: any) => {
-          if (response.authResponse) {
-            let authResponse = response.authResponse;
-            FB.api(`/me?fields=${options.fields}`, (fbUser: any) => {
-              let user: SocialUser = new SocialUser();
+      FB.login((response: any) => {
+        if (response.authResponse) {
+          let authResponse = response.authResponse;
+          FB.api(`/me?fields=${options.fields}`, (fbUser: any) => {
+            let user: SocialUser = new SocialUser();
 
-              user.id = fbUser.id;
-              user.name = fbUser.name;
-              user.email = fbUser.email;
-              user.photoUrl =
-                'https://graph.facebook.com/' +
-                fbUser.id +
-                '/picture?type=normal';
-              user.firstName = fbUser.first_name;
-              user.lastName = fbUser.last_name;
-              user.authToken = authResponse.accessToken;
+            user.id = fbUser.id;
+            user.name = fbUser.name;
+            user.email = fbUser.email;
+            user.photoUrl =
+              'https://graph.facebook.com/' +
+              fbUser.id +
+              '/picture?type=normal';
+            user.firstName = fbUser.first_name;
+            user.lastName = fbUser.last_name;
+            user.authToken = authResponse.accessToken;
 
-              user.facebook = fbUser;
+            user.facebook = fbUser;
 
-              resolve(user);
-            });
-          } else {
-            reject('User cancelled login or did not fully authorize.');
-          }
-        }, options);
-      });
+            resolve(user);
+          });
+        } else {
+          reject('User cancelled login or did not fully authorize.');
+        }
+      }, options);
     });
   }
 
   signOut(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.onReady().then(() => {
-        FB.logout((response: any) => {
-          resolve();
-        });
+      FB.logout((response: any) => {
+        resolve();
       });
     });
   }

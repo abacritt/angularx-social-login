@@ -36,7 +36,6 @@ export class AmazonLoginProvider extends BaseLoginProvider {
         'amazon-login-sdk',
         'https://assets.loginwithamazon.com/sdk/na/login1.js',
         () => {
-          this._readyState.next(true);
           resolve();
         },
         amazonRoot

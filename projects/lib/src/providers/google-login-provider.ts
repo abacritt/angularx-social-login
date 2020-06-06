@@ -29,7 +29,6 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
             this.auth2
               .then(() => {
-                this._readyState.next(true);
                 resolve();
               })
               .catch((err: any) => {
@@ -43,99 +42,95 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
   getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
-      this.onReady().then(() => {
-        if (this.auth2.isSignedIn.get()) {
-          let user: SocialUser = new SocialUser();
-          let profile = this.auth2.currentUser.get().getBasicProfile();
-          let token = this.auth2.currentUser.get().getAuthResponse(true)
-            .access_token;
-          let backendToken = this.auth2.currentUser.get().getAuthResponse(true)
-            .id_token;
+      if (this.auth2.isSignedIn.get()) {
+        let user: SocialUser = new SocialUser();
+        let profile = this.auth2.currentUser.get().getBasicProfile();
+        let token = this.auth2.currentUser.get().getAuthResponse(true)
+          .access_token;
+        let backendToken = this.auth2.currentUser.get().getAuthResponse(true)
+          .id_token;
 
-          user.id = profile.getId();
-          user.name = profile.getName();
-          user.email = profile.getEmail();
-          user.photoUrl = profile.getImageUrl();
-          user.firstName = profile.getGivenName();
-          user.lastName = profile.getFamilyName();
-          user.authToken = token;
-          user.idToken = backendToken;
-          resolve(user);
-        } else {
-          reject('No user is currently logged in.');
-        }
-      });
+        user.id = profile.getId();
+        user.name = profile.getName();
+        user.email = profile.getEmail();
+        user.photoUrl = profile.getImageUrl();
+        user.firstName = profile.getGivenName();
+        user.lastName = profile.getFamilyName();
+        user.authToken = token;
+        user.idToken = backendToken;
+        resolve(user);
+      } else {
+        reject('No user is currently logged in.');
+      }
     });
   }
 
   signIn(signInOptions?: any): Promise<SocialUser> {
+    const options = { ...this.initOptions, ...signInOptions };
+
     return new Promise((resolve, reject) => {
-      this.onReady().then(() => {
-        const offlineAccess: boolean =
-          (signInOptions && signInOptions.offline_access) || (this.initOptions && this.initOptions.offline_access);
-        let promise = !offlineAccess
-          ? this.auth2.signIn(signInOptions)
-          : this.auth2.grantOfflineAccess(signInOptions);
+      const offlineAccess: boolean = options && options.offline_access;
+      let promise = !offlineAccess
+        ? this.auth2.signIn(signInOptions)
+        : this.auth2.grantOfflineAccess(signInOptions);
 
-        promise
-          .then(
-            (response: any) => {
-              let user: SocialUser = new SocialUser();
-              let profile = this.auth2.currentUser.get().getBasicProfile();
-              let token = this.auth2.currentUser.get().getAuthResponse(true)
-                .access_token;
-              let backendToken = this.auth2.currentUser
-                .get()
-                .getAuthResponse(true).id_token;
+      promise
+        .then(
+          (response: any) => {
+            let user: SocialUser = new SocialUser();
+            let profile = this.auth2.currentUser.get().getBasicProfile();
+            let token = this.auth2.currentUser.get().getAuthResponse(true)
+              .access_token;
+            let backendToken = this.auth2.currentUser
+              .get()
+              .getAuthResponse(true).id_token;
 
-              user.id = profile.getId();
-              user.name = profile.getName();
-              user.email = profile.getEmail();
-              user.photoUrl = profile.getImageUrl();
-              user.firstName = profile.getGivenName();
-              user.lastName = profile.getFamilyName();
-              user.authToken = token;
-              user.idToken = backendToken;
+            user.id = profile.getId();
+            user.name = profile.getName();
+            user.email = profile.getEmail();
+            user.photoUrl = profile.getImageUrl();
+            user.firstName = profile.getGivenName();
+            user.lastName = profile.getFamilyName();
+            user.authToken = token;
+            user.idToken = backendToken;
 
-              if (response && response.code) {
-                user.authorizationCode = response.code;
-              }
-
-              resolve(user);
-            },
-            (closed: any) => {
-              reject('User cancelled login or did not fully authorize.');
+            if (response && response.code) {
+              user.authorizationCode = response.code;
             }
-          )
-          .catch((err: any) => {
-            reject(err);
-          });
-      });
+
+            resolve(user);
+          },
+          (closed: any) => {
+            reject(closed);
+          }
+        )
+        .catch((err: any) => {
+          reject(err);
+        });
     });
   }
 
   signOut(revoke?: boolean): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.onReady().then(() => {
-        let signOutPromise;
-        if (revoke) {
-          signOutPromise = this.auth2.disconnect();
-        } else {
-          signOutPromise = this.auth2.signOut();
-        }
+      let signOutPromise: Promise<any>;
 
-        signOutPromise
-          .then((err: any) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve();
-            }
-          })
-          .catch((err: any) => {
+      if (revoke) {
+        signOutPromise = this.auth2.disconnect();
+      } else {
+        signOutPromise = this.auth2.signOut();
+      }
+
+      signOutPromise
+        .then((err: any) => {
+          if (err) {
             reject(err);
-          });
-      });
+          } else {
+            resolve();
+          }
+        })
+        .catch((err: any) => {
+          reject(err);
+        });
     });
   }
 }
