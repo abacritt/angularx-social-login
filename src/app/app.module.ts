@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DemoComponent } from './demo/demo.component';
 
-import { SocialLoginModule } from 'lib';
+import { SocialLoginModule, SocialAuthServiceConfig } from 'lib';
 import {
   GoogleLoginProvider,
   FacebookLoginProvider,
@@ -19,7 +19,7 @@ import {
   imports: [BrowserModule, FormsModule, HttpClientModule, SocialLoginModule],
   providers: [
     {
-      provide: 'AuthServiceConfig',
+      provide: 'SocialAuthServiceConfig',
       useValue: {
         autoLogin: true,
         providers: [
@@ -40,7 +40,7 @@ import {
             ),
           },
         ],
-      },
+      } as SocialAuthServiceConfig,
     },
   ],
   bootstrap: [AppComponent],

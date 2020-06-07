@@ -3,13 +3,13 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { LoginProvider } from './entities/login-provider';
 import { SocialUser } from './entities/social-user';
 
-export interface AuthServiceConfig {
+export interface SocialAuthServiceConfig {
   autoLogin?: boolean;
   providers: { id: string; provider: LoginProvider }[];
 }
 
 @Injectable()
-export class AuthService {
+export class SocialAuthService {
   private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND =
     'Login provider not found';
   private static readonly ERR_NOT_LOGGED_IN = 'Not logged in';
@@ -27,7 +27,7 @@ export class AuthService {
     return this._authState.asObservable();
   }
 
-  constructor(@Inject('AuthServiceConfig') config: AuthServiceConfig | Promise<AuthServiceConfig>) {
+  constructor(@Inject('SocialAuthServiceConfig') config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>) {
     if (config instanceof Promise) {
       config.then((config) => {
         this.initialize(config);
@@ -37,7 +37,7 @@ export class AuthService {
     }
   }
 
-  private initialize(config: AuthServiceConfig) {
+  private initialize(config: SocialAuthServiceConfig) {
     this.autoLogin = config.autoLogin !== undefined ? config.autoLogin : false;
 
     config.providers.forEach((item) => {
@@ -70,7 +70,7 @@ export class AuthService {
   signIn(providerId: string, signInOptions?: any): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       if (!this.initialized) {
-        reject(AuthService.ERR_NOT_INITIALIZED);
+        reject(SocialAuthService.ERR_NOT_INITIALIZED);
       } else {
         let providerObject = this.providers.get(providerId);
         if (providerObject) {
@@ -87,7 +87,7 @@ export class AuthService {
               reject(err);
             });
         } else {
-          reject(AuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
+          reject(SocialAuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
         }
       }
     });
@@ -96,9 +96,9 @@ export class AuthService {
   signOut(revoke: boolean = false): Promise<any> {
     return new Promise((resolve, reject) => {
       if (!this.initialized) {
-        reject(AuthService.ERR_NOT_INITIALIZED);
+        reject(SocialAuthService.ERR_NOT_INITIALIZED);
       } else if (!this._user) {
-        reject(AuthService.ERR_NOT_LOGGED_IN);
+        reject(SocialAuthService.ERR_NOT_LOGGED_IN);
       } else {
         let providerId = this._user.provider;
         let providerObject = this.providers.get(providerId);
@@ -115,7 +115,7 @@ export class AuthService {
               reject(err);
             });
         } else {
-          reject(AuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
+          reject(SocialAuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
         }
       }
     });
