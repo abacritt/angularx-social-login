@@ -6,10 +6,10 @@ Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
 ## Getting started
 
-### Install via npm 
+### Install via npm
 
 ```sh
-npm install --save angularx-social-login
+npm i angularx-social-login
 ```
 
 ### Import the module
@@ -17,8 +17,12 @@ npm install --save angularx-social-login
 In your `AppModule`, import the `SocialLoginModule`
 
 ```javascript
-import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
-import { GoogleLoginProvider, FacebookLoginProvider } from "angularx-social-login";
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider,
+  AmazonLoginProvider,
+} from 'angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -30,19 +34,28 @@ import { GoogleLoginProvider, FacebookLoginProvider } from "angularx-social-logi
   ],
   providers: [
     {
-      provide: AuthServiceConfig,
-      useFactory: () => {
-        return new AuthServiceConfig([
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider("Google-OAuth-Client-Id")
+            provider: new GoogleLoginProvider(
+              '624796833023-clhjgupm0pu6vgga7k5i5bsfp6qp6egh.apps.googleusercontent.com'
+            ),
           },
           {
             id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider("Facebook-App-Id")
-          }
-        ]);
-      }
+            provider: new FacebookLoginProvider('561602290896109'),
+          },
+          {
+            id: AmazonLoginProvider.PROVIDER_ID,
+            provider: new AmazonLoginProvider(
+              'amzn1.application-oa2-client.f074ae67c0a146b6902cc0c4a3297935'
+            ),
+          },
+        ],
+      } as SocialAuthServiceConfig,
     }
   ],
   bootstrap: [...]
@@ -54,7 +67,7 @@ export class AppModule { }
 
 ```javascript
 
-import { AuthService } from "angularx-social-login";
+import { SocialAuthService } from "angularx-social-login";
 import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
 
 @Component({
@@ -64,7 +77,7 @@ import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-logi
 })
 export class DemoComponent implements OnInit {
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: SocialAuthService) { }
 
   signInWithGoogle(): void {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
@@ -72,7 +85,7 @@ export class DemoComponent implements OnInit {
 
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
-  } 
+  }
 
   signOut(): void {
     this.authService.signOut();
@@ -83,10 +96,10 @@ export class DemoComponent implements OnInit {
 
 ### Subscribe to the authentication state
 
-You are notified when user logs in or logs out. You receive a `SocialUser` object when the user logs in and a `null` when the user logs out. `SocialUser` object contains basic user information such as name, email, photo URL, etc.
+You are notified when user logs in or logs out. You receive a `SocialUser` object when the user logs in and a `null` when the user logs out. `SocialUser` object contains basic user information such as name, email, photo URL, etc. along with the `auth_token`. You can communicate the `auth_token` to your server to authenticate the user in server and make API calls from server.
 
 ```javascript
-import { AuthService } from "angularx-social-login";
+import { SocialAuthService } from "angularx-social-login";
 import { SocialUser } from "angularx-social-login";
 
 @Component({
@@ -121,10 +134,10 @@ export class DemoComponent implements OnInit {
 </div>
 ```
 
-## Specifying custom scope
+## Specifying custom scopes, fields etc. on initialization
 
 ```javascript
-const fbLoginOptions: LoginOpt = {
+const fbLoginOptions = {
   scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages',
   return_scopes: true,
   enable_profile_selector: true
@@ -144,6 +157,16 @@ let config = new AuthServiceConfig([
     provider: new FacebookLoginProvider("Facebook-App-Id", fbLoginOptions)
   }
 ]);
+```
+
+## Specifying custom scopes, fields etc. on login
+
+```javascript
+const fbLoginOptions = {
+  scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages'
+}; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
+
+this.authService.signIn(FacebookLoginProvider.PROVIDER_ID, fbLoginOptions);
 ```
 
 ## Running the demo app

@@ -41,7 +41,7 @@ import {
           },
         ],
       } as SocialAuthServiceConfig,
-    },
+    }
   ],
   bootstrap: [AppComponent],
 })
