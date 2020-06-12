@@ -4,6 +4,8 @@ Social login and authentication module for Angular 8 (supports Angular 4+). Supp
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
+> Note: For Angular version compatibility information, check the [CHANGELOG](CHANGELOG.md).
+
 ## Getting started
 
 ### Install via npm
