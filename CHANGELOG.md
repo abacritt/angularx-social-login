@@ -5,3 +5,6 @@
 - Add Amazon login provider.
 - Add option to disable auto-login with providers.
 - Angular 9 support (with `--prod` flag)
+
+## 2.2.1
+- Angular 8 support
