@@ -8,6 +8,7 @@ export interface SocialAuthServiceConfig {
   providers: { id: string; provider: LoginProvider }[];
 }
 
+/** @dynamic */
 @Injectable()
 export class SocialAuthService {
   private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND =

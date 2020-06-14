@@ -24,9 +24,11 @@
   "bugs": {
     "url": "https://github.com/abacritt/angularx-social-login/issues"
   },
+  "dependencies": {
+    "tslib": "^1.10.0"
+  },
   "peerDependencies": {
     "@angular/common": "^9.1.0",
-    "@angular/core": "^9.1.0",
-    "tslib": "^1.10.0"
+    "@angular/core": "^9.1.0"
   }
 }
