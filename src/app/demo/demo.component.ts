@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService } from 'lib';
+import { SocialAuthService } from 'lib';
 import { SocialUser } from 'lib';
-import { GoogleLoginProvider, FacebookLoginProvider } from 'lib';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider,
+  AmazonLoginProvider,
+} from 'lib';
 
 @Component({
   selector: 'app-demo',
@@ -13,7 +17,7 @@ export class DemoComponent implements OnInit {
 
   user: SocialUser;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: SocialAuthService) { }
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {
@@ -27,6 +31,10 @@ export class DemoComponent implements OnInit {
 
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithAmazon(): void {
+    this.authService.signIn(AmazonLoginProvider.PROVIDER_ID);
   }
 
   signOut(): void {

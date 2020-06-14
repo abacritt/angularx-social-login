@@ -6,28 +6,24 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AuthService, AuthServiceConfig } from './auth.service';
-
-export function configFactory(config: AuthServiceConfig) {
-  return config;
-}
+import { SocialAuthService, SocialAuthServiceConfig } from './auth.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   providers: [
-    AuthService
+    SocialAuthService
   ]
 })
 export class SocialLoginModule {
-  public static initialize(config: AuthServiceConfig): ModuleWithProviders {
+  public static initialize(config: SocialAuthServiceConfig): ModuleWithProviders {
     return {
       ngModule: SocialLoginModule,
       providers: [
-        AuthService,
+        SocialAuthService,
         {
-          provide: AuthServiceConfig,
+          provide: 'SocialAuthServiceConfig',
           useValue: config
         }
       ]
