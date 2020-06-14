@@ -1,4 +1,4 @@
-export { SocialAuthService, SocialAuthServiceConfig } from './auth.service';
+export { SocialAuthService, SocialAuthServiceConfig } from './socialauth.service';
 export { SocialLoginModule } from './sociallogin.module';
 export { SocialUser } from './entities/social-user';
 export { GoogleLoginProvider } from './providers/google-login-provider';

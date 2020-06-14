@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { SocialAuthService, SocialAuthServiceConfig } from './auth.service';
+import { SocialAuthService, SocialAuthServiceConfig } from './socialauth.service';
 
 @NgModule({
   imports: [
