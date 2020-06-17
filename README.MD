@@ -111,8 +111,8 @@ import { SocialUser } from "angularx-social-login";
 })
 export class DemoComponent implements OnInit {
 
-  private user: SocialUser;
-  private loggedIn: boolean;
+  user: SocialUser;
+  loggedIn: boolean;
 
   constructor(private authService: AuthService) { }
 
