@@ -1,6 +1,6 @@
 # Angular 9 Social Login
 
-Social login and authentication module for Angular 8 (supports Angular 4+). Supports authentication with **Google**, **Facebook**, and **Amazon**. Can be extended to other providers also.
+Social login and authentication module for Angular 9 (supports Angular 4+). Supports authentication with **Google**, **Facebook**, and **Amazon**. Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
