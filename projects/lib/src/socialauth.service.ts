@@ -28,7 +28,10 @@ export class SocialAuthService {
     return this._authState.asObservable();
   }
 
-  constructor(@Inject('SocialAuthServiceConfig') config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>) {
+  constructor(
+    @Inject('SocialAuthServiceConfig')
+    config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>
+  ) {
     if (config instanceof Promise) {
       config.then((config) => {
         this.initialize(config);
@@ -49,23 +52,25 @@ export class SocialAuthService {
       Array.from(this.providers.values()).map((provider) =>
         provider.initialize()
       )
-    ).then(() => {
-      this.initialized = true;
+    )
+      .then(() => {
+        this.initialized = true;
 
-      this.providers.forEach((provider: LoginProvider, key: string) => {
-        if (this.autoLogin) {
-          provider
-            .getLoginStatus()
-            .then((user: SocialUser) => {
-              user.provider = key;
+        this.providers.forEach((provider: LoginProvider, key: string) => {
+          if (this.autoLogin) {
+            provider
+              .getLoginStatus()
+              .then((user: SocialUser) => {
+                user.provider = key;
 
-              this._user = user;
-              this._authState.next(user);
-            })
-            .catch(console.debug);
-        }
-      });
-    });
+                this._user = user;
+                this._authState.next(user);
+              })
+              .catch(console.debug);
+          }
+        });
+      })
+      .catch(console.error);
   }
 
   signIn(providerId: string, signInOptions?: any): Promise<SocialUser> {
