@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, AsyncSubject } from 'rxjs';
 import { LoginProvider } from './entities/login-provider';
 import { SocialUser } from './entities/social-user';
 
@@ -14,7 +14,7 @@ export class SocialAuthService {
   private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND =
     'Login provider not found';
   private static readonly ERR_NOT_LOGGED_IN = 'Not logged in';
-  private static readonly ERR_NOT_INITIALIZED = 'Login providers not ready yet';
+  private static readonly ERR_NOT_INITIALIZED = 'Login providers not ready yet. Are there errors on your console?';
 
   private providers: Map<string, LoginProvider> = new Map();
   private autoLogin = false;
@@ -23,9 +23,14 @@ export class SocialAuthService {
   private _authState: ReplaySubject<SocialUser> = new ReplaySubject(1);
 
   private initialized = false;
+  private _initState: AsyncSubject<boolean> = new AsyncSubject();
 
   get authState(): Observable<SocialUser> {
     return this._authState.asObservable();
+  }
+
+  get initState(): Observable<boolean> {
+    return this._initState.asObservable();
   }
 
   constructor(
@@ -55,6 +60,7 @@ export class SocialAuthService {
     )
       .then(() => {
         this.initialized = true;
+        this._initState.complete();
 
         this.providers.forEach((provider: LoginProvider, key: string) => {
           if (this.autoLogin) {

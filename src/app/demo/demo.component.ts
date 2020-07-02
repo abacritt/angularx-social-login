@@ -20,7 +20,7 @@ export class DemoComponent implements OnInit {
   constructor(private authService: SocialAuthService) { }
 
   ngOnInit() {
-    this.authService.authState.subscribe((user) => {
+    this.authService.authState.subscribe(user => {
       this.user = user;
     });
   }
