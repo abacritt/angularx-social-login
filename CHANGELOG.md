@@ -1,3 +1,6 @@
+## 3.1.0
+- Added `initState` observable in `SocialAuthService`. The observable will complete once all the providers are ready.
+
 # 3.0.0
 - Refactor and rename the social auth service.
 - Refactor the way one provides the config object.
