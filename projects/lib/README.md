@@ -1,5 +1,7 @@
 # Angular 9 Social Login
 
+[![Gitter](https://badges.gitter.im/angularx-social-login/community.svg)](https://gitter.im/angularx-social-login/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 Social login and authentication module for Angular 9 (supports Angular 4+). Supports authentication with **Google**, **Facebook**, and **Amazon**. Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
