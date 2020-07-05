@@ -45,6 +45,7 @@ export class AmazonLoginProvider extends BaseLoginProvider {
 
   getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
+      // TODO: localStorage based implementation?
       amazon.Login.retrieveProfile('', (response) => {
         if (response.success) {
           let user: SocialUser = new SocialUser();
