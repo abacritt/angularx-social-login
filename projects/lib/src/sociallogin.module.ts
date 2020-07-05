@@ -17,7 +17,7 @@ import { SocialAuthService, SocialAuthServiceConfig } from './socialauth.service
   ]
 })
 export class SocialLoginModule {
-  public static initialize(config: SocialAuthServiceConfig): ModuleWithProviders {
+  public static initialize(config: SocialAuthServiceConfig): ModuleWithProviders<SocialLoginModule> {
     return {
       ngModule: SocialLoginModule,
       providers: [
