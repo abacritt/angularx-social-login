@@ -14,11 +14,14 @@
     "angular",
     "angular4",
     "angular8",
+    "angular9",
+    "angular10",
     "angular-social-login",
     "social-authentication",
     "social-login",
     "google-authentication",
-    "facebook-authentication"
+    "facebook-authentication",
+    "amazon-authentication"
   ],
   "license": "MIT",
   "bugs": {
@@ -26,9 +29,9 @@
   },
   "dependencies": {
     "tslib": "^2.0.0"
-},
+  },
   "peerDependencies": {
-    "@angular/common": "^9.1.0",
-    "@angular/core": "^9.1.0"
+    "@angular/common": "^9.0.0 || ^10.0.0",
+    "@angular/core": "^9.0.0 || ^10.0.0"
   }
 }
