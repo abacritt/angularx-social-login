@@ -1,12 +1,12 @@
-# Angular 9 Social Login
+# Angular 9 / 10 Social Login
 
 [![Gitter](https://badges.gitter.im/angularx-social-login/community.svg)](https://gitter.im/angularx-social-login/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Social login and authentication module for Angular 9 (supports Angular 4+). Supports authentication with **Google**, **Facebook**, and **Amazon**. Can be extended to other providers also.
+Social login and authentication module for Angular 9 / 10. Supports authentication with **Google**, **Facebook**, and **Amazon**. Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
-> Note: For Angular version compatibility information, check the [CHANGELOG](CHANGELOG.md).
+> Note: For compatibility with older versions Angular (e.g. Angular 8 and older), please use an older version of the library. Check [this comment on the compatibility with Angular versions](https://github.com/abacritt/angularx-social-login/pull/286#discussion_r449864732) and [this comment on how to use the older version of the library](https://github.com/abacritt/angularx-social-login/issues/283#issuecomment-652930750).
 
 ## Getting started
 

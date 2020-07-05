@@ -1,3 +1,7 @@
+## 3.2.0
+- Support for Angular 10
+- Fix issue with route guards (thanks to @mokipedia)
+
 ## 3.1.0
 - Added `initState` observable in `SocialAuthService`. The observable will complete once all the providers are ready.
 
