@@ -14,11 +14,14 @@
     "angular",
     "angular4",
     "angular8",
+    "angular9",
+    "angular10",
     "angular-social-login",
     "social-authentication",
     "social-login",
     "google-authentication",
-    "facebook-authentication"
+    "facebook-authentication",
+    "amazon-authentication"
   ],
   "license": "MIT",
   "bugs": {
