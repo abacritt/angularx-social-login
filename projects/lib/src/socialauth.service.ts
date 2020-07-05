@@ -62,10 +62,13 @@ export class SocialAuthService {
         this.initialized = true;
         this._initState.complete();
 
-        this.providers.forEach((provider: LoginProvider, key: string) => {
-          if (this.autoLogin) {
-            provider
-              .getLoginStatus()
+        const loginStatusPromises = [];
+
+        if (this.autoLogin) {
+          this.providers.forEach((provider: LoginProvider, key: string) => {
+            let promise = provider.getLoginStatus();
+            loginStatusPromises.push(promise);
+            promise
               .then((user: SocialUser) => {
                 user.provider = key;
 
@@ -73,8 +76,12 @@ export class SocialAuthService {
                 this._authState.next(user);
               })
               .catch(console.debug);
-          }
-        });
+          });
+          Promise.all(loginStatusPromises).catch(() => {
+            this._user = null;
+            this._authState.next(null);
+          });
+        }
       })
       .catch(console.error);
   }
