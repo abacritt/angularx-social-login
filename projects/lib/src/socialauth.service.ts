@@ -1,5 +1,5 @@
-import { Injectable, Inject } from '@angular/core';
-import { Observable, ReplaySubject, AsyncSubject } from 'rxjs';
+import { Inject, Injectable } from '@angular/core';
+import { AsyncSubject, Observable, ReplaySubject } from 'rxjs';
 import { LoginProvider } from './entities/login-provider';
 import { SocialUser } from './entities/social-user';
 
@@ -35,7 +35,7 @@ export class SocialAuthService {
 
   constructor(
     @Inject('SocialAuthServiceConfig')
-    config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>
+      config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>,
   ) {
     if (config instanceof Promise) {
       config.then((config) => {
@@ -55,16 +55,18 @@ export class SocialAuthService {
 
     Promise.all(
       Array.from(this.providers.values()).map((provider) =>
-        provider.initialize()
-      )
+        provider.initialize(),
+      ),
     )
       .then(() => {
         this.initialized = true;
         this._initState.complete();
 
-        const loginStatusPromises = [];
 
         if (this.autoLogin) {
+          const loginStatusPromises = [];
+          let loggedIn = false;
+
           this.providers.forEach((provider: LoginProvider, key: string) => {
             let promise = provider.getLoginStatus();
             loginStatusPromises.push(promise);
@@ -74,12 +76,15 @@ export class SocialAuthService {
 
                 this._user = user;
                 this._authState.next(user);
+                loggedIn = true;
               })
               .catch(console.debug);
           });
           Promise.all(loginStatusPromises).catch(() => {
-            this._user = null;
-            this._authState.next(null);
+            if (!loggedIn) {
+              this._user = null;
+              this._authState.next(null);
+            }
           });
         }
       })
