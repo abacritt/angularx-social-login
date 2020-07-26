@@ -1,3 +1,7 @@
+## 3.2.1
+- LocalStorage based token persistence for Amazon provider
+- Bug fixes
+
 ## 3.2.0
 - Support for Angular 10
 - Fix issue with route guards (thanks to @mokipedia)
