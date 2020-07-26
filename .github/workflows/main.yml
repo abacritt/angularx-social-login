@@ -26,8 +26,4 @@ jobs:
 
     # Builds the Angular app
     - name: Build Angular
-      run: ng build --prod --baseHref=/angularx-social-login/
-
-    # Puts the files in /docs folder
-    - name: Run a multi-line script
-      run: mv dist/angularx-social-login-ws ../docs
+      run: ng build --prod --output-path docs --base-href /angularx-social-login/
