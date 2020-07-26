@@ -20,6 +20,10 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    # Install Angular CLI globally
+    - name: Install Angular CLI
+      run: sudo npm i -g @angular/cli
+
     # Install dependencies
     - name: Run npm install
       run: npm i
