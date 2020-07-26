@@ -33,3 +33,7 @@ jobs:
       run: |
         ng build lib
         ng build --prod --output-path docs --base-href /angularx-social-login/
+
+    # Demo git status
+    - name: git status
+      run: git status
