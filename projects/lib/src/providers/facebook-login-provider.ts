@@ -57,7 +57,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             user.lastName = fbUser.last_name;
             user.authToken = authResponse.accessToken;
 
-            user.facebook = fbUser;
+            user.response = fbUser;
 
             resolve(user);
           });
@@ -88,7 +88,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             user.lastName = fbUser.last_name;
             user.authToken = authResponse.accessToken;
 
-            user.facebook = fbUser;
+            user.response = fbUser;
 
             resolve(user);
           });

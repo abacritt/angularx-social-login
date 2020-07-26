@@ -53,6 +53,7 @@ export class AmazonLoginProvider extends BaseLoginProvider {
           user.id = response.profile.CustomerId;
           user.name = response.profile.Name;
           user.email = response.profile.PrimaryEmail;
+          user.response = response.profile;
 
           resolve(user);
         } else {
@@ -78,6 +79,7 @@ export class AmazonLoginProvider extends BaseLoginProvider {
               user.name = response.profile.Name;
               user.email = response.profile.PrimaryEmail;
               user.authToken = authResponse.access_token;
+              user.response = response.profile;
 
               resolve(user);
             }

@@ -45,6 +45,7 @@ export class DummyLoginProvider extends BaseLoginProvider {
     provider: 'DUMMY',
     idToken: 'dummyIdToken',
     authorizationCode: 'dummyAuthCode',
+    response: {}
   };
 
   private dummy: SocialUser;
