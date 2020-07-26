@@ -26,4 +26,4 @@ jobs:
 
     # Builds the Angular app
     - name: Build Angular
-      run: ng build --prod --output-path docs --base-href /angularx-social-login/
+      run: npm run build --prod --output-path docs --base-href /angularx-social-login/
