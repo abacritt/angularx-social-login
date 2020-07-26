@@ -22,6 +22,10 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    # Install dependencies
+    - name: Run npm install
+      run: npm i
+
     # Builds the Angular app
     - name: Build Angular
       run: ng build --prod --baseHref=/angularx-social-login/
