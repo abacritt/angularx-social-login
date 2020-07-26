@@ -1,6 +1,6 @@
 ## 3.2.1
 - LocalStorage based token persistence for Amazon provider
-- Bug fixes
+- Bug fixes related to offline access in Google provider
 
 ## 3.2.0
 - Support for Angular 10
