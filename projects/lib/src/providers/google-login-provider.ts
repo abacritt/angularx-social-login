@@ -63,7 +63,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
         resolve(user);
       } else {
-        reject('No user is currently logged in.');
+        reject(`No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`);
       }
     });
   }

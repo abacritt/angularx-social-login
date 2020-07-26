@@ -22,6 +22,7 @@
     <div class="card-block">
       <h4 class="card-title">{{ user.name }}</h4>
       <p class="card-text">{{ user.email }}</p>
+      <p class="card-text">Logged in with {{ user.provider }}</p>
     </div>
     <div class="card-block">
       <button class="btn btn-danger" (click)="signOut()">Sign out</button>

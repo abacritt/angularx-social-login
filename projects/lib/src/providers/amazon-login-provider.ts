@@ -45,21 +45,26 @@ export class AmazonLoginProvider extends BaseLoginProvider {
 
   getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
-      // TODO: localStorage based implementation?
-      amazon.Login.retrieveProfile('', (response) => {
-        if (response.success) {
-          let user: SocialUser = new SocialUser();
+      let token = this.retrieveToken();
 
-          user.id = response.profile.CustomerId;
-          user.name = response.profile.Name;
-          user.email = response.profile.PrimaryEmail;
-          user.response = response.profile;
+      if (token) {
+        amazon.Login.retrieveProfile(token, (response) => {
+          if (response.success) {
+            let user: SocialUser = new SocialUser();
 
-          resolve(user);
-        } else {
-          reject(response.error);
-        }
-      });
+            user.id = response.profile.CustomerId;
+            user.name = response.profile.Name;
+            user.email = response.profile.PrimaryEmail;
+            user.response = response.profile;
+
+            resolve(user);
+          } else {
+            reject(response.error);
+          }
+        });
+      } else {
+        reject(`No user is currently logged in with ${AmazonLoginProvider.PROVIDER_ID}`);
+      }
     });
   }
 
@@ -81,6 +86,8 @@ export class AmazonLoginProvider extends BaseLoginProvider {
               user.authToken = authResponse.access_token;
               user.response = response.profile;
 
+              this.persistToken(authResponse.access_token);
+
               resolve(user);
             }
           );
@@ -93,10 +100,24 @@ export class AmazonLoginProvider extends BaseLoginProvider {
     return new Promise((resolve, reject) => {
       try {
         amazon.Login.logout();
+
+        this.clearToken();
         resolve();
       } catch (err) {
         reject(err.message);
       }
     });
+  }
+
+  private persistToken(token: string): void {
+    localStorage.setItem(`${AmazonLoginProvider.PROVIDER_ID}_token`, token);
+  }
+
+  private retrieveToken(): string {
+    return localStorage.getItem(`${AmazonLoginProvider.PROVIDER_ID}_token`);
+  }
+
+  private clearToken(): void {
+    localStorage.removeItem(`${AmazonLoginProvider.PROVIDER_ID}_token`);
   }
 }
