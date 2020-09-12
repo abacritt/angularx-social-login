@@ -1,4 +1,7 @@
-## 3.2.1
+### 3.2.2
+- Bug fixes
+
+### 3.2.1
 - LocalStorage based token persistence for Amazon provider
 - Bug fixes related to offline access in Google provider
 
