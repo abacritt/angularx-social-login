@@ -60,8 +60,8 @@ export class SocialAuthService {
     )
       .then(() => {
         this.initialized = true;
+        this._initState.next(this.initialized);
         this._initState.complete();
-
 
         if (this.autoLogin) {
           const loginStatusPromises = [];
