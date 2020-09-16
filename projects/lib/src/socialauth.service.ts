@@ -6,6 +6,7 @@ import { SocialUser } from './entities/social-user';
 export interface SocialAuthServiceConfig {
   autoLogin?: boolean;
   providers: { id: string; provider: LoginProvider }[];
+  onError?(error: any): void;
 }
 
 /** @dynamic */
@@ -88,7 +89,12 @@ export class SocialAuthService {
           });
         }
       })
-      .catch(console.error);
+      .catch(error => {
+        console.error(error);
+        if (config.onError) {
+          config.onError(error);
+        }
+      });
   }
 
   signIn(providerId: string, signInOptions?: any): Promise<SocialUser> {
