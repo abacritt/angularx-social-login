@@ -6,7 +6,7 @@ import { SocialUser } from './entities/social-user';
 export interface SocialAuthServiceConfig {
   autoLogin?: boolean;
   providers: { id: string; provider: LoginProvider }[];
-  errorCallback?(error: any): void;
+  onError?(error: any): void;
 }
 
 /** @dynamic */
@@ -91,8 +91,8 @@ export class SocialAuthService {
       })
       .catch(error => {
         console.error(error);
-        if (config.errorCallback) {
-          config.errorCallback(error);
+        if (config.onError) {
+          config.onError(error);
         }
       });
   }
