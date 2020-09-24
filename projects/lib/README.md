@@ -116,7 +116,7 @@ export class DemoComponent implements OnInit {
   user: SocialUser;
   loggedIn: boolean;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: SocialAuthService) { }
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {
@@ -147,7 +147,7 @@ const fbLoginOptions = {
   enable_profile_selector: true
 }; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
 
-const googleLoginOptions: LoginOpt = {
+const googleLoginOptions = {
   scope: 'profile email'
 }; // https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2clientconfig
 

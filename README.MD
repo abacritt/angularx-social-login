@@ -147,7 +147,7 @@ const fbLoginOptions = {
   enable_profile_selector: true
 }; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
 
-const googleLoginOptions: LoginOpt = {
+const googleLoginOptions = {
   scope: 'profile email'
 }; // https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2clientconfig
 
