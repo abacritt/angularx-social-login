@@ -10,3 +10,4 @@ export { DummyLoginProvider } from './providers/dummy-login-provider';
 export { GoogleLoginProvider } from './providers/google-login-provider';
 export { FacebookLoginProvider } from './providers/facebook-login-provider';
 export { AmazonLoginProvider } from './providers/amazon-login-provider';
+export { VKLoginProvider } from './providers/vk-login-provider';

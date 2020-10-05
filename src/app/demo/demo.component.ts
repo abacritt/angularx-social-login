@@ -6,6 +6,7 @@ import {
   GoogleLoginProvider,
   FacebookLoginProvider,
   AmazonLoginProvider,
+  VKLoginProvider,
 } from 'lib';
 
 @Component({
@@ -35,6 +36,10 @@ export class DemoComponent implements OnInit {
 
   signInWithAmazon(): void {
     this.authService.signIn(AmazonLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithVK(): void {
+    this.authService.signIn(VKLoginProvider.PROVIDER_ID);
   }
 
   signOut(): void {
