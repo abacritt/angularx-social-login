@@ -43,7 +43,7 @@ import {
           {
             id: VKLoginProvider.PROVIDER_ID,
             provider: new VKLoginProvider(
-              '1234567890'
+              '7624815'
             ),
           },
         ],
