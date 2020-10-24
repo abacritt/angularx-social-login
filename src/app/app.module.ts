@@ -12,6 +12,7 @@ import {
   GoogleLoginProvider,
   FacebookLoginProvider,
   AmazonLoginProvider,
+  VKLoginProvider
 } from 'lib';
 
 @NgModule({
@@ -37,6 +38,12 @@ import {
             id: AmazonLoginProvider.PROVIDER_ID,
             provider: new AmazonLoginProvider(
               'amzn1.application-oa2-client.f074ae67c0a146b6902cc0c4a3297935'
+            ),
+          },
+          {
+            id: VKLoginProvider.PROVIDER_ID,
+            provider: new VKLoginProvider(
+              '7624815'
             ),
           },
         ],

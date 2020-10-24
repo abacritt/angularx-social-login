@@ -2,7 +2,7 @@
 
 [![Gitter](https://badges.gitter.im/angularx-social-login/community.svg)](https://gitter.im/angularx-social-login/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Social login and authentication module for Angular 9 / 10. Supports authentication with **Google**, **Facebook**, and **Amazon**. Can be extended to other providers also.
+Social login and authentication module for Angular 9 / 10. Supports authentication with **Google**, **Facebook**, **Amazon**, and **VK** ([vk.com](https://vk.com), former [vkontakte.ru](https://vkontakte.ru)). Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
@@ -26,6 +26,7 @@ import {
   GoogleLoginProvider,
   FacebookLoginProvider,
   AmazonLoginProvider,
+  VKLoginProvider
 } from 'angularx-social-login';
 
 @NgModule({
@@ -58,6 +59,12 @@ import {
               'clientId'
             ),
           },
+          {
+            id: VKLoginProvider.PROVIDER_ID,
+            provider: new VKLoginProvider(
+              'clientId'
+            ),
+          },
         ],
       } as SocialAuthServiceConfig,
     }
@@ -72,7 +79,7 @@ export class AppModule { }
 ```javascript
 
 import { SocialAuthService } from "angularx-social-login";
-import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
+import { FacebookLoginProvider, GoogleLoginProvider, VKLoginProvider } from "angularx-social-login";
 
 @Component({
   selector: 'app-demo',
@@ -89,6 +96,10 @@ export class DemoComponent implements OnInit {
 
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithVK(): void {
+    this.authService.signIn(VKLoginProvider.PROVIDER_ID);
   }
 
   signOut(): void {
@@ -151,6 +162,11 @@ const googleLoginOptions = {
   scope: 'profile email'
 }; // https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2clientconfig
 
+const vkLoginOptions = {
+  fields: 'photo_max,contacts', // Profile fields to return, see: https://vk.com/dev/objects/user
+  version: '5.124', // https://vk.com/dev/versions
+}; // https://vk.com/dev/users.get
+
 let config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
@@ -159,7 +175,11 @@ let config = new AuthServiceConfig([
   {
     id: FacebookLoginProvider.PROVIDER_ID,
     provider: new FacebookLoginProvider("Facebook-App-Id", fbLoginOptions)
-  }
+  },
+  {
+    id: VKLoginProvider.PROVIDER_ID,
+    provider: new VKLoginProvider("VK-App-Id", vkLoginOptions)
+  },
 ]);
 ```
 
