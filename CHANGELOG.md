@@ -1,3 +1,7 @@
+## 3.3.1
+- VK login provider
+- Optional `onError` callback added in `SocialAuthServiceConfig`
+
 ### 3.2.2
 - Bug fixes
 
