@@ -6,7 +6,7 @@ import { SocialUser } from './entities/social-user';
 export interface SocialAuthServiceConfig {
   autoLogin?: boolean;
   providers: { id: string; provider: LoginProvider }[];
-  onError?(error: any): void;
+  onError?: (error: any) => any;
 }
 
 /** @dynamic */
@@ -49,6 +49,7 @@ export class SocialAuthService {
 
   private initialize(config: SocialAuthServiceConfig) {
     this.autoLogin = config.autoLogin !== undefined ? config.autoLogin : false;
+    const {onError = console.error} = config;
 
     config.providers.forEach((item) => {
       this.providers.set(item.id, item.provider);
@@ -90,10 +91,7 @@ export class SocialAuthService {
         }
       })
       .catch(error => {
-        console.error(error);
-        if (config.onError) {
-          config.onError(error);
-        }
+        onError(error);
       });
   }
 
