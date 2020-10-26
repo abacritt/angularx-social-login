@@ -2,7 +2,7 @@
 
 [![Gitter](https://badges.gitter.im/angularx-social-login/community.svg)](https://gitter.im/angularx-social-login/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Social login and authentication module for Angular 9 / 10. Supports authentication with **Google**, **Facebook**, **Amazon**, and **VK** ([vk.com](https://vk.com), former [vkontakte.ru](https://vkontakte.ru)). Can be extended to other providers also.
+Social login and authentication module for Angular 9 / 10. Supports authentication with **Google**, **Facebook**, **Amazon**, and **VK** out of the box. Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
@@ -24,9 +24,7 @@ In your `AppModule`, import the `SocialLoginModule`
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import {
   GoogleLoginProvider,
-  FacebookLoginProvider,
-  AmazonLoginProvider,
-  VKLoginProvider
+  FacebookLoginProvider
 } from 'angularx-social-login';
 
 @NgModule({
@@ -47,25 +45,13 @@ import {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
               'clientId'
-            ),
+            )
           },
           {
             id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider('clientId'),
-          },
-          {
-            id: AmazonLoginProvider.PROVIDER_ID,
-            provider: new AmazonLoginProvider(
-              'clientId'
-            ),
-          },
-          {
-            id: VKLoginProvider.PROVIDER_ID,
-            provider: new VKLoginProvider(
-              'clientId'
-            ),
-          },
-        ],
+            provider: new FacebookLoginProvider('clientId')
+          }
+        ]
       } as SocialAuthServiceConfig,
     }
   ],
@@ -79,7 +65,7 @@ export class AppModule { }
 ```javascript
 
 import { SocialAuthService } from "angularx-social-login";
-import { FacebookLoginProvider, GoogleLoginProvider, VKLoginProvider } from "angularx-social-login";
+import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
 
 @Component({
   selector: 'app-demo',
@@ -96,10 +82,6 @@ export class DemoComponent implements OnInit {
 
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
-  }
-
-  signInWithVK(): void {
-    this.authService.signIn(VKLoginProvider.PROVIDER_ID);
   }
 
   signOut(): void {
