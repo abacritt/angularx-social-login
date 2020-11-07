@@ -31,7 +31,9 @@ import {
           },
           {
             id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider('561602290896109'),
+            provider: new FacebookLoginProvider('561602290896109', {
+              lazy: true
+            })
           },
           {
             id: AmazonLoginProvider.PROVIDER_ID,
