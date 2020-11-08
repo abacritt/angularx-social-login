@@ -1,6 +1,5 @@
 import { LoginProvider } from './login-provider';
 import { SocialUser } from './social-user';
-import { BehaviorSubject } from 'rxjs';
 
 export abstract class BaseLoginProvider implements LoginProvider {
   constructor() {}

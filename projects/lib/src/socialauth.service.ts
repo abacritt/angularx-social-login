@@ -15,7 +15,8 @@ export class SocialAuthService {
   private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND =
     'Login provider not found';
   private static readonly ERR_NOT_LOGGED_IN = 'Not logged in';
-  private static readonly ERR_NOT_INITIALIZED = 'Login providers not ready yet. Are there errors on your console?';
+  private static readonly ERR_NOT_INITIALIZED =
+    'Login providers not ready yet. Are there errors on your console?';
 
   private providers: Map<string, LoginProvider> = new Map();
   private autoLogin = false;
@@ -23,6 +24,7 @@ export class SocialAuthService {
   private _user: SocialUser = null;
   private _authState: ReplaySubject<SocialUser> = new ReplaySubject(1);
 
+  /* Consider making this an enum comprising LOADING, LOADED, FAILED etc. */
   private initialized = false;
   private _initState: AsyncSubject<boolean> = new AsyncSubject();
 
@@ -36,7 +38,7 @@ export class SocialAuthService {
 
   constructor(
     @Inject('SocialAuthServiceConfig')
-      config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>,
+    config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>
   ) {
     if (config instanceof Promise) {
       config.then((config) => {
@@ -49,7 +51,7 @@ export class SocialAuthService {
 
   private initialize(config: SocialAuthServiceConfig) {
     this.autoLogin = config.autoLogin !== undefined ? config.autoLogin : false;
-    const {onError = console.error} = config;
+    const { onError = console.error } = config;
 
     config.providers.forEach((item) => {
       this.providers.set(item.id, item.provider);
@@ -57,14 +59,10 @@ export class SocialAuthService {
 
     Promise.all(
       Array.from(this.providers.values()).map((provider) =>
-        provider.initialize(),
-      ),
+        provider.initialize()
+      )
     )
       .then(() => {
-        this.initialized = true;
-        this._initState.next(this.initialized);
-        this._initState.complete();
-
         if (this.autoLogin) {
           const loginStatusPromises = [];
           let loggedIn = false;
@@ -90,8 +88,13 @@ export class SocialAuthService {
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         onError(error);
+      })
+      .finally(() => {
+        this.initialized = true;
+        this._initState.next(this.initialized);
+        this._initState.complete();
       });
   }
 

@@ -17,26 +17,30 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
   initialize(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.loadScript(
-        GoogleLoginProvider.PROVIDER_ID,
-        'https://apis.google.com/js/platform.js',
-        () => {
-          gapi.load('auth2', () => {
-            this.auth2 = gapi.auth2.init({
-              ...this.initOptions,
-              client_id: this.clientId,
-            });
-
-            this.auth2
-              .then(() => {
-                resolve();
-              })
-              .catch((err: any) => {
-                reject(err);
+      try {
+        this.loadScript(
+          GoogleLoginProvider.PROVIDER_ID,
+          'https://apis.google.com/js/platform.js',
+          () => {
+            gapi.load('auth2', () => {
+              this.auth2 = gapi.auth2.init({
+                ...this.initOptions,
+                client_id: this.clientId,
               });
-          });
-        }
-      );
+
+              this.auth2
+                .then(() => {
+                  resolve();
+                })
+                .catch((err: any) => {
+                  reject(err);
+                });
+            });
+          }
+        );
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 
@@ -63,7 +67,9 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
         resolve(user);
       } else {
-        reject(`No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`);
+        reject(
+          `No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`
+        );
       }
     });
   }
