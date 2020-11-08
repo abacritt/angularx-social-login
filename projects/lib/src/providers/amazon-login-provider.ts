@@ -32,14 +32,18 @@ export class AmazonLoginProvider extends BaseLoginProvider {
     };
 
     return new Promise((resolve, reject) => {
-      this.loadScript(
-        'amazon-login-sdk',
-        'https://assets.loginwithamazon.com/sdk/na/login1.js',
-        () => {
-          resolve();
-        },
-        amazonRoot
-      );
+      try {
+        this.loadScript(
+          'amazon-login-sdk',
+          'https://assets.loginwithamazon.com/sdk/na/login1.js',
+          () => {
+            resolve();
+          },
+          amazonRoot
+        );
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 

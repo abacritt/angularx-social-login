@@ -21,17 +21,21 @@ export class VKLoginProvider extends BaseLoginProvider {
 
   initialize(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.loadScript(
-        VKLoginProvider.PROVIDER_ID,
-        this.VK_API_URL,
-        () => {
-          VK.init({
-            apiId: this.clientId,
-          });
+      try {
+        this.loadScript(
+          VKLoginProvider.PROVIDER_ID,
+          this.VK_API_URL,
+          () => {
+            VK.init({
+              apiId: this.clientId,
+            });
 
-          resolve();
-        }
-      );
+            resolve();
+          }
+        );
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 
