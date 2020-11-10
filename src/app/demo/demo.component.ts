@@ -46,4 +46,8 @@ export class DemoComponent implements OnInit {
     this.authService.signOut();
   }
 
+  refreshGoogleToken(): void {
+    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+  }
+
 }

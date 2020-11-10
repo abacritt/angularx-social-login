@@ -91,6 +91,31 @@ export class DemoComponent implements OnInit {
 }
 ```
 
+### Refresh google Auth Token
+
+Once a user is logged in manual refresh token method can be triggered
+
+```javascript
+
+import { SocialAuthService } from "angularx-social-login";
+import { GoogleLoginProvider } from "angularx-social-login";
+
+@Component({
+  selector: 'app-demo',
+  templateUrl: './demo.component.html',
+  styleUrls: ['./demo.component.css']
+})
+export class DemoComponent implements OnInit {
+
+  constructor(private authService: SocialAuthService) { }
+
+  refreshToken(): void {
+    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+}
+```
+
 ### Subscribe to the authentication state
 
 You are notified when user logs in or logs out. You receive a `SocialUser` object when the user logs in and a `null` when the user logs out. `SocialUser` object contains basic user information such as name, email, photo URL, etc. along with the `auth_token`. You can communicate the `auth_token` to your server to authenticate the user in server and make API calls from server.
