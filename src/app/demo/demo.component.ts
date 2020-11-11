@@ -7,6 +7,7 @@ import {
   FacebookLoginProvider,
   AmazonLoginProvider,
   VKLoginProvider,
+  MicrosoftLoginProvider
 } from 'lib';
 
 @Component({
@@ -40,6 +41,10 @@ export class DemoComponent implements OnInit {
 
   signInWithVK(): void {
     this.authService.signIn(VKLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithMicrosoft(): void {
+    this.authService.signIn(MicrosoftLoginProvider.PROVIDER_ID);
   }
 
   signOut(): void {

@@ -12,7 +12,8 @@ import {
   GoogleLoginProvider,
   FacebookLoginProvider,
   AmazonLoginProvider,
-  VKLoginProvider
+  VKLoginProvider,
+  MicrosoftLoginProvider
 } from 'lib';
 
 @NgModule({
@@ -46,10 +47,14 @@ import {
               '7624815'
             ),
           },
+          {
+            id: MicrosoftLoginProvider.PROVIDER_ID,
+            provider: new MicrosoftLoginProvider('0611ccc3-9521-45b6-b432-039852002705'),
+          }
         ],
       } as SocialAuthServiceConfig,
     }
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
