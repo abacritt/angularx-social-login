@@ -101,7 +101,7 @@ export class SocialAuthService {
       });
   }
 
-  refreshAuthToken(providerId: string): Promise<SocialUser> {
+  refreshAuthToken(providerId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.initialized) {
         reject(SocialAuthService.ERR_NOT_INITIALIZED);
@@ -111,13 +111,12 @@ export class SocialAuthService {
         const providerObject = this.providers.get(providerId);
         if (providerObject) {
           providerObject
-            .getLoginStatus(true)
+            .getLoginStatus({refreshToken: true})
             .then((user: SocialUser) => {
               user.provider = providerId;
-              resolve(user);
-
               this._user = user;
               this._authState.next(user);
+              resolve();
             })
             .catch((err) => {
               reject(err);

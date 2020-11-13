@@ -17,6 +17,7 @@ import {
 export class DemoComponent implements OnInit {
 
   user: SocialUser;
+  GoogleLoginProvider = GoogleLoginProvider;
 
   constructor(private authService: SocialAuthService) { }
 
