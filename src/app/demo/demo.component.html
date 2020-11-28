@@ -28,5 +28,8 @@
     <div class="card-block">
       <button class="btn btn-danger" (click)="signOut()">Sign out</button>
     </div>
+    <div class="card-block" *ngIf="user.provider === GoogleLoginProvider.PROVIDER_ID">
+      <button class="btn" (click)="refreshGoogleToken()">Refresh google token</button>
+    </div>
   </div>
 </div>

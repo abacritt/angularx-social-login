@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { AsyncSubject, Observable, ReplaySubject } from 'rxjs';
 import { LoginProvider } from './entities/login-provider';
 import { SocialUser } from './entities/social-user';
+import { GoogleLoginProvider } from './providers/google-login-provider';
 
 export interface SocialAuthServiceConfig {
   autoLogin?: boolean;
@@ -17,6 +18,8 @@ export class SocialAuthService {
   private static readonly ERR_NOT_LOGGED_IN = 'Not logged in';
   private static readonly ERR_NOT_INITIALIZED =
     'Login providers not ready yet. Are there errors on your console?';
+  private static readonly ERR_NOT_SUPPORTED_FOR_REFRESH_TOKEN =
+    'Chosen login provider is not supported for refreshing a token';
 
   private providers: Map<string, LoginProvider> = new Map();
   private autoLogin = false;
@@ -96,6 +99,33 @@ export class SocialAuthService {
         this._initState.next(this.initialized);
         this._initState.complete();
       });
+  }
+
+  refreshAuthToken(providerId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!this.initialized) {
+        reject(SocialAuthService.ERR_NOT_INITIALIZED);
+      } else if (providerId !== GoogleLoginProvider.PROVIDER_ID) {
+        reject(SocialAuthService.ERR_NOT_SUPPORTED_FOR_REFRESH_TOKEN);
+      } else {
+        const providerObject = this.providers.get(providerId);
+        if (providerObject) {
+          providerObject
+            .getLoginStatus({refreshToken: true})
+            .then((user: SocialUser) => {
+              user.provider = providerId;
+              this._user = user;
+              this._authState.next(user);
+              resolve();
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        } else {
+          reject(SocialAuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
+        }
+      }
+    });
   }
 
   signIn(providerId: string, signInOptions?: any): Promise<SocialUser> {

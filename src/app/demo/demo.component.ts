@@ -17,6 +17,7 @@ import {
 export class DemoComponent implements OnInit {
 
   user: SocialUser;
+  GoogleLoginProvider = GoogleLoginProvider;
 
   constructor(private authService: SocialAuthService) { }
 
@@ -44,6 +45,10 @@ export class DemoComponent implements OnInit {
 
   signOut(): void {
     this.authService.signOut();
+  }
+
+  refreshGoogleToken(): void {
+    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }
 
 }
