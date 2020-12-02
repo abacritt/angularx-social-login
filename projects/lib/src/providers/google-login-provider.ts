@@ -47,24 +47,30 @@ export class GoogleLoginProvider extends BaseLoginProvider {
   getLoginStatus(loginStatusOptions?: any): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       if (this.auth2.isSignedIn.get()) {
+
         let user: SocialUser = new SocialUser();
 
         const profile = this.auth2.currentUser.get().getBasicProfile();
-        const authResponse = loginStatusOptions && loginStatusOptions.refreshToken ?
-          this.auth2.currentUser.get().reloadAuthResponse(true) :
-          this.auth2.currentUser.get().getAuthResponse(true);
-
         user.id = profile.getId();
         user.name = profile.getName();
         user.email = profile.getEmail();
         user.photoUrl = profile.getImageUrl();
         user.firstName = profile.getGivenName();
         user.lastName = profile.getFamilyName();
-        user.authToken = authResponse.access_token;
-        user.idToken = authResponse.id_token;
         user.response = profile;
 
-        resolve(user);
+        if (loginStatusOptions && loginStatusOptions.refreshToken) {
+          this.auth2.currentUser.get().reloadAuthResponse().then(authResponse => {
+            user.authToken = authResponse.access_token;
+            user.idToken = authResponse.id_token;
+            resolve(user);
+          });
+        } else {
+          const authResponse = this.auth2.currentUser.get().getAuthResponse(true);
+          user.authToken = authResponse.access_token;
+          user.idToken = authResponse.id_token;
+          resolve(user);
+        }
       } else {
         reject(
           `No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`
