@@ -88,16 +88,6 @@ declare let msal: any;
 
 const COMMON_AUTHORITY: string = 'https://login.microsoftonline.com/common/';
 
-const defaultOptions : MicrosoftOptions = {
-  redirect_uri: location.origin,
-  authority: COMMON_AUTHORITY,
-  scopes: ['openid', 'profile', 'User.Read'],
-  knownAuthorities: [],
-  protocolMode: ProtocolMode.AAD,
-  clientCapabilities: [],
-  cacheLocation: 'sessionStorage'
-};
-
 /**
  * Microsoft Authentication using MSAL v2: https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-browser
  */
@@ -105,11 +95,26 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
   private _instance: MSALClientApplication;
   public static readonly PROVIDER_ID: string = 'MICROSOFT';
 
+  private initOptions: MicrosoftOptions = {
+    redirect_uri: location.origin,
+    authority: COMMON_AUTHORITY,
+    scopes: ['openid', 'profile', 'User.Read'],
+    knownAuthorities: [],
+    protocolMode: ProtocolMode.AAD,
+    clientCapabilities: [],
+    cacheLocation: 'sessionStorage'
+  };
+
   constructor(
     private clientId: string,
-    private initOptions: MicrosoftOptions = defaultOptions
+    initOptions?: MicrosoftOptions
   ) {
     super();
+
+    this.initOptions = {
+      ...this.initOptions,
+      ...initOptions
+    };
   }
 
   initialize(): Promise<void> {
@@ -122,14 +127,14 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
             const config = {
               auth: {
                 clientId: this.clientId,
-                redirectUri: this.initOptions.redirect_uri ?? defaultOptions.redirect_uri,
-                authority: this.initOptions.authority ?? defaultOptions.authority,
-                knownAuthorities: this.initOptions.knownAuthorities ?? defaultOptions.knownAuthorities,
-                protocolMode: this.initOptions.protocolMode ?? defaultOptions.protocolMode,
-                clientCapabilities: this.initOptions.clientCapabilities ?? defaultOptions.clientCapabilities
+                redirectUri: this.initOptions.redirect_uri,
+                authority: this.initOptions.authority,
+                knownAuthorities: this.initOptions.knownAuthorities,
+                protocolMode: this.initOptions.protocolMode,
+                clientCapabilities: this.initOptions.clientCapabilities
               },
               cache: !this.initOptions.cacheLocation ? null : {
-                cacheLocation: this.initOptions.cacheLocation ?? defaultOptions.cacheLocation
+                cacheLocation: this.initOptions.cacheLocation
               }
             };
 
