@@ -1,3 +1,6 @@
+### 3.5.4
+- Support Angular 11
+
 ### 3.5.3
 - Fix for #346
 
