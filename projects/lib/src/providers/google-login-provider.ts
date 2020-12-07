@@ -45,9 +45,10 @@ export class GoogleLoginProvider extends BaseLoginProvider {
   }
 
   getLoginStatus(loginStatusOptions?: any): Promise<SocialUser> {
+    const options = {...this.initOptions, ...loginStatusOptions};
+
     return new Promise((resolve, reject) => {
       if (this.auth2.isSignedIn.get()) {
-
         let user: SocialUser = new SocialUser();
 
         const profile = this.auth2.currentUser.get().getBasicProfile();
@@ -59,17 +60,18 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         user.lastName = profile.getFamilyName();
         user.response = profile;
 
-        if (loginStatusOptions && loginStatusOptions.refreshToken) {
-          this.auth2.currentUser.get().reloadAuthResponse().then(authResponse => {
-            user.authToken = authResponse.access_token;
-            user.idToken = authResponse.id_token;
-            resolve(user);
-          });
-        } else {
-          const authResponse = this.auth2.currentUser.get().getAuthResponse(true);
+        const resolveUser = authResponse => {
           user.authToken = authResponse.access_token;
           user.idToken = authResponse.id_token;
+
           resolve(user);
+        };
+
+        if (options.refreshToken) {
+          this.auth2.currentUser.get().reloadAuthResponse().then(resolveUser);
+        } else {
+          const authResponse = this.auth2.currentUser.get().getAuthResponse(true);
+          resolveUser(authResponse);
         }
       } else {
         reject(
