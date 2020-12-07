@@ -1,3 +1,9 @@
+### 3.5.3
+- Fix for #346
+
+### 3.5.2
+- Bug fixes
+
 ## 3.5.1
 - Microsoft login provider
 - Ability to refresh auth token with providers
