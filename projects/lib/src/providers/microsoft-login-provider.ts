@@ -161,6 +161,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
               let user: SocialUser = new SocialUser();
               user.provider = MicrosoftLoginProvider.PROVIDER_ID;
               user.id = loginResponse.idToken;
+              user.authToken = loginResponse.accessToken;
               user.name = loginResponse.idTokenClaims.name;
               user.email = loginResponse.account.username;
               user.idToken = loginResponse.idToken;
