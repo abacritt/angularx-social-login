@@ -14,7 +14,8 @@ export enum ProtocolMode {
  * Details (not all options are supported): https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/configuration.md
  */
 export type MicrosoftOptions = {
-  redirect_uri: string,
+  redirect_uri?: string,
+  logout_redirect_uri?: string,
   authority?: string,
   knownAuthorities?: string[],
   protocolMode?: ProtocolMode,
@@ -96,7 +97,6 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID: string = 'MICROSOFT';
 
   private initOptions: MicrosoftOptions = {
-    redirect_uri: location.origin,
     authority: COMMON_AUTHORITY,
     scopes: ['openid', 'profile', 'User.Read'],
     knownAuthorities: [],
@@ -127,7 +127,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
             const config = {
               auth: {
                 clientId: this.clientId,
-                redirectUri: this.initOptions.redirect_uri,
+                redirectUri: this.initOptions.redirect_uri ?? location.origin,
                 authority: this.initOptions.authority,
                 knownAuthorities: this.initOptions.knownAuthorities,
                 protocolMode: this.initOptions.protocolMode,
@@ -190,69 +190,37 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
     });
   }
 
-  getLoginStatus(): Promise<SocialUser> {
-    return new Promise<SocialUser>((resolve, reject) => {
-      const accounts = this._instance.getAllAccounts();
-      if (accounts.length > 0) {
-        try {
-          this._instance.ssoSilent({
-            scopes: this.initOptions.scopes,
-            loginHint: accounts[0].username
-          })
-            .then(loginResponse => {
-              this.getSocialUser(loginResponse)
-                .then(user => resolve(user))
-                .catch(err => reject(err));
-            })
-            .catch(err => reject(err));
-        } catch (err) {
-          reject(err);
-        }
-      } else {
-        reject(`No user is currently logged in with ${MicrosoftLoginProvider.PROVIDER_ID}`);
-      }
-    });
+  async getLoginStatus(): Promise<SocialUser> {
+    const accounts = this._instance.getAllAccounts();
+    if (accounts?.length > 0) {
+      const loginResponse = await this._instance.ssoSilent({
+        scopes: this.initOptions.scopes,
+        loginHint: accounts[0].username
+      });
+      return await this.getSocialUser(loginResponse);
+    } else {
+      throw `No user is currently logged in with ${MicrosoftLoginProvider.PROVIDER_ID}`;
+    }
   }
 
-  signIn(): Promise<SocialUser> {
-    return new Promise<SocialUser>((resolve, reject) => {
-      try {
-        this._instance.loginPopup({
-          scopes: this.initOptions.scopes
-        })
-          .then(loginResponse => {
-            this.getSocialUser(loginResponse)
-              .then(user => resolve(user))
-              .catch(err => reject(err));
-          })
-          .catch(err => reject(err));
-      } catch (err) {
-        reject(err);
-      }
+  async signIn(): Promise<SocialUser> {
+    const loginResponse = await this._instance.loginPopup({
+      scopes: this.initOptions.scopes
     });
+    return await this.getSocialUser(loginResponse);
   }
 
-  signOut(revoke?: boolean): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      try {
-        const accounts = this._instance.getAllAccounts();
-        //TODO: This redirects to a Microsoft page, then sends us back to redirect_uri... this doesn't seem to match other providers
-        //Open issues:
-        // https://github.com/abacritt/angularx-social-login/issues/306
-        // https://github.com/AzureAD/microsoft-authentication-library-for-js/issues/2563
-        this._instance.logout({
-          account: accounts[0],
-          postLogoutRedirectUri: this.initOptions.redirect_uri
-        })
-          .then(() => {
-            resolve();
-          })
-          .catch(err => {
-            reject(err);
-          });
-      } catch (err) {
-        reject(err);
-      }
-    });
+  async signOut(revoke?: boolean): Promise<any> {
+    const accounts = this._instance.getAllAccounts();
+    if (accounts?.length > 0) {
+      //TODO: This redirects to a Microsoft page, then sends us back to redirect_uri... this doesn't seem to match other providers
+      //Open issues:
+      // https://github.com/abacritt/angularx-social-login/issues/306
+      // https://github.com/AzureAD/microsoft-authentication-library-for-js/issues/2563
+      await this._instance.logout({
+        account: accounts[0],
+        postLogoutRedirectUri: this.initOptions.logout_redirect_uri ?? this.initOptions.redirect_uri ?? location.href
+      })
+    }
   }
 }
