@@ -19,7 +19,7 @@ The second argument can have the following fields (all fields are optional):
 |Field|Type|Description|Default Value|
 |-|-|-|-|
 |authority|string|The authority URL like `https://{uri}/{tenantid}`|`'https://login.microsoftonline.com/common/'`|
-|scopes|string[]|[Scopes](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes) requested during login|`['openid', 'profile', 'User.Read']`|
+|scopes|string[]|[Scopes](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes) requested during login|`['openid', 'email', 'profile', 'User.Read']`|
 |redirect_uri|string|The configured redirect URL for the registered application|`location.origin`|
 |logout_redirect_uri|string|The logout URL that the user is returned to after logging out|`location.href`|
 |knownAuthorities|string[]|An array of valid authority URL|`null` (all authorities are valid)|

@@ -98,7 +98,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
 
   private initOptions: MicrosoftOptions = {
     authority: COMMON_AUTHORITY,
-    scopes: ['openid', 'profile', 'User.Read'],
+    scopes: ['openid', 'email', 'profile', 'User.Read'],
     knownAuthorities: [],
     protocolMode: ProtocolMode.AAD,
     clientCapabilities: [],
