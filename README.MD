@@ -200,8 +200,15 @@ const fbLoginOptions = {
 this.authService.signIn(FacebookLoginProvider.PROVIDER_ID, fbLoginOptions);
 ```
 
+## Providers
+
+|Provider|Documentation|
+|-|-|
+|MicrosoftLoginProvider|[Link](microsoft-provider.md)|
+
 ## Running the demo app
 
 ```sh
+ng build lib
 ng serve
 ```
