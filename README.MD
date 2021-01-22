@@ -174,7 +174,7 @@ const vkLoginOptions = {
   version: '5.124', // https://vk.com/dev/versions
 }; // https://vk.com/dev/users.get
 
-let config = new AuthServiceConfig([
+let config = [
   {
     id: GoogleLoginProvider.PROVIDER_ID,
     provider: new GoogleLoginProvider("Google-OAuth-Client-Id", googleLoginOptions)
@@ -187,7 +187,7 @@ let config = new AuthServiceConfig([
     id: VKLoginProvider.PROVIDER_ID,
     provider: new VKLoginProvider("VK-App-Id", vkLoginOptions)
   },
-]);
+];
 ```
 
 ## Specifying custom scopes, fields etc. on login
