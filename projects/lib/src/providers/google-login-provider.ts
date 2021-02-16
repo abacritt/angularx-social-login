@@ -52,15 +52,14 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         let user: SocialUser = new SocialUser();
 
         const profile = this.auth2.currentUser.get().getBasicProfile();
-        const authResponse = this.auth2.currentUser.get().getAuthResponse();  // get complete authResponse object
+        const authResponse = this.auth2.currentUser.get().getAuthResponse(true);  // get complete authResponse object
         user.id = profile.getId();
         user.name = profile.getName();
         user.email = profile.getEmail();
         user.photoUrl = profile.getImageUrl();
         user.firstName = profile.getGivenName();
         user.lastName = profile.getFamilyName();
-        user.response = profile;
-        user.authResponse = authResponse;
+        user.response = authResponse;
 
         const resolveUser = authResponse => {
           user.authToken = authResponse.access_token;
@@ -101,12 +100,10 @@ export class GoogleLoginProvider extends BaseLoginProvider {
               user.authorizationCode = response.code;
             } else {
               let profile = this.auth2.currentUser.get().getBasicProfile();
-              let token = this.auth2.currentUser.get().getAuthResponse(true)
-                .access_token;
-              let backendToken = this.auth2.currentUser
-                .get()
-                .getAuthResponse(true).id_token;
-              const authResponse = this.auth2.currentUser.get().getAuthResponse();
+              let authResponse = this.auth2.currentUser.get().getAuthResponse(true);
+              
+              let token = authResponse.access_token;
+              let backendToken = authResponse.id_token;
 
               user.id = profile.getId();
               user.name = profile.getName();
@@ -116,9 +113,8 @@ export class GoogleLoginProvider extends BaseLoginProvider {
               user.lastName = profile.getFamilyName();
               user.authToken = token;
               user.idToken = backendToken;
-              user.authResponse = authResponse;
 
-              user.response = profile;
+              user.response = authResponse;
             }
 
             resolve(user);
