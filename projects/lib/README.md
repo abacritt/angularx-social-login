@@ -1,8 +1,8 @@
 # Angular Social Login
 
-[![Gitter](https://badges.gitter.im/angularx-social-login/community.svg)](https://gitter.im/angularx-social-login/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+> Use [Discussions](https://github.com/abacritt/angularx-social-login/discussions) for questions.
 
-Social login and authentication module for Angular 9+. Supports authentication with **Google**, **Facebook**, **Amazon**, and **VK** out of the box. Can be extended to other providers also.
+Social login and authentication module for Angular 9+. Supports authentication with **Google**, **Facebook**, **Amazon**, **Microsoft**, and **VK** out of the box. Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
@@ -91,6 +91,31 @@ export class DemoComponent implements OnInit {
 }
 ```
 
+### Refresh google Auth Token
+
+Once a user is logged in manual refresh token method can be triggered
+
+```javascript
+
+import { SocialAuthService } from "angularx-social-login";
+import { GoogleLoginProvider } from "angularx-social-login";
+
+@Component({
+  selector: 'app-demo',
+  templateUrl: './demo.component.html',
+  styleUrls: ['./demo.component.css']
+})
+export class DemoComponent implements OnInit {
+
+  constructor(private authService: SocialAuthService) { }
+
+  refreshToken(): void {
+    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+}
+```
+
 ### Subscribe to the authentication state
 
 You are notified when user logs in or logs out. You receive a `SocialUser` object when the user logs in and a `null` when the user logs out. `SocialUser` object contains basic user information such as name, email, photo URL, etc. along with the `auth_token`. You can communicate the `auth_token` to your server to authenticate the user in server and make API calls from server.
@@ -149,7 +174,7 @@ const vkLoginOptions = {
   version: '5.124', // https://vk.com/dev/versions
 }; // https://vk.com/dev/users.get
 
-let config = new AuthServiceConfig([
+let config = [
   {
     id: GoogleLoginProvider.PROVIDER_ID,
     provider: new GoogleLoginProvider("Google-OAuth-Client-Id", googleLoginOptions)
@@ -162,7 +187,7 @@ let config = new AuthServiceConfig([
     id: VKLoginProvider.PROVIDER_ID,
     provider: new VKLoginProvider("VK-App-Id", vkLoginOptions)
   },
-]);
+];
 ```
 
 ## Specifying custom scopes, fields etc. on login
@@ -175,8 +200,15 @@ const fbLoginOptions = {
 this.authService.signIn(FacebookLoginProvider.PROVIDER_ID, fbLoginOptions);
 ```
 
+## Providers
+
+|Provider|Documentation|
+|-|-|
+|MicrosoftLoginProvider|[Link](microsoft-provider.md)|
+
 ## Running the demo app
 
 ```sh
+ng build lib
 ng serve
 ```

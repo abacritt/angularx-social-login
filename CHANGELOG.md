@@ -1,3 +1,6 @@
+### 3.5.5
+- Bug fixes
+
 ### 3.5.4
 - Support Angular 11
 
