@@ -8,6 +8,9 @@ import { CommonModule } from '@angular/common';
 
 import { SocialAuthService, SocialAuthServiceConfig } from './socialauth.service';
 
+/**
+ * The main module of angularx-social-login library.
+ */
 @NgModule({
   imports: [
     CommonModule
