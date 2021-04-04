@@ -4,6 +4,6 @@ export interface LoginProvider {
   initialize(): Promise<void>;
 	getLoginStatus(loginStatusOptions?: any): Promise<SocialUser>;
 	signIn(signInOptions?: any): Promise<SocialUser>;
-	signOut(revoke?: boolean): Promise<any>;
+	signOut(revoke?: boolean): Promise<void>;
 }
 

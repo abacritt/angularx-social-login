@@ -100,7 +100,7 @@ export class AmazonLoginProvider extends BaseLoginProvider {
     });
   }
 
-  signOut(revoke?: boolean): Promise<any> {
+  signOut(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
         amazon.Login.logout();

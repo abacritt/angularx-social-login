@@ -101,7 +101,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
             } else {
               let profile = this.auth2.currentUser.get().getBasicProfile();
               let authResponse = this.auth2.currentUser.get().getAuthResponse(true);
-              
+
               let token = authResponse.access_token;
               let backendToken = authResponse.id_token;
 
@@ -129,7 +129,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     });
   }
 
-  signOut(revoke?: boolean): Promise<any> {
+  signOut(revoke?: boolean): Promise<void> {
     return new Promise((resolve, reject) => {
       let signOutPromise: Promise<any>;
 

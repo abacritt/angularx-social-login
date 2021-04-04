@@ -51,7 +51,7 @@ export class VKLoginProvider extends BaseLoginProvider {
     );
   }
 
-  signOut(): Promise<any> {
+  signOut(): Promise<void> {
     return new Promise((resolve, reject) => {
       VK.Auth.logout((response: any) => {
         resolve();
