@@ -78,7 +78,7 @@ interface MSALLogoutRequest {
 
 interface MSALClientApplication {
   getAllAccounts(): MSALAccount[];
-  logout(logoutRequest?: MSALLogoutRequest): Promise<void>;
+  logoutPopup(logoutRequest?: MSALLogoutRequest): Promise<void>;
   loginPopup(loginRequest: MSALLoginRequest): Promise<MSALLoginResponse>;
   ssoSilent(loginRequest: MSALLoginRequest): Promise<MSALLoginResponse>;
   acquireTokenSilent(loginRequest: MSALLoginRequest): Promise<MSALLoginResponse>;
@@ -121,7 +121,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
     return new Promise((resolve, reject) => {
       this.loadScript(
         MicrosoftLoginProvider.PROVIDER_ID,
-        'https://alcdn.msauth.net/browser/2.1.0/js/msal-browser.js',
+        'https://alcdn.msauth.net/browser/2.13.1/js/msal-browser.js',
         () => {
           try {
             const config = {
@@ -213,11 +213,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
   async signOut(revoke?: boolean): Promise<any> {
     const accounts = this._instance.getAllAccounts();
     if (accounts?.length > 0) {
-      //TODO: This redirects to a Microsoft page, then sends us back to redirect_uri... this doesn't seem to match other providers
-      //Open issues:
-      // https://github.com/abacritt/angularx-social-login/issues/306
-      // https://github.com/AzureAD/microsoft-authentication-library-for-js/issues/2563
-      await this._instance.logout({
+      await this._instance.logoutPopup({
         account: accounts[0],
         postLogoutRedirectUri: this.initOptions.logout_redirect_uri ?? this.initOptions.redirect_uri ?? location.href
       })
