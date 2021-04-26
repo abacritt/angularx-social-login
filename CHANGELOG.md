@@ -1,3 +1,6 @@
+### 3.5.6
+- Bug fixes and additional features in Microsoft provider
+
 ### 3.5.5
 - Bug fixes
 
