@@ -1,3 +1,6 @@
+### 3.5.7
+- Bug fix related to Facebook provider
+
 ### 3.5.6
 - Bug fixes and additional features in Microsoft provider
 
