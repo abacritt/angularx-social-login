@@ -56,7 +56,8 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             user.photoUrl =
               'https://graph.facebook.com/' +
               fbUser.id +
-              '/picture?type=normal';
+              '/picture?type=normal&access_token=' +
+              authResponse.accessToken;
             user.firstName = fbUser.first_name;
             user.lastName = fbUser.last_name;
             user.authToken = authResponse.accessToken;
