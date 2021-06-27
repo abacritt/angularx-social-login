@@ -1,6 +1,5 @@
-import {BaseLoginProvider} from '../entities/base-login-provider';
-import {SocialUser} from '../entities/social-user';
-
+import { BaseLoginProvider } from '../entities/base-login-provider';
+import { SocialUser } from '../entities/social-user';
 
 // Simulates login / logout without actually requiring an Internet connection.
 //
@@ -30,7 +29,6 @@ import {SocialUser} from '../entities/social-user';
 //  { ... }
 //  ]);
 
-
 export class DummyLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID: string = 'DUMMY';
 
@@ -45,7 +43,7 @@ export class DummyLoginProvider extends BaseLoginProvider {
     provider: 'DUMMY',
     idToken: 'dummyIdToken',
     authorizationCode: 'dummyAuthCode',
-    response: {}
+    response: {},
   };
 
   private dummy: SocialUser;
