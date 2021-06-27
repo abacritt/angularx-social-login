@@ -85,7 +85,7 @@ export class DummyLoginProvider extends BaseLoginProvider {
     });
   }
 
-  signOut(revoke?: boolean): Promise<any> {
+  signOut(revoke?: boolean): Promise<void> {
     return new Promise((resolve, reject) => {
       this.loggedIn = false;
       resolve();
