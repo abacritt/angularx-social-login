@@ -6,16 +6,20 @@ declare let FB: any;
 export class FacebookLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID: string = 'FACEBOOK';
 
-  constructor(
-    private clientId: string,
-    private initOptions: any = {
-      scope: 'email,public_profile',
-      locale: 'en_US',
-      fields: 'name,email,picture,first_name,last_name',
-      version: 'v4.0',
-    }
-  ) {
+  private requestOptions = {
+    scope: 'email,public_profile',
+    locale: 'en_US',
+    fields: 'name,email,picture,first_name,last_name',
+    version: 'v10.0',
+  };
+
+  constructor(private clientId: string, initOptions: Object = {}) {
     super();
+
+    this.requestOptions = {
+      ...this.requestOptions,
+      ...initOptions,
+    };
   }
 
   initialize(): Promise<void> {
@@ -23,14 +27,14 @@ export class FacebookLoginProvider extends BaseLoginProvider {
       try {
         this.loadScript(
           FacebookLoginProvider.PROVIDER_ID,
-          `//connect.facebook.net/${this.initOptions.locale}/sdk.js`,
+          `//connect.facebook.net/${this.requestOptions.locale}/sdk.js`,
           () => {
             FB.init({
               appId: this.clientId,
               autoLogAppEvents: true,
               cookie: true,
               xfbml: true,
-              version: this.initOptions.version,
+              version: this.requestOptions.version,
             });
 
             resolve();
@@ -47,7 +51,7 @@ export class FacebookLoginProvider extends BaseLoginProvider {
       FB.getLoginStatus((response: any) => {
         if (response.status === 'connected') {
           let authResponse = response.authResponse;
-          FB.api(`/me?fields=${this.initOptions.fields}`, (fbUser: any) => {
+          FB.api(`/me?fields=${this.requestOptions.fields}`, (fbUser: any) => {
             let user: SocialUser = new SocialUser();
 
             user.id = fbUser.id;
@@ -67,14 +71,16 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             resolve(user);
           });
         } else {
-          reject(`No user is currently logged in with ${FacebookLoginProvider.PROVIDER_ID}`);
+          reject(
+            `No user is currently logged in with ${FacebookLoginProvider.PROVIDER_ID}`
+          );
         }
       });
     });
   }
 
   signIn(signInOptions?: any): Promise<SocialUser> {
-    const options = { ...this.initOptions, ...signInOptions };
+    const options = { ...this.requestOptions, ...signInOptions };
     return new Promise((resolve, reject) => {
       FB.login((response: any) => {
         if (response.authResponse) {

@@ -210,7 +210,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
     return await this.getSocialUser(loginResponse);
   }
 
-  async signOut(revoke?: boolean): Promise<any> {
+  async signOut(revoke?: boolean): Promise<void> {
     const accounts = this._instance.getAllAccounts();
     if (accounts?.length > 0) {
       await this._instance.logoutPopup({
