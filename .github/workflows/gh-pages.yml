@@ -6,7 +6,7 @@ name: Deploy to Gh-Pages
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -17,19 +17,25 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
 
-    # Install Angular CLI globally
-    - name: Install Angular CLI
-      run: sudo npm i -g @angular/cli
+      # Install Angular CLI globally
+      - name: Install Angular CLI
+        run: sudo npm i -g @angular/cli
 
-    # Install dependencies
-    - name: Run npm install
-      run: npm i
+      # Install dependencies
+      - name: Run npm install
+        run: npm i
 
-    # Builds the Angular app
-    - name: Build Angular
-      run: |
-        ng build lib
-        ng build --prod --output-path docs --base-href /angularx-social-login/
+      # Builds the Angular app
+      - name: Build Angular
+        run: |
+          ng build lib
+          ng build --prod --output-path docs --base-href /angularx-social-login/
+
+      - uses: EndBug/add-and-commit@v7
+        with:
+          add: "docs"
+          default_author: github_actions
+          message: "Update demo application"
