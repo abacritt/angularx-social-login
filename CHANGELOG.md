@@ -1,3 +1,6 @@
+# 4.0.1
+- Support for Angular 12
+
 ### 3.5.7
 - Bug fix related to Facebook provider
 

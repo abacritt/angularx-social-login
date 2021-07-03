@@ -2,11 +2,17 @@
 
 > Use [Discussions](https://github.com/abacritt/angularx-social-login/discussions) for questions.
 
-Social login and authentication module for Angular 9+. Supports authentication with **Google**, **Facebook**, **Amazon**, **Microsoft**, and **VK** out of the box. Can be extended to other providers also.
+Social login and authentication module for Angular 12. Supports authentication with **Google**, **Facebook**, **Amazon**, **Microsoft**, and **VK** out of the box. Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
-> Note: For compatibility with older versions Angular (e.g. Angular 8 and older), please use an older version of the library. Check [this comment on the compatibility with Angular versions](https://github.com/abacritt/angularx-social-login/pull/286#discussion_r449864732) and [this comment on how to use the older version of the library](https://github.com/abacritt/angularx-social-login/issues/283#issuecomment-652930750).
+### Comatibility Matrix
+
+| Library Version | Angular Version |
+| --------------- | --------------- |
+| 4               | 12              |
+| 3               | 9, 10, 11       |
+| 2               | 5, 6, 7, 8      |
 
 ## Getting started
 
@@ -51,7 +57,10 @@ import {
             id: FacebookLoginProvider.PROVIDER_ID,
             provider: new FacebookLoginProvider('clientId')
           }
-        ]
+        ],
+        onError: (err) => {
+          console.error(err);
+        }
       } as SocialAuthServiceConfig,
     }
   ],
