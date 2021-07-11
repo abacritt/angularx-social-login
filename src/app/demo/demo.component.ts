@@ -11,7 +11,7 @@ import {
 } from 'lib';
 
 @Component({
-  selector: 'app-demo',
+  selector: 'lib-app-demo',
   templateUrl: './demo.component.html',
   styleUrls: ['./demo.component.css']
 })
