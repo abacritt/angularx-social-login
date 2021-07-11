@@ -99,15 +99,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         },
@@ -165,6 +161,7 @@
   },
   "defaultProject": "angularx-social-login-ws",
   "cli": {
-    "analytics": "453e5c42-c48c-4792-ae02-a0e3f3513a9e"
+    "analytics": "453e5c42-c48c-4792-ae02-a0e3f3513a9e",
+    "defaultCollection": "@angular-eslint/schematics"
   }
 }
