@@ -58,6 +58,6 @@
     "node": ">=12.18"
   },
   "lint-staged": {
-    "*.js": "npm run lint --cache --fix"
+    "*.js": "npm run lint -- --cache --fix"
   }
 }
