@@ -26,3 +26,4 @@ The second argument can have the following fields (all fields are optional):
 |protocolMode|ProtocolMode|The protocol to use, AAD or OIDC|`ProtocolMode.AAD`|
 |clientCapabilities|string[]|Array of capabilities to be added to all network requests as part of the xms_cc claims request|null|
 |cacheLocation|string|Location of token cache in browser|`'sessionStorage'`|
+|prompt|string|Indicates the type of user interaction that is required. The only valid values at this time are `login`, `none`, `select_account`, and `consent`|`none`

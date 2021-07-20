@@ -21,7 +21,8 @@ export type MicrosoftOptions = {
   protocolMode?: ProtocolMode,
   clientCapabilities?: string[],
   cacheLocation?: string,
-  scopes?: string[]
+  scopes?: string[],
+  prompt?: string,
 };
 
 // Collection of internal MSAL interfaces from: https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-browser/src
@@ -52,6 +53,7 @@ interface MSALLoginRequest {
   sid?: string;
   loginHint?: string;
   domainHint?: string;
+  prompt?: string;
 }
 
 interface MSALLoginResponse {
@@ -205,7 +207,8 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
 
   async signIn(): Promise<SocialUser> {
     const loginResponse = await this._instance.loginPopup({
-      scopes: this.initOptions.scopes
+      scopes: this.initOptions.scopes,
+      prompt: this.initOptions.prompt,
     });
     return await this.getSocialUser(loginResponse);
   }
