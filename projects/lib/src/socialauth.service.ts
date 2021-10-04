@@ -95,7 +95,10 @@ export class SocialAuthService {
                 this._authState.next(user);
                 loggedIn = true;
               })
-              .catch(console.debug);
+              .catch((error) => {
+                console.debug(error);
+                throw error;
+              });
           });
           Promise.all(loginStatusPromises).catch(() => {
             if (!loggedIn) {
