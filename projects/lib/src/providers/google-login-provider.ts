@@ -20,16 +20,15 @@ export class GoogleLoginProvider extends BaseLoginProvider {
       try {
         this.loadScript(
           GoogleLoginProvider.PROVIDER_ID,
-          'https://apis.google.com/js/platform.js',
+          'https://apis.google.com/js/api.js',
           () => {
-            gapi.load('auth2', () => {
-              this.auth2 = gapi.auth2.init({
+            gapi.load('client:auth2', () => {
+              gapi.client.init({
                 ...this.initOptions,
                 client_id: this.clientId,
-              });
-
-              this.auth2
+              })
                 .then(() => {
+                  this.auth2 = gapi.auth2.getAuthInstance();
                   resolve();
                 })
                 .catch((err: any) => {
@@ -49,21 +48,16 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
     return new Promise((resolve, reject) => {
       if (this.auth2.isSignedIn.get()) {
-        let user: SocialUser = new SocialUser();
+        const user: SocialUser = new SocialUser();
 
         const profile = this.auth2.currentUser.get().getBasicProfile();
         const authResponse = this.auth2.currentUser.get().getAuthResponse(true);  // get complete authResponse object
-        user.id = profile.getId();
-        user.name = profile.getName();
-        user.email = profile.getEmail();
-        user.photoUrl = profile.getImageUrl();
-        user.firstName = profile.getGivenName();
-        user.lastName = profile.getFamilyName();
+        this.setUserProfile(user, profile);
         user.response = authResponse;
 
-        const resolveUser = authResponse => {
-          user.authToken = authResponse.access_token;
-          user.idToken = authResponse.id_token;
+        const resolveUser = authenticationResponse => {
+          user.authToken = authenticationResponse.access_token;
+          user.idToken = authenticationResponse.id_token;
 
           resolve(user);
         };
@@ -71,7 +65,6 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         if (options.refreshToken) {
           this.auth2.currentUser.get().reloadAuthResponse().then(resolveUser);
         } else {
-          const authResponse = this.auth2.currentUser.get().getAuthResponse(true);
           resolveUser(authResponse);
         }
       } else {
@@ -87,30 +80,25 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
     return new Promise((resolve, reject) => {
       const offlineAccess: boolean = options && options.offline_access;
-      let promise = !offlineAccess
+      const promise = !offlineAccess
         ? this.auth2.signIn(signInOptions)
         : this.auth2.grantOfflineAccess(signInOptions);
 
       promise
         .then(
           (response: any) => {
-            let user: SocialUser = new SocialUser();
+            const user: SocialUser = new SocialUser();
 
             if (response && response.code) {
               user.authorizationCode = response.code;
             } else {
-              let profile = this.auth2.currentUser.get().getBasicProfile();
-              let authResponse = this.auth2.currentUser.get().getAuthResponse(true);
+              const profile = this.auth2.currentUser.get().getBasicProfile();
+              const authResponse = this.auth2.currentUser.get().getAuthResponse(true);
 
-              let token = authResponse.access_token;
-              let backendToken = authResponse.id_token;
+              const token = authResponse.access_token;
+              const backendToken = authResponse.id_token;
 
-              user.id = profile.getId();
-              user.name = profile.getName();
-              user.email = profile.getEmail();
-              user.photoUrl = profile.getImageUrl();
-              user.firstName = profile.getGivenName();
-              user.lastName = profile.getFamilyName();
+              this.setUserProfile(user, profile);
               user.authToken = token;
               user.idToken = backendToken;
 
@@ -151,5 +139,14 @@ export class GoogleLoginProvider extends BaseLoginProvider {
           reject(err);
         });
     });
+  }
+
+  private setUserProfile(user: SocialUser, profile: any): void {
+    user.id = profile.getId();
+    user.name = profile.getName();
+    user.email = profile.getEmail();
+    user.photoUrl = profile.getImageUrl();
+    user.firstName = profile.getGivenName();
+    user.lastName = profile.getFamilyName();
   }
 }
