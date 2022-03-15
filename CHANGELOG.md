@@ -1,3 +1,6 @@
+# 4.0.2
+- Support for Angular 13
+
 # 4.0.1
 - Support for Angular 12
 
