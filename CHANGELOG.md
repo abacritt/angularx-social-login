@@ -1,5 +1,9 @@
-# 4.0.2
-- Support for Angular 13
+## 4.1.1
+- Update to Angular 13
+- Update several dependencies
+
+## 4.1.0
+- Update to new Google Identification libray
 
 # 4.0.1
 - Support for Angular 12
