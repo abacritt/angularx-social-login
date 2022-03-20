@@ -1,3 +1,6 @@
+## 4.1.0
+- Update to new Google Identification libray
+
 # 4.0.1
 - Support for Angular 12
 
