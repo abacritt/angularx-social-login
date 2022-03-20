@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
-import { AsyncSubject, Observable, ReplaySubject } from 'rxjs';
-import { LoginProvider } from './entities/login-provider';
-import { SocialUser } from './entities/social-user';
-import { GoogleLoginProvider } from './providers/google-login-provider';
+import {Inject, Injectable} from '@angular/core';
+import {AsyncSubject, Observable, ReplaySubject} from 'rxjs';
+import {LoginProvider} from './entities/login-provider';
+import {SocialUser} from './entities/social-user';
+import {GoogleLoginProvider} from './providers/google-login-provider';
 
 /**
  * An interface to define the shape of the service configuration options.
@@ -20,7 +20,7 @@ export interface SocialAuthServiceConfig {
  *
  * @dynamic
  */
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class SocialAuthService {
   private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND =
     'Login provider not found';
@@ -55,10 +55,10 @@ export class SocialAuthService {
    */
   constructor(
     @Inject('SocialAuthServiceConfig')
-    config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>
+      config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>
   ) {
     if (config instanceof Promise) {
-      config.then((config) => {
+      config.then((config: SocialAuthServiceConfig) => {
         this.initialize(config);
       });
     } else {
@@ -68,7 +68,7 @@ export class SocialAuthService {
 
   private initialize(config: SocialAuthServiceConfig) {
     this.autoLogin = config.autoLogin !== undefined ? config.autoLogin : false;
-    const { onError = console.error } = config;
+    const {onError = console.error} = config;
 
     config.providers.forEach((item) => {
       this.providers.set(item.id, item.provider);
@@ -125,7 +125,7 @@ export class SocialAuthService {
         const providerObject = this.providers.get(providerId);
         if (providerObject) {
           providerObject
-            .getLoginStatus({ refreshToken: true })
+            .getLoginStatus({refreshToken: true})
             .then((user: SocialUser) => {
               user.provider = providerId;
               this._user = user;

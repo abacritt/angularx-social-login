@@ -1,13 +1,17 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AppComponent } from './app.component';
+import {NavbarComponent} from './navbar/navbar.component';
+import {DemoComponent} from './demo/demo.component';
 
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
-      ],
+        AppComponent,
+        NavbarComponent,
+        DemoComponent
+      ]
     }).compileComponents();
   }));
 
