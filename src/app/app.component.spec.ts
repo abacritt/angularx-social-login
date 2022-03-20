@@ -3,15 +3,24 @@ import { TestBed, waitForAsync } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {DemoComponent} from './demo/demo.component';
+import {SocialAuthService} from 'lib';
+import SpyObj = jasmine.SpyObj;
+import createSpyObj = jasmine.createSpyObj;
+import {Observable} from 'rxjs';
 
 describe('AppComponent', () => {
+  let socialAuthServiceMock: SpyObj<SocialAuthService>;
+
+  socialAuthServiceMock = createSpyObj('socialAuthService', ['authState', 'initState', 'refreshAuthToken', 'signIn', 'signOut']);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
         NavbarComponent,
         DemoComponent
-      ]
+      ],
+      providers: [{ provide: SocialAuthService, useValue: {...socialAuthServiceMock, authState: new Observable()} }]
     }).compileComponents();
   }));
 
