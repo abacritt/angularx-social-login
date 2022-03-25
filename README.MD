@@ -6,7 +6,7 @@ Social login and authentication module for Angular 12. Supports authentication w
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
-### Comatibility Matrix
+### Compatibility Matrix
 
 | Library Version | Angular Version |
 | --------------- | --------------- |
