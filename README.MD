@@ -2,15 +2,15 @@
 
 > Use [Discussions](https://github.com/abacritt/angularx-social-login/discussions) for questions.
 
-Social login and authentication module for Angular 12. Supports authentication with **Google**, **Facebook**, **Amazon**, **Microsoft**, and **VK** out of the box. Can be extended to other providers also.
+Social login and authentication module for Angular 13. Supports authentication with **Google**, **Facebook**, **Amazon**, **Microsoft**, and **VK** out of the box. Can be extended to other providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
 ### Comatibility Matrix
 
 | Library Version | Angular Version |
-| --------------- | --------------- |
-| 4               | 12              |
+| --------------- |-----------------|
+| 4               | 12, 13          |
 | 3               | 9, 10, 11       |
 | 2               | 5, 6, 7, 8      |
 

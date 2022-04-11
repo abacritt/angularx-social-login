@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { SocialAuthService } from 'lib';
-import { SocialUser } from 'lib';
+import {SocialAuthService} from 'lib';
+import {SocialUser} from 'lib';
 import {
   GoogleLoginProvider,
   FacebookLoginProvider,
@@ -20,7 +20,8 @@ export class DemoComponent implements OnInit {
   user: SocialUser;
   GoogleLoginProvider = GoogleLoginProvider;
 
-  constructor(private authService: SocialAuthService) { }
+  constructor(private authService: SocialAuthService) {
+  }
 
   ngOnInit() {
     this.authService.authState.subscribe(user => {
