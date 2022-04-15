@@ -8,18 +8,19 @@ Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
 ### Comatibility Matrix
 
-| Library Version | Angular Version |
-| --------------- |-----------------|
-| 4               | 12, 13          |
-| 3               | 9, 10, 11       |
-| 2               | 5, 6, 7, 8      |
+| Library Version                       | Angular Version |
+| ------------------------------------- |-----------------|
+| @abacritt/angularx-social-login:1     | 13              |
+| angularx-social-login:4               | 12, 13          |
+| angularx-social-login:3               | 9, 10, 11       |
+| angularx-social-login:2               | 5, 6, 7, 8      |
 
 ## Getting started
 
 ### Install via npm
 
 ```sh
-npm i angularx-social-login
+npm i @abacritt/angularx-social-login
 ```
 
 ### Import the module
