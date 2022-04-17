@@ -123,7 +123,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
     return new Promise((resolve, reject) => {
       this.loadScript(
         MicrosoftLoginProvider.PROVIDER_ID,
-        'https://alcdn.msauth.net/browser/2.13.1/js/msal-browser.js',
+        'https://alcdn.msauth.net/browser/2.13.1/js/msal-browser.min.js',
         () => {
           try {
             const config = {
