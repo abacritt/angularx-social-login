@@ -1,3 +1,6 @@
+# 1.0.2
+- Minified build for Microsoft provider
+
 # 1
 - Angular 13 support
 
