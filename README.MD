@@ -159,7 +159,7 @@ export class DemoComponent implements OnInit {
 ### Display the user information
 
 ```html
-<img src="{{ user.photoUrl }}">
+<img src="{{ user.photoUrl }}" referrerpolicy="no-referrer">
 <div>
   <h4>{{ user.name }}</h4>
   <p>{{ user.email }}</p>
