@@ -28,11 +28,11 @@ npm i @abacritt/angularx-social-login
 In your `AppModule`, import the `SocialLoginModule`
 
 ```javascript
-import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import {
   GoogleLoginProvider,
   FacebookLoginProvider
-} from 'angularx-social-login';
+} from '@abacritt/angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -74,8 +74,8 @@ export class AppModule { }
 
 ```javascript
 
-import { SocialAuthService } from "angularx-social-login";
-import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
+import { SocialAuthService } from "@abacritt/angularx-social-login";
+import { FacebookLoginProvider, GoogleLoginProvider } from "@abacritt/angularx-social-login";
 
 @Component({
   selector: 'app-demo',
@@ -107,8 +107,8 @@ Once a user is logged in manual refresh token method can be triggered
 
 ```javascript
 
-import { SocialAuthService } from "angularx-social-login";
-import { GoogleLoginProvider } from "angularx-social-login";
+import { SocialAuthService } from "@abacritt/angularx-social-login";
+import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
 
 @Component({
   selector: 'app-demo',
@@ -131,8 +131,8 @@ export class DemoComponent implements OnInit {
 You are notified when user logs in or logs out. You receive a `SocialUser` object when the user logs in and a `null` when the user logs out. `SocialUser` object contains basic user information such as name, email, photo URL, etc. along with the `auth_token`. You can communicate the `auth_token` to your server to authenticate the user in server and make API calls from server.
 
 ```javascript
-import { SocialAuthService } from "angularx-social-login";
-import { SocialUser } from "angularx-social-login";
+import { SocialAuthService } from "@abacritt/angularx-social-login";
+import { SocialUser } from "@abacritt/angularx-social-login";
 
 @Component({
   selector: 'app-demo',
