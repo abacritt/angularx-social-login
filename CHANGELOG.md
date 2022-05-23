@@ -1,3 +1,7 @@
+# 1.1.0
+- Fix google authentication
+- Bump dependency versions
+
 # 1.0.2
 - Minified build for Microsoft provider
 
