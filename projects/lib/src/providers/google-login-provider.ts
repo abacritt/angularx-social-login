@@ -1,12 +1,10 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/social-user';
 
-declare let gapi: any;
-
 export class GoogleLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID: string = 'GOOGLE';
 
-  protected auth2: any;
+  protected auth2: gapi.auth2.GoogleAuth;
 
   constructor(
     private clientId: string,
