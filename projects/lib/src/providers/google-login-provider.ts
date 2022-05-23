@@ -32,7 +32,14 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                   resolve();
                 })
                 .catch((err: any) => {
-                  reject(err);
+                  if ((err.details as string).includes('deprecated')) {
+                    // we can still use the instance as it's ready.
+                    this.auth2 = gapi.auth2.getAuthInstance();
+                    console.error(err)
+                    resolve();
+                  } else {
+                    reject(err);
+                  }
                 });
             });
           }
