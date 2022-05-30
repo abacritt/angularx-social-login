@@ -2,6 +2,7 @@ import { NgZone } from '@angular/core';
 import { BehaviorSubject, filter, map, Observable, ReplaySubject } from 'rxjs';
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/social-user';
+import { decodeJwt, JWTPayload } from 'jose';
 
 export class GoogleLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID: string = 'GOOGLE';
@@ -26,6 +27,8 @@ export class GoogleLoginProvider extends BaseLoginProvider {
       map(resp => {
         const user = new SocialUser();
         user.idToken = resp.credential;
+        const jwtPayload = decodeJwt(resp.credential);
+        this.setUserProfile(user, jwtPayload);
         return user;
       })
     );
@@ -58,44 +61,16 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     });
   }
 
-  getLoginStatus(loginStatusOptions?: any): Promise<SocialUser> {
+  getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       if (this._credentialResponse.value !== null) {
         const user = new SocialUser();
         user.idToken = this._credentialResponse.value.credential;
+        const jwtPayload = decodeJwt(user.idToken);
+        this.setUserProfile(user, jwtPayload);
         resolve(user);
       }
       else {
-        reject(
-          `No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`
-        );
-      }
-    });
-
-    const options = {...this.initOptions, ...loginStatusOptions};
-
-    return new Promise((resolve, reject) => {
-      if (this.auth2.isSignedIn.get()) {
-        const user: SocialUser = new SocialUser();
-
-        const profile = this.auth2.currentUser.get().getBasicProfile();
-        const authResponse = this.auth2.currentUser.get().getAuthResponse(true);  // get complete authResponse object
-        this.setUserProfile(user, profile);
-        user.response = authResponse;
-
-        const resolveUser = authenticationResponse => {
-          user.authToken = authenticationResponse.access_token;
-          user.idToken = authenticationResponse.id_token;
-
-          resolve(user);
-        };
-
-        if (options.refreshToken) {
-          this.auth2.currentUser.get().reloadAuthResponse().then(resolveUser);
-        } else {
-          resolveUser(authResponse);
-        }
-      } else {
         reject(
           `No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`
         );
@@ -105,46 +80,6 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
   signIn(signInOptions?: any): Promise<SocialUser> {
     throw new Error('not implemented');
-    
-    const options = { ...this.initOptions, ...signInOptions };
-
-    return new Promise((resolve, reject) => {
-      const offlineAccess: boolean = options && options.offline_access;
-      const promise = !offlineAccess
-        ? this.auth2.signIn(signInOptions)
-        : this.auth2.grantOfflineAccess(signInOptions);
-
-      promise
-        .then(
-          (response: any) => {
-            const user: SocialUser = new SocialUser();
-
-            if (response && response.code) {
-              user.authorizationCode = response.code;
-            } else {
-              const profile = this.auth2.currentUser.get().getBasicProfile();
-              const authResponse = this.auth2.currentUser.get().getAuthResponse(true);
-
-              const token = authResponse.access_token;
-              const backendToken = authResponse.id_token;
-
-              this.setUserProfile(user, profile);
-              user.authToken = token;
-              user.idToken = backendToken;
-
-              user.response = authResponse;
-            }
-
-            resolve(user);
-          },
-          (closed: any) => {
-            reject(closed);
-          }
-        )
-        .catch((err: any) => {
-          reject(err);
-        });
-    });
   }
 
   signOut(revoke?: boolean): Promise<void> {
@@ -161,36 +96,14 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         promptAndResolve();
       }
     });
-
-    return new Promise((resolve, reject) => {
-      let signOutPromise: Promise<any>;
-
-      if (revoke) {
-        signOutPromise = this.auth2.disconnect();
-      } else {
-        signOutPromise = this.auth2.signOut();
-      }
-
-      signOutPromise
-        .then((err: any) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        })
-        .catch((err: any) => {
-          reject(err);
-        });
-    });
   }
 
-  private setUserProfile(user: SocialUser, profile: any): void {
-    user.id = profile.getId();
-    user.name = profile.getName();
-    user.email = profile.getEmail();
-    user.photoUrl = profile.getImageUrl();
-    user.firstName = profile.getGivenName();
-    user.lastName = profile.getFamilyName();
+  private setUserProfile(user: SocialUser, jwtPayload: JWTPayload) {
+    user.id = jwtPayload.sub;
+    user.name = jwtPayload['name'] as string;
+    user.email = jwtPayload['email'] as string;
+    user.photoUrl = jwtPayload['picture'] as string;
+    user.firstName = jwtPayload['given_name'] as string;
+    user.lastName = jwtPayload['family_name'] as string;
   }
 }

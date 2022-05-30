@@ -33,7 +33,8 @@
   "peerDependencies": {
     "@angular/common": "^13.2.6",
     "@angular/core": "^13.2.6",
-    "rxjs": "^7.5.5"
+    "rxjs": "^7.5.5",
+    "jose": "^4.8.1"
   },
   "homepage": "https://github.com/abacritt/angularx-social-login#readme",
   "main": "bundles/abacrit-angularx-social-login.umd.js",
