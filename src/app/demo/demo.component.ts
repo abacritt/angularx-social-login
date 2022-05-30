@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 
-import {SocialAuthService} from 'lib';
+import {GoogleLoginProvider, SocialAuthService} from 'lib';
 import {SocialUser} from 'lib';
 import {
   FacebookLoginProvider,
@@ -17,6 +17,7 @@ import {
 export class DemoComponent implements OnInit {
 
   user: SocialUser;
+  GoogleLoginProvider = GoogleLoginProvider;
 
   constructor(private authService: SocialAuthService) {
   }
@@ -45,5 +46,9 @@ export class DemoComponent implements OnInit {
 
   signOut(): void {
     this.authService.signOut();
+  }
+  
+  refreshGoogleToken(): void {
+    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }
 }

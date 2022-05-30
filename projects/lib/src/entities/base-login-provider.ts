@@ -4,13 +4,11 @@ import { SocialUser } from './social-user';
 
 export abstract class BaseLoginProvider implements LoginProvider {
   constructor() {}
-
-	readonly socialUser$?: Observable<SocialUser>;
-	readonly initialized$?: Observable<true>;
   
+	readonly observe?: true;
   abstract initialize(): Promise<void>;
-  abstract getLoginStatus(): Promise<SocialUser>;
-  abstract signIn(): Promise<SocialUser>;
+  abstract getLoginStatus(): Promise<SocialUser> | Observable<SocialUser>;
+  signIn?(): Promise<SocialUser>;
   abstract signOut(revoke?: boolean): Promise<void>;
 
   protected loadScript(

@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule, NgZone} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 
@@ -22,14 +22,13 @@ import {
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
-      useFactory: (ngZone: NgZone) => ({
+      useValue: {
         autoLogin: true,
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
               '624796833023-clhjgupm0pu6vgga7k5i5bsfp6qp6egh.apps.googleusercontent.com',
-              ngZone
             ),
           },
           {
@@ -53,8 +52,7 @@ import {
             provider: new MicrosoftLoginProvider('0611ccc3-9521-45b6-b432-039852002705'),
           }
         ],
-      } as SocialAuthServiceConfig),
-      deps: [NgZone]
+      } as SocialAuthServiceConfig
     }
   ],
   bootstrap: [AppComponent],

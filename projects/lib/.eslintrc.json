@@ -20,7 +20,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "asl",
+            "prefix": "lib",
             "style": "camelCase"
           }
         ],
@@ -28,7 +28,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "asl",
+            "prefix": "lib",
             "style": "kebab-case"
           }
         ]

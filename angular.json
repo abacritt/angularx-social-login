@@ -125,7 +125,7 @@
       "projectType": "library",
       "root": "projects/lib",
       "sourceRoot": "projects/lib/src",
-      "prefix": "asl",
+      "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",

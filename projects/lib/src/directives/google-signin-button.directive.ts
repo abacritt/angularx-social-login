@@ -1,17 +1,17 @@
-import { Directive, ElementRef, Inject, OnDestroy} from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Directive, ElementRef, Inject} from '@angular/core';
+import { take } from 'rxjs';
 import { GoogleLoginProvider } from '../providers/google-login-provider';
-import { SocialAuthServiceConfig } from '../socialauth.service';
+import { SocialAuthService, SocialAuthServiceConfig } from '../socialauth.service';
 
 @Directive({
-  selector: '[aslGoogleSigninButton]',
+  // eslint-disable-next-line @angular-eslint/directive-selector
+  selector: 'asl-google-signin-button',
 })
-export class GoogleSigninButtonDirective implements OnDestroy {
-  private readonly _destroy = new Subject<void>();
-
+export class GoogleSigninButtonDirective {
   constructor(
     @Inject('SocialAuthServiceConfig') config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>,
     private readonly _el: ElementRef,
+    private readonly _socialAuthService: SocialAuthService
   ) {
     if (config instanceof Promise) {
       config.then((config: SocialAuthServiceConfig) => {
@@ -23,22 +23,15 @@ export class GoogleSigninButtonDirective implements OnDestroy {
   }
 
   initialize(config: SocialAuthServiceConfig) {
-    const providerProvider = config.providers.find(({ id }) => id === GoogleLoginProvider.PROVIDER_ID);
-    if (!providerProvider) {
-      throw new Error('GoogleLoginProvider should be provided to use this component');
+    if (!config.providers.some(({ id }) => id === GoogleLoginProvider.PROVIDER_ID)) {
+      throw new Error('GoogleLoginProvider should be provided to use this directive');
     }
 
-    const googleProvider = providerProvider.provider as GoogleLoginProvider;
-    googleProvider.initialized$.pipe(takeUntil(this._destroy)).subscribe(() => {
+    this._socialAuthService.initState.pipe(take(1)).subscribe(() => {
       google.accounts.id.renderButton(this._el.nativeElement, {
         type: 'icon',
         size: 'medium',
       });
     })
-  }
-
-  ngOnDestroy() {
-    this._destroy.next();
-    this._destroy.complete();
   }
 }
