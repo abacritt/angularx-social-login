@@ -3,7 +3,6 @@ import {Component, OnInit} from '@angular/core';
 import {SocialAuthService} from 'lib';
 import {SocialUser} from 'lib';
 import {
-  GoogleLoginProvider,
   FacebookLoginProvider,
   AmazonLoginProvider,
   VKLoginProvider,
@@ -18,7 +17,6 @@ import {
 export class DemoComponent implements OnInit {
 
   user: SocialUser;
-  GoogleLoginProvider = GoogleLoginProvider;
 
   constructor(private authService: SocialAuthService) {
   }
@@ -27,10 +25,6 @@ export class DemoComponent implements OnInit {
     this.authService.authState.subscribe(user => {
       this.user = user;
     });
-  }
-
-  signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
   signInWithFB(): void {
@@ -52,9 +46,4 @@ export class DemoComponent implements OnInit {
   signOut(): void {
     this.authService.signOut();
   }
-
-  refreshGoogleToken(): void {
-    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
-  }
-
 }

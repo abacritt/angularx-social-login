@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {AsyncSubject, Observable, ReplaySubject} from 'rxjs';
+import {AsyncSubject, isObservable, Observable, ReplaySubject} from 'rxjs';
 import {LoginProvider} from './entities/login-provider';
 import {SocialUser} from './entities/social-user';
 import {GoogleLoginProvider} from './providers/google-login-provider';
@@ -85,7 +85,7 @@ export class SocialAuthService {
           let loggedIn = false;
 
           this.providers.forEach((provider: LoginProvider, key: string) => {
-            let promise = provider.getLoginStatus();
+            const promise = provider.getLoginStatus();
             loginStatusPromises.push(promise);
             promise
               .then((user: SocialUser) => {
@@ -104,6 +104,21 @@ export class SocialAuthService {
             }
           });
         }
+
+        // also observe providers which have an observable SocialUser
+        this.providers.forEach((provider, key) => {
+          if (isObservable(provider.socialUser$)) {
+            provider.socialUser$.subscribe({
+              next: user => {
+                user.provider = key;
+  
+                this._user = user;
+                this._authState.next(user);
+              },
+              error: console.debug,
+            })
+          }
+        })
       })
       .catch((error) => {
         onError(error);
