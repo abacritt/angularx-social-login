@@ -1857,23 +1857,6 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
-"@types/gapi.auth2@^0.0.56":
-  version "0.0.56"
-  resolved "https://registry.yarnpkg.com/@types/gapi.auth2/-/gapi.auth2-0.0.56.tgz#2f7031f79390b8401e7950d8277ada874fd2731c"
-  integrity sha512-kGaBtGVCqGS3Y05L56dGVlBpJflxLfwA0zpMQnQgGRFk1tsMPbQnogG51UQjt1vCuYfRO0Jd9/K5KDtzjAbMkA==
-  dependencies:
-    "@types/gapi" "*"
-
-"@types/gapi.client@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@types/gapi.client/-/gapi.client-1.0.5.tgz#a6eb97e664fe51656c5b52258bd0afef28c76308"
-  integrity sha512-OTpbBMuzfC4lkvaomxqskI/iWRGW3zOZbDXZLNSyiuswTiSSGgILRLkg0POuZ4EgzEdaYaTlXpnXiCp07ri/Yw==
-
-"@types/gapi@*":
-  version "0.0.42"
-  resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.42.tgz#772aa461660de09e7a78258064e075818373493c"
-  integrity sha512-kskWpouTGqutaIVRo/swiGnMVoRxOYdRwvaDrh0yavfR9vQoHvJJ7Enp4KE9MEGS8qF7F5KiP6bRNOYcCgRXCA==
-
 "@types/google.accounts@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@types/google.accounts/-/google.accounts-0.0.1.tgz#1cddd6b4b3ccf0a07c7282e3ca6f8d4390d3ce6e"

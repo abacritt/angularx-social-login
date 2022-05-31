@@ -72,12 +72,15 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     });
   }
 
-  private setUserProfile(user: SocialUser, jwtPayload: JWTPayload) {
-    user.id = jwtPayload.sub;
-    user.name = jwtPayload['name'] as string;
-    user.email = jwtPayload['email'] as string;
-    user.photoUrl = jwtPayload['picture'] as string;
-    user.firstName = jwtPayload['given_name'] as string;
-    user.lastName = jwtPayload['family_name'] as string;
+  private setUserProfile(
+    user: SocialUser,
+    { sub: id, name, email, 'picture': photoUrl, 'given_name': firstName, 'family_name': lastName }: JWTPayload
+  ) {
+    user.id = id;
+    if (typeof name === 'string') user.name = name;
+    if (typeof email === 'string') user.email = email;
+    if (typeof photoUrl === 'string') user.photoUrl = photoUrl;
+    if (typeof firstName === 'string') user.firstName = firstName;
+    if (typeof lastName === 'string') user.lastName = lastName;
   }
 }

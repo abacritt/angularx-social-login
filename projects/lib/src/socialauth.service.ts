@@ -154,11 +154,9 @@ export class SocialAuthService {
           const promise = isObservable(promiseOrObservable) ? firstValueFrom(promiseOrObservable) : promiseOrObservable;
           promise
             .then((user: SocialUser) => {
-              this._ngZone.run(() => {
-                user.provider = providerId;
-                this._user = user;
-                this._authState.next(user);
-              });
+              user.provider = providerId;
+              this._user = user;
+              this._authState.next(user);
               resolve();
             })
             .catch((err) => {
