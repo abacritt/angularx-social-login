@@ -1,14 +1,11 @@
-import { Observable } from 'rxjs';
 import { LoginProvider } from './login-provider';
 import { SocialUser } from './social-user';
 
 export abstract class BaseLoginProvider implements LoginProvider {
   constructor() {}
-  
-	readonly observe?: true;
+
   abstract initialize(): Promise<void>;
-  abstract getLoginStatus(): Promise<SocialUser> | Observable<SocialUser>;
-  signIn?(): Promise<SocialUser>;
+  abstract getLoginStatus(refreshToken?: boolean): Promise<SocialUser>;
   abstract signOut(revoke?: boolean): Promise<void>;
 
   protected loadScript(

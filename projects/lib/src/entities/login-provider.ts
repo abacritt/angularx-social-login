@@ -1,11 +1,10 @@
-import { Observable } from 'rxjs';
+import { EventEmitter } from '@angular/core';
 import { SocialUser } from './social-user';
 
 export interface LoginProvider {
-	readonly observe?: true;
+  readonly signedIn?: EventEmitter<SocialUser>;
   initialize(): Promise<void>;
-	getLoginStatus(loginStatusOptions?: { refreshToken: true }): Promise<SocialUser> | Observable<SocialUser>;
-	signIn?(signInOptions?: any): Promise<SocialUser>;
-	signOut(revoke?: boolean): Promise<void>;
+  getLoginStatus(refreshToken?: boolean): Promise<SocialUser>;
+  signIn?(signInOptions?: any): Promise<SocialUser>;
+  signOut(revoke?: boolean): Promise<void>;
 }
-

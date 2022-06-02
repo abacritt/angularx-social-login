@@ -1,14 +1,15 @@
-import { map, Observable, ReplaySubject } from 'rxjs';
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/social-user';
-import { decodeJwt, JWTPayload } from 'jose';
+import { decodeJwt } from 'jose';
+import { EventEmitter } from '@angular/core';
+import { LoginProvider } from '../entities/login-provider';
 
-export class GoogleLoginProvider extends BaseLoginProvider {
+export class GoogleLoginProvider
+  extends BaseLoginProvider
+  implements LoginProvider
+{
   public static readonly PROVIDER_ID: string = 'GOOGLE';
-  public readonly observe = true;
-
-  private readonly _credentialResponse = new ReplaySubject<google.accounts.id.CredentialResponse>(1);
-  private _accessToken = '';
+  public readonly signedIn = new EventEmitter<SocialUser>(true);
 
   constructor(private clientId: string) {
     super();
@@ -20,15 +21,14 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         this.loadScript(
           GoogleLoginProvider.PROVIDER_ID,
           'https://accounts.google.com/gsi/client',
-          () => {            
+          () => {
             google.accounts.id.initialize({
               client_id: this.clientId,
-              callback: response => {
-                this._credentialResponse.next(response)
-              },
+              callback: ({ credential }) =>
+                this.signedIn.emit(this.createSocialUser(credential)),
             });
-            
-            google.accounts.id.prompt(notification => console.debug('notification', notification));
+
+            google.accounts.id.prompt(this.onOneTapEvent);
 
             resolve();
           }
@@ -39,48 +39,36 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     });
   }
 
-  getLoginStatus(loginStatusOptions?: { refreshToken: true }): Observable<SocialUser> {
-    if (loginStatusOptions?.refreshToken) {
-      // TODO
-      debugger;
-    }
-
-    return this._credentialResponse.pipe(
-      map(({ credential }) => {
-        const user = new SocialUser();
-        user.idToken = credential;
-        const jwtPayload = decodeJwt(credential);
-        this.setUserProfile(user, jwtPayload);
-        return user;
-      }),
-    );
-  }
-
-  signOut(revoke?: boolean): Promise<void> {
+  getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
-      const promptAndResolve = () => {
-        google.accounts.id.prompt(notification => console.debug('notification', notification));
-        resolve()
-      };
-
-      if (revoke) {
-        google.accounts.oauth2.revoke(this._accessToken, promptAndResolve);
-      }
-      else {
-        promptAndResolve();
-      }
+      // TODO try get from local storage ?
+      reject(
+        `No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`
+      );
     });
   }
 
-  private setUserProfile(
-    user: SocialUser,
-    { sub: id, name, email, 'picture': photoUrl, 'given_name': firstName, 'family_name': lastName }: JWTPayload
-  ) {
-    user.id = id;
-    if (typeof name === 'string') user.name = name;
-    if (typeof email === 'string') user.email = email;
-    if (typeof photoUrl === 'string') user.photoUrl = photoUrl;
-    if (typeof firstName === 'string') user.firstName = firstName;
-    if (typeof lastName === 'string') user.lastName = lastName;
+  signOut(): Promise<void> {
+    return new Promise((resolve) => {
+      google.accounts.id.prompt(this.onOneTapEvent);
+      resolve();
+    });
+  }
+
+  private createSocialUser(idToken: string) {
+    const user = new SocialUser();
+    user.idToken = idToken;
+    const payload = decodeJwt(idToken);
+    user.id = payload.sub;
+    user.name = payload.name as string | undefined;
+    user.email = payload.email as string | undefined;
+    user.photoUrl = payload.picture as string | undefined;
+    user.firstName = payload['given_name'] as string | undefined;
+    user.lastName = payload['family_name'] as string | undefined;
+    return user;
+  }
+
+  private onOneTapEvent(event: google.accounts.id.PromptMomentNotification) {
+    console.debug('handleOneTapPromptNotification(notification)', event);
   }
 }

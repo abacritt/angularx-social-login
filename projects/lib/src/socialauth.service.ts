@@ -1,8 +1,8 @@
-import {Inject, Injectable, NgZone} from '@angular/core';
-import {AsyncSubject, firstValueFrom, isObservable, Observable, ReplaySubject} from 'rxjs';
-import {LoginProvider} from './entities/login-provider';
-import {SocialUser} from './entities/social-user';
-import {GoogleLoginProvider} from './providers/google-login-provider';
+import { Inject, Injectable } from '@angular/core';
+import { AsyncSubject, isObservable, Observable, ReplaySubject } from 'rxjs';
+import { LoginProvider } from './entities/login-provider';
+import { SocialUser } from './entities/social-user';
+import { GoogleLoginProvider } from './providers/google-login-provider';
 
 /**
  * An interface to define the shape of the service configuration options.
@@ -20,7 +20,7 @@ export interface SocialAuthServiceConfig {
  *
  * @dynamic
  */
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class SocialAuthService {
   private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND =
     'Login provider not found';
@@ -55,8 +55,7 @@ export class SocialAuthService {
    */
   constructor(
     @Inject('SocialAuthServiceConfig')
-      config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>,
-      private readonly _ngZone: NgZone
+    config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>
   ) {
     if (config instanceof Promise) {
       config.then((config: SocialAuthServiceConfig) => {
@@ -69,7 +68,7 @@ export class SocialAuthService {
 
   private initialize(config: SocialAuthServiceConfig) {
     this.autoLogin = config.autoLogin !== undefined ? config.autoLogin : false;
-    const {onError = console.error} = config;
+    const { onError = console.error } = config;
 
     config.providers.forEach((item) => {
       this.providers.set(item.id, item.provider);
@@ -81,37 +80,12 @@ export class SocialAuthService {
       )
     )
       .then(() => {
-        const alreadyObserved = new Array<string>();
-        this.providers.forEach((provider, key) => {
-          if (provider.observe) {
-            const promiseOrObservable = provider.getLoginStatus();
-            if (!isObservable(promiseOrObservable)) return;
-            
-            alreadyObserved.push(key);
-
-            promiseOrObservable.subscribe({
-              next: (user: SocialUser) => {
-                this._ngZone.run(() => {
-                  user.provider = key;
-    
-                  this._user = user;
-                  this._authState.next(user);
-                });
-              },
-              error: console.debug,
-            })
-          }
-        });
-
         if (this.autoLogin) {
           const loginStatusPromises = [];
           let loggedIn = false;
 
           this.providers.forEach((provider: LoginProvider, key: string) => {
-            if (alreadyObserved.includes(key)) return;
-
-            const promiseOrObservable = provider.getLoginStatus();
-            const promise = isObservable(promiseOrObservable) ? firstValueFrom(promiseOrObservable) : promiseOrObservable;
+            const promise = provider.getLoginStatus();
             loginStatusPromises.push(promise);
             promise
               .then((user: SocialUser) => {
@@ -130,6 +104,16 @@ export class SocialAuthService {
             }
           });
         }
+
+        this.providers.forEach((provider, key) => {
+          if (isObservable(provider.signedIn)) {
+            provider.signedIn.subscribe((user) => {
+              user.provider = key;
+              this._user = user;
+              this._authState.next(user);
+            });
+          }
+        });
       })
       .catch((error) => {
         onError(error);
@@ -150,9 +134,8 @@ export class SocialAuthService {
       } else {
         const providerObject = this.providers.get(providerId);
         if (providerObject) {
-          const promiseOrObservable = providerObject.getLoginStatus({ refreshToken: true });
-          const promise = isObservable(promiseOrObservable) ? firstValueFrom(promiseOrObservable) : promiseOrObservable;
-          promise
+          providerObject
+            .getLoginStatus(true)
             .then((user: SocialUser) => {
               user.provider = providerId;
               this._user = user;
