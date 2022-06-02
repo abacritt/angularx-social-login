@@ -3,7 +3,7 @@ import { SocialUser } from './social-user';
 
 export interface LoginProvider {
   readonly signedIn?: EventEmitter<SocialUser>;
-  initialize(): Promise<void>;
+  initialize(autoLogin?: boolean): Promise<void>;
   getLoginStatus(refreshToken?: boolean): Promise<SocialUser>;
   signIn?(signInOptions?: any): Promise<SocialUser>;
   signOut(revoke?: boolean): Promise<void>;

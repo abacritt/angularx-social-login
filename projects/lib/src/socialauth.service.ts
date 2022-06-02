@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, NgZone } from '@angular/core';
 import { AsyncSubject, isObservable, Observable, ReplaySubject } from 'rxjs';
 import { LoginProvider } from './entities/login-provider';
 import { SocialUser } from './entities/social-user';
@@ -55,7 +55,8 @@ export class SocialAuthService {
    */
   constructor(
     @Inject('SocialAuthServiceConfig')
-    config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>
+    config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>,
+    private readonly _ngZone: NgZone
   ) {
     if (config instanceof Promise) {
       config.then((config: SocialAuthServiceConfig) => {
@@ -76,7 +77,7 @@ export class SocialAuthService {
 
     Promise.all(
       Array.from(this.providers.values()).map((provider) =>
-        provider.initialize()
+        provider.initialize(this.autoLogin)
       )
     )
       .then(() => {
@@ -110,7 +111,9 @@ export class SocialAuthService {
             provider.signedIn.subscribe((user) => {
               user.provider = key;
               this._user = user;
-              this._authState.next(user);
+              this._ngZone.run(() => {
+                this._authState.next(user);
+              });
             });
           }
         });

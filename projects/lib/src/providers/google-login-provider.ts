@@ -1,21 +1,23 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/social-user';
+import { LoginProvider } from '../entities/login-provider';
 import { decodeJwt } from 'jose';
 import { EventEmitter } from '@angular/core';
-import { LoginProvider } from '../entities/login-provider';
 
 export class GoogleLoginProvider
   extends BaseLoginProvider
   implements LoginProvider
 {
   public static readonly PROVIDER_ID: string = 'GOOGLE';
-  public readonly signedIn = new EventEmitter<SocialUser>(true);
+  public readonly signedIn = new EventEmitter<SocialUser>();
+
+  private _socialUser: SocialUser | null = null;
 
   constructor(private clientId: string) {
     super();
   }
 
-  initialize(): Promise<void> {
+  initialize(autoLogin?: boolean): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
         this.loadScript(
@@ -24,11 +26,14 @@ export class GoogleLoginProvider
           () => {
             google.accounts.id.initialize({
               client_id: this.clientId,
-              callback: ({ credential }) =>
-                this.signedIn.emit(this.createSocialUser(credential)),
+              auto_select: autoLogin,
+              callback: ({ credential }) => {
+                this._socialUser = this.createSocialUser(credential);
+                this.signedIn.emit(this._socialUser);
+              },
             });
 
-            google.accounts.id.prompt(this.onOneTapEvent);
+            google.accounts.id.prompt(console.debug);
 
             resolve();
           }
@@ -39,20 +44,32 @@ export class GoogleLoginProvider
     });
   }
 
-  getLoginStatus(): Promise<SocialUser> {
+  getLoginStatus(refreshToken?: boolean): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
-      // TODO try get from local storage ?
-      reject(
-        `No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`
-      );
+      if (this._socialUser) {
+        // TODO try get from local storage ?
+        if (refreshToken) {
+          google.accounts.id.revoke(this._socialUser.id, (response) => {
+            if (response.error) {
+              reject(response.error);
+            }
+            resolve(this._socialUser);
+          });
+        } else {
+          resolve(this._socialUser);
+        }
+      } else {
+        reject(
+          `No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`
+        );
+      }
     });
   }
 
-  signOut(): Promise<void> {
-    return new Promise((resolve) => {
-      google.accounts.id.prompt(this.onOneTapEvent);
-      resolve();
-    });
+  async signOut(): Promise<void> {
+    google.accounts.id.disableAutoSelect();
+    google.accounts.id.prompt(console.debug);
+    this._socialUser = null;
   }
 
   private createSocialUser(idToken: string) {
@@ -66,9 +83,5 @@ export class GoogleLoginProvider
     user.firstName = payload['given_name'] as string | undefined;
     user.lastName = payload['family_name'] as string | undefined;
     return user;
-  }
-
-  private onOneTapEvent(event: google.accounts.id.PromptMomentNotification) {
-    console.debug('handleOneTapPromptNotification(notification)', event);
   }
 }
