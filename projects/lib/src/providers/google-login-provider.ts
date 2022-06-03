@@ -5,6 +5,10 @@ import { decodeJwt } from 'jose';
 import { EventEmitter } from '@angular/core';
 import { BehaviorSubject, filter, skip } from 'rxjs';
 
+export interface GoogleInitOptions {
+  oneTapEnabled?: boolean;
+}
+
 export class GoogleLoginProvider
   extends BaseLoginProvider
   implements LoginProvider
@@ -13,7 +17,10 @@ export class GoogleLoginProvider
   public static readonly PROVIDER_ID: string = 'GOOGLE';
   public readonly changeUser = new EventEmitter<SocialUser | null>();
 
-  constructor(private clientId: string) {
+  constructor(
+    private clientId: string,
+    private readonly initOptions: GoogleInitOptions = {}
+  ) {
     super();
 
     // emit changeUser events but skip initial value from behaviorSubject
@@ -34,9 +41,13 @@ export class GoogleLoginProvider
                 this._socialUser.next(this.createSocialUser(credential)),
             });
 
-            this._socialUser
-              .pipe(filter((user) => user === null))
-              .subscribe(() => google.accounts.id.prompt(console.debug));
+            if (this.initOptions.oneTapEnabled) {
+              this._socialUser
+                .pipe(filter((user) => user === null))
+                .subscribe(() => google.accounts.id.prompt(console.debug));
+            } else if (autoLogin) {
+              google.accounts.id.prompt(console.debug);
+            }
 
             resolve();
           }
