@@ -55,7 +55,7 @@ export class GoogleLoginProvider
             if (response.error) {
               reject(response.error);
             }
-            this._socialUser.next(null);
+            resolve(this._socialUser.value);
           });
         } else {
           resolve(this._socialUser.value);
@@ -66,6 +66,10 @@ export class GoogleLoginProvider
         );
       }
     });
+  }
+
+  getAccessToken(): Promise<string> {
+    return new Promise((resolve, reject) => reject('hahahaha '));
   }
 
   async signOut(): Promise<void> {

@@ -1,29 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {GoogleLoginProvider, SocialAuthService} from 'lib';
-import {SocialUser} from 'lib';
+import { GoogleLoginProvider, SocialAuthService } from 'lib';
+import { SocialUser } from 'lib';
 import {
   FacebookLoginProvider,
   AmazonLoginProvider,
   VKLoginProvider,
-  MicrosoftLoginProvider
+  MicrosoftLoginProvider,
 } from 'lib';
 
 @Component({
   selector: 'lib-app-demo',
   templateUrl: './demo.component.html',
-  styleUrls: ['./demo.component.css']
+  styleUrls: ['./demo.component.css'],
 })
 export class DemoComponent implements OnInit {
-
   user: SocialUser;
   GoogleLoginProvider = GoogleLoginProvider;
 
-  constructor(private authService: SocialAuthService) {
-  }
+  constructor(private authService: SocialAuthService) {}
 
   ngOnInit() {
-    this.authService.authState.subscribe(user => {
+    this.authService.authState.subscribe((user) => {
       this.user = user;
     });
   }
@@ -47,8 +45,12 @@ export class DemoComponent implements OnInit {
   signOut(): void {
     this.authService.signOut();
   }
-  
-  refreshGoogleToken(): void {
+
+  getGoogleAccessToken() {
+    this.authService.getAccessToken(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  refreshGoogleIdToken(): void {
     this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }
 }

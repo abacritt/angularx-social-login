@@ -29,6 +29,8 @@ export class SocialAuthService {
     'Login providers not ready yet. Are there errors on your console?';
   private static readonly ERR_NOT_SUPPORTED_FOR_REFRESH_TOKEN =
     'Chosen login provider is not supported for refreshing a token';
+  private static readonly ERR_NOT_SUPPORTED_FOR_ACCESS_TOKEN =
+    'Chosen login provider is not supported for getting an access token';
 
   private providers: Map<string, LoginProvider> = new Map();
   private autoLogin = false;
@@ -128,6 +130,19 @@ export class SocialAuthService {
         this._initState.next(this.initialized);
         this._initState.complete();
       });
+  }
+
+  async getAccessToken(providerId: string): Promise<string> {
+    const providerObject = this.providers.get(providerId);
+    if (!this.initialized) {
+      throw SocialAuthService.ERR_NOT_INITIALIZED;
+    } else if (!providerObject) {
+      throw SocialAuthService.ERR_LOGIN_PROVIDER_NOT_FOUND;
+    } else if (!(providerObject instanceof GoogleLoginProvider)) {
+      throw SocialAuthService.ERR_NOT_SUPPORTED_FOR_ACCESS_TOKEN;
+    }
+
+    return await providerObject.getAccessToken();
   }
 
   refreshAuthToken(providerId: string): Promise<void> {
