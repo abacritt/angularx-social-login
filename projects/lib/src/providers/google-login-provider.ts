@@ -3,18 +3,23 @@ import { SocialUser } from '../entities/social-user';
 import { LoginProvider } from '../entities/login-provider';
 import { decodeJwt } from 'jose';
 import { EventEmitter } from '@angular/core';
+import { BehaviorSubject, filter } from 'rxjs';
 
 export class GoogleLoginProvider
   extends BaseLoginProvider
   implements LoginProvider
 {
+  private readonly _socialUser = new BehaviorSubject<SocialUser | null>(null);
   public static readonly PROVIDER_ID: string = 'GOOGLE';
   public readonly signedIn = new EventEmitter<SocialUser>();
 
-  private _socialUser: SocialUser | null = null;
-
   constructor(private clientId: string) {
     super();
+
+    // emit signedIn event on new SocialUser instance
+    this._socialUser
+      .pipe(filter((user) => user instanceof SocialUser))
+      .subscribe(this.signedIn);
   }
 
   initialize(autoLogin?: boolean): Promise<void> {
@@ -27,13 +32,13 @@ export class GoogleLoginProvider
             google.accounts.id.initialize({
               client_id: this.clientId,
               auto_select: autoLogin,
-              callback: ({ credential }) => {
-                this._socialUser = this.createSocialUser(credential);
-                this.signedIn.emit(this._socialUser);
-              },
+              callback: ({ credential }) =>
+                this._socialUser.next(this.createSocialUser(credential)),
             });
 
-            google.accounts.id.prompt(console.debug);
+            this._socialUser
+              .pipe(filter((user) => user === null))
+              .subscribe(() => google.accounts.id.prompt(console.debug));
 
             resolve();
           }
@@ -46,17 +51,16 @@ export class GoogleLoginProvider
 
   getLoginStatus(refreshToken?: boolean): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
-      if (this._socialUser) {
-        // TODO try get from local storage ?
+      if (this._socialUser.value) {
         if (refreshToken) {
-          google.accounts.id.revoke(this._socialUser.id, (response) => {
+          google.accounts.id.revoke(this._socialUser.value.id, (response) => {
             if (response.error) {
               reject(response.error);
             }
-            resolve(this._socialUser);
+            resolve(this._socialUser.value);
           });
         } else {
-          resolve(this._socialUser);
+          resolve(this._socialUser.value);
         }
       } else {
         reject(
@@ -68,8 +72,7 @@ export class GoogleLoginProvider
 
   async signOut(): Promise<void> {
     google.accounts.id.disableAutoSelect();
-    google.accounts.id.prompt(console.debug);
-    this._socialUser = null;
+    this._socialUser.next(null);
   }
 
   private createSocialUser(idToken: string) {
