@@ -3,7 +3,7 @@ import { SocialUser } from '../entities/social-user';
 import { LoginProvider } from '../entities/login-provider';
 import { decodeJwt } from 'jose';
 import { EventEmitter } from '@angular/core';
-import { BehaviorSubject, filter } from 'rxjs';
+import { BehaviorSubject, filter, skip } from 'rxjs';
 
 export class GoogleLoginProvider
   extends BaseLoginProvider
@@ -11,15 +11,13 @@ export class GoogleLoginProvider
 {
   private readonly _socialUser = new BehaviorSubject<SocialUser | null>(null);
   public static readonly PROVIDER_ID: string = 'GOOGLE';
-  public readonly signedIn = new EventEmitter<SocialUser>();
+  public readonly changeUser = new EventEmitter<SocialUser | null>();
 
   constructor(private clientId: string) {
     super();
 
-    // emit signedIn event on new SocialUser instance
-    this._socialUser
-      .pipe(filter((user) => user instanceof SocialUser))
-      .subscribe(this.signedIn);
+    // emit changeUser events but skip initial value from behaviorSubject
+    this._socialUser.pipe(skip(1)).subscribe(this.changeUser);
   }
 
   initialize(autoLogin?: boolean): Promise<void> {
@@ -57,7 +55,7 @@ export class GoogleLoginProvider
             if (response.error) {
               reject(response.error);
             }
-            resolve(this._socialUser.value);
+            this._socialUser.next(null);
           });
         } else {
           resolve(this._socialUser.value);

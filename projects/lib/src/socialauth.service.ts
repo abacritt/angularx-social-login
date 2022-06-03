@@ -33,8 +33,8 @@ export class SocialAuthService {
   private providers: Map<string, LoginProvider> = new Map();
   private autoLogin = false;
 
-  private _user: SocialUser = null;
-  private _authState: ReplaySubject<SocialUser> = new ReplaySubject(1);
+  private _user: SocialUser | null = null;
+  private _authState: ReplaySubject<SocialUser | null> = new ReplaySubject(1);
 
   /* Consider making this an enum comprising LOADING, LOADED, FAILED etc. */
   private initialized = false;
@@ -107,9 +107,11 @@ export class SocialAuthService {
         }
 
         this.providers.forEach((provider, key) => {
-          if (isObservable(provider.signedIn)) {
-            provider.signedIn.subscribe((user) => {
-              user.provider = key;
+          if (isObservable(provider.changeUser)) {
+            provider.changeUser.subscribe((user) => {
+              if (user !== null) {
+                user.provider = key;
+              }
               this._user = user;
               this._ngZone.run(() => {
                 this._authState.next(user);
