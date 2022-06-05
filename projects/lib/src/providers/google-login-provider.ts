@@ -3,7 +3,7 @@ import { SocialUser } from '../entities/social-user';
 import { LoginProvider } from '../entities/login-provider';
 import { decodeJwt } from 'jose';
 import { EventEmitter } from '@angular/core';
-import { BehaviorSubject, filter, skip, Subject, take } from 'rxjs';
+import { BehaviorSubject, filter, skip, take } from 'rxjs';
 
 export interface GoogleInitOptions {
   /**
@@ -24,11 +24,14 @@ export class GoogleLoginProvider
   extends BaseLoginProvider
   implements LoginProvider
 {
-  private readonly _socialUser = new BehaviorSubject<SocialUser | null>(null);
-  private readonly _accessToken = new Subject<string>();
-  private _tokenClient: google.accounts.oauth2.TokenClient | undefined;
   public static readonly PROVIDER_ID: string = 'GOOGLE';
+
   public readonly changeUser = new EventEmitter<SocialUser | null>();
+
+  private readonly _socialUser = new BehaviorSubject<SocialUser | null>(null);
+  private readonly _accessToken = new BehaviorSubject<string | null>(null);
+  private readonly _receivedAccessToken = new EventEmitter<string>();
+  private _tokenClient: google.accounts.oauth2.TokenClient | undefined;
 
   constructor(
     private clientId: string,
@@ -40,6 +43,9 @@ export class GoogleLoginProvider
 
     // emit changeUser events but skip initial value from behaviorSubject
     this._socialUser.pipe(skip(1)).subscribe(this.changeUser);
+
+    // emit receivedAccessToken but skip initial value from behaviorSubject
+    this._accessToken.pipe(skip(1)).subscribe(this._receivedAccessToken);
   }
 
   initialize(autoLogin?: boolean): Promise<void> {
@@ -55,33 +61,6 @@ export class GoogleLoginProvider
               callback: ({ credential }) => {
                 const socialUser = this.createSocialUser(credential);
                 this._socialUser.next(socialUser);
-
-                if (this.initOptions.scopes) {
-                  const scopes =
-                    this.initOptions.scopes instanceof Array
-                      ? this.initOptions.scopes
-                      : this.initOptions.scopes
-                          .split(/ +|\r?\n/)
-                          .filter((p) => p);
-
-                  this._tokenClient = google.accounts.oauth2.initTokenClient({
-                    client_id: this.clientId,
-                    scope: scopes.join(' '),
-                    hint: socialUser.email,
-                    callback: (tokenResponse) => {
-                      if (tokenResponse.error) {
-                        const errorObj = {
-                          code: tokenResponse.error,
-                          description: tokenResponse.error_description,
-                          uri: tokenResponse.error_uri,
-                        };
-                        this._accessToken.error(errorObj);
-                      } else {
-                        this._accessToken.next(tokenResponse.access_token);
-                      }
-                    },
-                  });
-                }
               },
             });
 
@@ -89,6 +68,29 @@ export class GoogleLoginProvider
               this._socialUser
                 .pipe(filter((user) => user === null))
                 .subscribe(() => google.accounts.id.prompt(console.debug));
+            }
+
+            if (this.initOptions.scopes) {
+              const scopes =
+                this.initOptions.scopes instanceof Array
+                  ? this.initOptions.scopes
+                  : this.initOptions.scopes.split(/ +|\r?\n/).filter((p) => p);
+
+              this._tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: this.clientId,
+                scope: scopes.join(' '),
+                callback: (tokenResponse) => {
+                  if (tokenResponse.error) {
+                    this._accessToken.error({
+                      code: tokenResponse.error,
+                      description: tokenResponse.error_description,
+                      uri: tokenResponse.error_uri,
+                    });
+                  } else {
+                    this._accessToken.next(tokenResponse.access_token);
+                  }
+                },
+              });
             }
 
             resolve();
@@ -124,10 +126,32 @@ export class GoogleLoginProvider
   getAccessToken(): Promise<string> {
     return new Promise((resolve, reject) => {
       if (!this._tokenClient) {
-        reject('No token client was instantiated.');
+        if (this._socialUser.value) {
+          reject(
+            'No token client was instantiated, you should specify some scopes.'
+          );
+        } else {
+          reject('You should be logged-in first.');
+        }
       } else {
-        this._tokenClient.requestAccessToken();
-        this._accessToken.pipe(take(1)).subscribe(resolve);
+        this._tokenClient.requestAccessToken({
+          hint: this._socialUser.value?.email,
+        });
+        this._receivedAccessToken.pipe(take(1)).subscribe(resolve);
+      }
+    });
+  }
+
+  revokeAccessToken(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!this._tokenClient) {
+        reject(
+          'No token client was instantiated, you should specify some scopes.'
+        );
+      } else if (!this._accessToken.value) {
+        reject('No access token to revoke');
+      } else {
+        google.accounts.oauth2.revoke(this._accessToken.value, resolve);
       }
     });
   }

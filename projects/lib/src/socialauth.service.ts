@@ -172,6 +172,23 @@ export class SocialAuthService {
     });
   }
 
+  refreshAccessToken(providerId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!this.initialized) {
+        reject(SocialAuthService.ERR_NOT_INITIALIZED);
+      } else if (providerId !== GoogleLoginProvider.PROVIDER_ID) {
+        reject(SocialAuthService.ERR_NOT_SUPPORTED_FOR_REFRESH_TOKEN);
+      } else {
+        const providerObject = this.providers.get(providerId);
+        if (providerObject instanceof GoogleLoginProvider) {
+          providerObject.revokeAccessToken().then(resolve).catch(reject);
+        } else {
+          reject(SocialAuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
+        }
+      }
+    });
+  }
+
   /**
    * A method used to sign in a user with a specific `LoginProvider`.
    *

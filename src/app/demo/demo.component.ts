@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 import { GoogleLoginProvider, SocialAuthService } from 'lib';
@@ -15,46 +16,63 @@ import {
   styleUrls: ['./demo.component.css'],
 })
 export class DemoComponent implements OnInit {
-  user: SocialUser;
+  googleAccessToken: string | undefined;
+  user: SocialUser | undefined;
   GoogleLoginProvider = GoogleLoginProvider;
 
-  constructor(private authService: SocialAuthService) {}
+  constructor(
+    private readonly _authService: SocialAuthService,
+    private readonly _httpClient: HttpClient
+  ) {}
 
   ngOnInit() {
-    this.authService.authState.subscribe((user) => {
+    this._authService.authState.subscribe((user) => {
       this.user = user;
     });
   }
 
   signInWithFB(): void {
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+    this._authService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
   signInWithAmazon(): void {
-    this.authService.signIn(AmazonLoginProvider.PROVIDER_ID);
+    this._authService.signIn(AmazonLoginProvider.PROVIDER_ID);
   }
 
   signInWithVK(): void {
-    this.authService.signIn(VKLoginProvider.PROVIDER_ID);
+    this._authService.signIn(VKLoginProvider.PROVIDER_ID);
   }
 
   signInWithMicrosoft(): void {
-    this.authService.signIn(MicrosoftLoginProvider.PROVIDER_ID);
+    this._authService.signIn(MicrosoftLoginProvider.PROVIDER_ID);
   }
 
   signOut(): void {
-    this.authService.signOut();
+    this._authService.signOut();
   }
 
-  getGoogleAccessToken() {
-    this.authService
-      .getAccessToken(GoogleLoginProvider.PROVIDER_ID)
-      .then((access_token) => {
-        console.debug('we got an access token for APIs', access_token);
+  async getGoogleAccessToken() {
+    this.googleAccessToken = await this._authService.getAccessToken(
+      GoogleLoginProvider.PROVIDER_ID
+    );
+  }
+
+  getGoogleCalendarData() {
+    this._httpClient
+      .get('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+        headers: { Authorization: `Bearer ${this.googleAccessToken}` },
+      })
+      .subscribe((events) => {
+        alert('Look at your console');
+        console.log('events', events);
       });
   }
 
   refreshGoogleIdToken(): void {
-    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+    this._authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  refreshGoogleAccessToken() {
+    this._authService.refreshAccessToken(GoogleLoginProvider.PROVIDER_ID);
   }
 }
