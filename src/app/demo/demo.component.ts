@@ -47,7 +47,11 @@ export class DemoComponent implements OnInit {
   }
 
   getGoogleAccessToken() {
-    this.authService.getAccessToken(GoogleLoginProvider.PROVIDER_ID);
+    this.authService
+      .getAccessToken(GoogleLoginProvider.PROVIDER_ID)
+      .then((access_token) => {
+        console.debug('we got an access token for APIs', access_token);
+      });
   }
 
   refreshGoogleIdToken(): void {

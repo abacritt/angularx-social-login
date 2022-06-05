@@ -3,25 +3,40 @@ import { SocialUser } from '../entities/social-user';
 import { LoginProvider } from '../entities/login-provider';
 import { decodeJwt } from 'jose';
 import { EventEmitter } from '@angular/core';
-import { BehaviorSubject, filter, skip } from 'rxjs';
+import { BehaviorSubject, filter, skip, Subject, take } from 'rxjs';
 
 export interface GoogleInitOptions {
+  /**
+   * enables the One Tap mechanism, and makes auto-login possible
+   */
   oneTapEnabled?: boolean;
+  /**
+   * list of permission scopes to grant in case we request an access token
+   */
+  scopes?: string | string[];
 }
+
+const defaultInitOptions: GoogleInitOptions = {
+  oneTapEnabled: true,
+};
 
 export class GoogleLoginProvider
   extends BaseLoginProvider
   implements LoginProvider
 {
   private readonly _socialUser = new BehaviorSubject<SocialUser | null>(null);
+  private readonly _accessToken = new Subject<string>();
+  private _tokenClient: google.accounts.oauth2.TokenClient | undefined;
   public static readonly PROVIDER_ID: string = 'GOOGLE';
   public readonly changeUser = new EventEmitter<SocialUser | null>();
 
   constructor(
     private clientId: string,
-    private readonly initOptions: GoogleInitOptions = {}
+    private readonly initOptions?: GoogleInitOptions
   ) {
     super();
+
+    this.initOptions = { ...defaultInitOptions, ...this.initOptions };
 
     // emit changeUser events but skip initial value from behaviorSubject
     this._socialUser.pipe(skip(1)).subscribe(this.changeUser);
@@ -37,16 +52,43 @@ export class GoogleLoginProvider
             google.accounts.id.initialize({
               client_id: this.clientId,
               auto_select: autoLogin,
-              callback: ({ credential }) =>
-                this._socialUser.next(this.createSocialUser(credential)),
+              callback: ({ credential }) => {
+                const socialUser = this.createSocialUser(credential);
+                this._socialUser.next(socialUser);
+
+                if (this.initOptions.scopes) {
+                  const scopes =
+                    this.initOptions.scopes instanceof Array
+                      ? this.initOptions.scopes
+                      : this.initOptions.scopes
+                          .split(/ +|\r?\n/)
+                          .filter((p) => p);
+
+                  this._tokenClient = google.accounts.oauth2.initTokenClient({
+                    client_id: this.clientId,
+                    scope: scopes.join(' '),
+                    hint: socialUser.email,
+                    callback: (tokenResponse) => {
+                      if (tokenResponse.error) {
+                        const errorObj = {
+                          code: tokenResponse.error,
+                          description: tokenResponse.error_description,
+                          uri: tokenResponse.error_uri,
+                        };
+                        this._accessToken.error(errorObj);
+                      } else {
+                        this._accessToken.next(tokenResponse.access_token);
+                      }
+                    },
+                  });
+                }
+              },
             });
 
             if (this.initOptions.oneTapEnabled) {
               this._socialUser
                 .pipe(filter((user) => user === null))
                 .subscribe(() => google.accounts.id.prompt(console.debug));
-            } else if (autoLogin) {
-              google.accounts.id.prompt(console.debug);
             }
 
             resolve();
@@ -80,7 +122,14 @@ export class GoogleLoginProvider
   }
 
   getAccessToken(): Promise<string> {
-    return new Promise((resolve, reject) => reject('hahahaha '));
+    return new Promise((resolve, reject) => {
+      if (!this._tokenClient) {
+        reject('No token client was instantiated.');
+      } else {
+        this._tokenClient.requestAccessToken();
+        this._accessToken.pipe(take(1)).subscribe(resolve);
+      }
+    });
   }
 
   async signOut(): Promise<void> {
