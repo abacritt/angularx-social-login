@@ -159,9 +159,10 @@
       }
     }
   },
-  "defaultProject": "angularx-social-login-ws",
   "cli": {
     "analytics": "453e5c42-c48c-4792-ae02-a0e3f3513a9e",
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }
