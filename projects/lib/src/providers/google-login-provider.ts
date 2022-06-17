@@ -174,8 +174,6 @@ export class GoogleLoginProvider
   }
 
   private decodeJwt(idToken: string): Record<string, string | undefined> {
-    const parts = idToken.split('.');
-    const decoded = atob(parts[1]);
-    return JSON.parse(decoded);
+    return JSON.parse(window.atob(idToken.split('.')[1]));
   }
 }
