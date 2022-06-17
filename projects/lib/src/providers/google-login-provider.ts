@@ -1,7 +1,6 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/social-user';
 import { LoginProvider } from '../entities/login-provider';
-import { decodeJwt } from 'jose';
 import { EventEmitter } from '@angular/core';
 import { BehaviorSubject, filter, skip, take } from 'rxjs';
 
@@ -164,13 +163,19 @@ export class GoogleLoginProvider
   private createSocialUser(idToken: string) {
     const user = new SocialUser();
     user.idToken = idToken;
-    const payload = decodeJwt(idToken);
+    const payload = this.decodeJwt(idToken);
     user.id = payload.sub;
-    user.name = payload.name as string | undefined;
-    user.email = payload.email as string | undefined;
-    user.photoUrl = payload.picture as string | undefined;
-    user.firstName = payload['given_name'] as string | undefined;
-    user.lastName = payload['family_name'] as string | undefined;
+    user.name = payload.name;
+    user.email = payload.email;
+    user.photoUrl = payload.picture;
+    user.firstName = payload['given_name'];
+    user.lastName = payload['family_name'];
     return user;
+  }
+
+  private decodeJwt(idToken: string): Record<string, string | undefined> {
+    const parts = idToken.split('.');
+    const decoded = atob(parts[1]);
+    return JSON.parse(decoded);
   }
 }
