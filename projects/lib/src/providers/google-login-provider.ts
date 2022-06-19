@@ -70,14 +70,14 @@ export class GoogleLoginProvider
             }
 
             if (this.initOptions.scopes) {
-              const scopes =
+              const scope =
                 this.initOptions.scopes instanceof Array
-                  ? this.initOptions.scopes
-                  : this.initOptions.scopes.split(/ +|\r?\n/).filter((p) => p);
+                  ? this.initOptions.scopes.filter((s) => s).join(' ')
+                  : this.initOptions.scopes;
 
               this._tokenClient = google.accounts.oauth2.initTokenClient({
                 client_id: this.clientId,
-                scope: scopes.join(' '),
+                scope,
                 callback: (tokenResponse) => {
                   if (tokenResponse.error) {
                     this._accessToken.error({
@@ -150,7 +150,10 @@ export class GoogleLoginProvider
       } else if (!this._accessToken.value) {
         reject('No access token to revoke');
       } else {
-        google.accounts.oauth2.revoke(this._accessToken.value, resolve);
+        google.accounts.oauth2.revoke(this._accessToken.value, () => {
+          this._accessToken.next(null);
+          resolve();
+        });
       }
     });
   }

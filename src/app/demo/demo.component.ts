@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 import { GoogleLoginProvider, SocialAuthService } from 'lib';
@@ -73,6 +73,8 @@ export class DemoComponent implements OnInit {
   }
 
   refreshGoogleAccessToken() {
-    this._authService.refreshAccessToken(GoogleLoginProvider.PROVIDER_ID);
+    this._authService
+      .refreshAccessToken(GoogleLoginProvider.PROVIDER_ID)
+      .then(() => delete this.googleAccessToken);
   }
 }
