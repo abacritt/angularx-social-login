@@ -1,24 +1,23 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
-import {AppComponent} from './app.component';
-import {NavbarComponent} from './navbar/navbar.component';
-import {DemoComponent} from './demo/demo.component';
+import { AppComponent } from './app.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { DemoComponent } from './demo/demo.component';
 
-import {SocialLoginModule, SocialAuthServiceConfig} from 'lib';
+import { SocialLoginModule, SocialAuthServiceConfig } from 'lib';
 import {
   GoogleLoginProvider,
   FacebookLoginProvider,
   AmazonLoginProvider,
   VKLoginProvider,
-  MicrosoftLoginProvider
+  MicrosoftLoginProvider,
 } from 'lib';
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, DemoComponent],
-  imports: [BrowserModule, FormsModule, HttpClientModule, SocialLoginModule],
+  imports: [BrowserModule, FormsModule, SocialLoginModule],
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
@@ -43,19 +42,18 @@ import {
           },
           {
             id: VKLoginProvider.PROVIDER_ID,
-            provider: new VKLoginProvider(
-              '7624815'
-            ),
+            provider: new VKLoginProvider('7624815'),
           },
           {
             id: MicrosoftLoginProvider.PROVIDER_ID,
-            provider: new MicrosoftLoginProvider('0611ccc3-9521-45b6-b432-039852002705'),
-          }
+            provider: new MicrosoftLoginProvider(
+              '0611ccc3-9521-45b6-b432-039852002705'
+            ),
+          },
         ],
       } as SocialAuthServiceConfig,
-    }
+    },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

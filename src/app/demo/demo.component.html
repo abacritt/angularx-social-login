@@ -1,26 +1,46 @@
 <div class="jumbotron bg-transparent text-center">
   <div *ngIf="!user" class="card text-center">
-    <h6 class="card-header">
-      Social Login Demo
-    </h6>
+    <h6 class="card-header">Social Login Demo</h6>
     <div class="card-block">
       <h4 class="card-title">Not signed in</h4>
       <p class="card-text">Sign in with</p>
     </div>
-    <div class="card-block">
-      <button class="btn btn-social-icon btn-google mx-1" (click)="signInWithGoogle()"><span class="fab fa-google"></span></button>
-      <button class="btn btn-social-icon btn-facebook mx-1" (click)="signInWithFB()"><span class="fab fa-facebook"></span></button>
-      <button class="btn btn-social-icon btn-amazon mx-1" (click)="signInWithAmazon()"><span class="fab fa-amazon"></span></button>
-      <button class="btn btn-social-icon btn-amazon mx-1" (click)="signInWithVK()"><span class="fab fa-vk"></span></button>
-      <button class="btn btn-social-icon btn-microsoft mx-1" (click)="signInWithMicrosoft()"><span class="fab fa-microsoft"></span></button>
+    <div class="card-block d-flex justify-content-center">
+      <asl-google-signin-button class="mx-1"></asl-google-signin-button>
+      <button
+        class="btn btn-social-icon btn-facebook mx-1"
+        (click)="signInWithFB()"
+      >
+        <span class="fab fa-facebook"></span>
+      </button>
+      <button
+        class="btn btn-social-icon btn-amazon mx-1"
+        (click)="signInWithAmazon()"
+      >
+        <span class="fab fa-amazon"></span>
+      </button>
+      <button
+        class="btn btn-social-icon btn-amazon mx-1"
+        (click)="signInWithVK()"
+      >
+        <span class="fab fa-vk"></span>
+      </button>
+      <button
+        class="btn btn-social-icon btn-microsoft mx-1"
+        (click)="signInWithMicrosoft()"
+      >
+        <span class="fab fa-microsoft"></span>
+      </button>
     </div>
   </div>
   <div *ngIf="user" class="card text-center">
-    <h6 class="card-header">
-      Social Login Demo
-    </h6>
+    <h6 class="card-header">Social Login Demo</h6>
     <div class="card-block"></div>
-    <img *ngIf="user.photoUrl" class="card-img-top img-responsive photo" src="{{ user.photoUrl }}">
+    <img
+      *ngIf="user.photoUrl"
+      class="card-img-top img-responsive photo"
+      src="{{ user.photoUrl }}"
+    />
     <div class="card-block">
       <h4 class="card-title">{{ user.name }}</h4>
       <p class="card-text">{{ user.email }}</p>
@@ -29,8 +49,13 @@
     <div class="card-block">
       <button class="btn btn-danger" (click)="signOut()">Sign out</button>
     </div>
-    <div class="card-block" *ngIf="user.provider === GoogleLoginProvider.PROVIDER_ID">
-      <button class="btn" (click)="refreshGoogleToken()">Refresh google token</button>
+    <div
+      class="card-block"
+      *ngIf="user.provider === GoogleLoginProvider.PROVIDER_ID"
+    >
+      <button class="btn" (click)="refreshGoogleToken()">
+        Refresh google token
+      </button>
     </div>
   </div>
 </div>

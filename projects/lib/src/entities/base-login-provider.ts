@@ -4,9 +4,8 @@ import { SocialUser } from './social-user';
 export abstract class BaseLoginProvider implements LoginProvider {
   constructor() {}
 
-  abstract initialize(): Promise<void>;
-  abstract getLoginStatus(): Promise<SocialUser>;
-  abstract signIn(): Promise<SocialUser>;
+  abstract initialize(autoLogin?: boolean): Promise<void>;
+  abstract getLoginStatus(refreshToken?: boolean): Promise<SocialUser>;
   abstract signOut(revoke?: boolean): Promise<void>;
 
   protected loadScript(

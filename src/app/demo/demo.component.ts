@@ -1,60 +1,52 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {SocialAuthService} from 'lib';
-import {SocialUser} from 'lib';
+import { GoogleLoginProvider, SocialAuthService } from 'lib';
+import { SocialUser } from 'lib';
 import {
-  GoogleLoginProvider,
   FacebookLoginProvider,
   AmazonLoginProvider,
   VKLoginProvider,
-  MicrosoftLoginProvider
+  MicrosoftLoginProvider,
 } from 'lib';
 
 @Component({
   selector: 'lib-app-demo',
   templateUrl: './demo.component.html',
-  styleUrls: ['./demo.component.css']
+  styleUrls: ['./demo.component.css'],
 })
 export class DemoComponent implements OnInit {
-
-  user: SocialUser;
+  user: SocialUser | undefined;
   GoogleLoginProvider = GoogleLoginProvider;
 
-  constructor(private authService: SocialAuthService) {
-  }
+  constructor(private readonly _authService: SocialAuthService) {}
 
   ngOnInit() {
-    this.authService.authState.subscribe(user => {
+    this._authService.authState.subscribe((user) => {
       this.user = user;
     });
   }
 
-  signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-  }
-
   signInWithFB(): void {
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+    this._authService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
   signInWithAmazon(): void {
-    this.authService.signIn(AmazonLoginProvider.PROVIDER_ID);
+    this._authService.signIn(AmazonLoginProvider.PROVIDER_ID);
   }
 
   signInWithVK(): void {
-    this.authService.signIn(VKLoginProvider.PROVIDER_ID);
+    this._authService.signIn(VKLoginProvider.PROVIDER_ID);
   }
 
   signInWithMicrosoft(): void {
-    this.authService.signIn(MicrosoftLoginProvider.PROVIDER_ID);
+    this._authService.signIn(MicrosoftLoginProvider.PROVIDER_ID);
   }
 
   signOut(): void {
-    this.authService.signOut();
+    this._authService.signOut();
   }
 
   refreshGoogleToken(): void {
-    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+    this._authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }
-
 }
