@@ -20,7 +20,10 @@
         "dist/lib/lib",
         "dist/lib"
       ]
-    }
+    },
+    "types": [
+      "google.accounts"
+    ]
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
