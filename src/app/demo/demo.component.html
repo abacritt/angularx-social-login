@@ -53,25 +53,8 @@
       class="card-block"
       *ngIf="user.provider === GoogleLoginProvider.PROVIDER_ID"
     >
-      <button class="btn btn-warning mb-2" (click)="refreshGoogleIdToken()">
-        Refresh id token
-      </button>
-      <button class="btn btn-primary mb-2" (click)="getGoogleAccessToken()">
-        Get access token
-      </button>
-      <button
-        *ngIf="googleAccessToken"
-        class="btn btn-success mb-2"
-        (click)="getGoogleCalendarData()"
-      >
-        Get calendar data
-      </button>
-      <button
-        *ngIf="googleAccessToken"
-        class="btn btn-warning mb-2"
-        (click)="refreshGoogleAccessToken()"
-      >
-        Refresh access token
+      <button class="btn" (click)="refreshGoogleToken()">
+        Refresh google token
       </button>
     </div>
   </div>

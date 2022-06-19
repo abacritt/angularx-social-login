@@ -18,7 +18,7 @@ import {
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, DemoComponent],
-  imports: [BrowserModule, FormsModule, HttpClientModule, SocialLoginModule],
+  imports: [BrowserModule, FormsModule, SocialLoginModule],
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
@@ -28,8 +28,7 @@ import {
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '624796833023-clhjgupm0pu6vgga7k5i5bsfp6qp6egh.apps.googleusercontent.com',
-              { scopes: ['https://www.googleapis.com/auth/calendar.readonly'] }
+              '624796833023-clhjgupm0pu6vgga7k5i5bsfp6qp6egh.apps.googleusercontent.com'
             ),
           },
           {

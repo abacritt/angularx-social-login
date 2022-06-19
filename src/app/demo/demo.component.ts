@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 import { GoogleLoginProvider, SocialAuthService } from 'lib';
@@ -16,14 +15,10 @@ import {
   styleUrls: ['./demo.component.css'],
 })
 export class DemoComponent implements OnInit {
-  googleAccessToken: string | undefined;
   user: SocialUser | undefined;
   GoogleLoginProvider = GoogleLoginProvider;
 
-  constructor(
-    private readonly _authService: SocialAuthService,
-    private readonly _httpClient: HttpClient
-  ) {}
+  constructor(private readonly _authService: SocialAuthService) {}
 
   ngOnInit() {
     this._authService.authState.subscribe((user) => {
@@ -51,30 +46,7 @@ export class DemoComponent implements OnInit {
     this._authService.signOut();
   }
 
-  async getGoogleAccessToken() {
-    this.googleAccessToken = await this._authService.getAccessToken(
-      GoogleLoginProvider.PROVIDER_ID
-    );
-  }
-
-  getGoogleCalendarData() {
-    this._httpClient
-      .get('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
-        headers: { Authorization: `Bearer ${this.googleAccessToken}` },
-      })
-      .subscribe((events) => {
-        alert('Look at your console');
-        console.log('events', events);
-      });
-  }
-
-  refreshGoogleIdToken(): void {
+  refreshGoogleToken(): void {
     this._authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
-  }
-
-  refreshGoogleAccessToken() {
-    this._authService
-      .refreshAccessToken(GoogleLoginProvider.PROVIDER_ID)
-      .then(() => delete this.googleAccessToken);
   }
 }
