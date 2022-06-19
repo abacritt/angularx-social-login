@@ -75,20 +75,16 @@ export class AppModule { }
 ```javascript
 
 import { SocialAuthService } from "@abacritt/angularx-social-login";
-import { FacebookLoginProvider, GoogleLoginProvider } from "@abacritt/angularx-social-login";
+import { FacebookLoginProvider } from "@abacritt/angularx-social-login";
 
 @Component({
   selector: 'app-demo',
   templateUrl: './demo.component.html',
   styleUrls: ['./demo.component.css']
 })
-export class DemoComponent implements OnInit {
+export class DemoComponent {
 
   constructor(private authService: SocialAuthService) { }
-
-  signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-  }
 
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
@@ -100,6 +96,19 @@ export class DemoComponent implements OnInit {
 
 }
 ```
+
+### Sign in with google
+
+`GoogleLoginProvider` has no `signIn()` method as other providers, the login flow is triggered by a button that the **gis client** is generating.
+Calling `SocialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)` will have no effect.
+
+Instead make sure you [subscribed to the authentication state](#subscribe-to-the-authentication-state) and add the following `GoogleSigninButtonDirective` to your component template to wrap the 'Sign In With Google' button:
+
+```html
+<asl-google-signin-button></asl-google-signin-button>
+```
+
+This will only work if the `GoogleLoginProvider` is registered in [SocialAuthServiceConfig](#import-the-module).
 
 ### Refresh google Auth Token
 
@@ -121,6 +130,71 @@ export class DemoComponent implements OnInit {
 
   refreshToken(): void {
     this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+}
+```
+
+### Request google Access Token
+
+Once a user is logged in an access token can be requested for the scopes we specified in `GoogleInitOptions.scopes`, you can then reuse this access token to make calls to google apis
+
+```typescript
+
+import { HttpClient } from '@angular/common/http';
+import { SocialAuthService } from "@abacritt/angularx-social-login";
+import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
+
+@Component({
+  selector: 'app-demo',
+  templateUrl: './demo.component.html',
+  styleUrls: ['./demo.component.css']
+})
+export class DemoComponent implements OnInit {
+
+  private accessToken = '';
+
+  constructor(private authService: SocialAuthService, private httpClient: HttpClient) { }
+
+  getAccessToken(): void {
+    this.authService.getAccessToken(GoogleLoginProvider.PROVIDER_ID).then(accessToken => this.accessToken = accessToken);
+  }
+
+  getGoogleCalendarData(): void {
+    if (!this.accessToken) return;
+
+    this.httpClient
+      .get('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+        headers: { Authorization: `Bearer ${this.accessToken}` },
+      })
+      .subscribe((events) => {
+        alert('Look at your console');
+        console.log('events', events);
+      });
+  }
+}
+```
+
+### Refresh google Access Token
+
+Once a user is logged in and an access token was obtained, the access token can be refreshed (revoked)
+
+```typescript
+
+import { SocialAuthService } from "@abacritt/angularx-social-login";
+import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
+
+@Component({
+  selector: 'app-demo',
+  templateUrl: './demo.component.html',
+  styleUrls: ['./demo.component.css']
+})
+export class DemoComponent implements OnInit {
+
+  constructor(private authService: SocialAuthService) { }
+
+  refreshToken(): void {
+    this.authService.refreshAccessToken(GoogleLoginProvider.PROVIDER_ID);
   }
 
 }
@@ -175,9 +249,10 @@ const fbLoginOptions = {
   enable_profile_selector: true
 }; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
 
-const googleLoginOptions = {
-  scope: 'profile email'
-}; // https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2clientconfig
+const googleLoginOptions: GoogleInitOptions = {
+  oneTapEnabled: false, // default is true
+  scopes: 'https://www.googleapis.com/auth/calendar.readonly'
+}; // https://developers.google.com/identity/oauth2/web/guides/use-token-model#initialize_a_token_client
 
 const vkLoginOptions = {
   fields: 'photo_max,contacts', // Profile fields to return, see: https://vk.com/dev/objects/user

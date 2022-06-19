@@ -1,3 +1,8 @@
+# 2.0.0 ???
+- New directive `GoogleSigninButtonDirective` (`<asl-google-signin-button></asl-google-signin-button>`)
+- `GoogleLoginProvider` accepts a `GoogleInitOptions` object as 2nd argument, it has 2 optional properties: `oneTapEnabled` and `scopes`
+- New `getAccessToken()` and `refreshAccessToken()` functions in `SocialAuthService` for google
+
 # 1.1.0
 - Fix google authentication
 - Bump dependency versions
