@@ -97,24 +97,24 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     });
   }
 
-  getLoginStatus(refreshToken?: boolean): Promise<SocialUser> {
+  getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       if (this._socialUser.value) {
-        if (refreshToken) {
-          google.accounts.id.revoke(this._socialUser.value.id, (response) => {
-            if (response.error) {
-              reject(response.error);
-            }
-            resolve(this._socialUser.value);
-          });
-        } else {
-          resolve(this._socialUser.value);
-        }
+        resolve(this._socialUser.value);
       } else {
         reject(
           `No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`
         );
       }
+    });
+  }
+
+  refreshToken(): Promise<SocialUser | null> {
+    return new Promise((resolve, reject) => {
+      google.accounts.id.revoke(this._socialUser.value.id, (response) => {
+        if (response.error) reject(response.error);
+        else resolve(this._socialUser.value);
+      });
     });
   }
 

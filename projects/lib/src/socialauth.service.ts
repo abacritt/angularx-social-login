@@ -148,20 +148,22 @@ export class SocialAuthService {
     return new Promise((resolve, reject) => {
       if (!this.initialized) {
         reject(SocialAuthService.ERR_NOT_INITIALIZED);
-      } else if (providerId !== GoogleLoginProvider.PROVIDER_ID) {
-        reject(SocialAuthService.ERR_NOT_SUPPORTED_FOR_REFRESH_TOKEN);
       } else {
         const providerObject = this.providers.get(providerId);
         if (providerObject) {
-          providerObject
-            .getLoginStatus(true)
-            .then((user: SocialUser) => {
-              this.setUser(user, providerId);
-              resolve();
-            })
-            .catch((err) => {
-              reject(err);
-            });
+          if (typeof providerObject.refreshToken !== 'function') {
+            reject(SocialAuthService.ERR_NOT_SUPPORTED_FOR_REFRESH_TOKEN);
+          } else {
+            providerObject
+              .refreshToken()
+              .then((user) => {
+                this.setUser(user, providerId);
+                resolve();
+              })
+              .catch((err) => {
+                reject(err);
+              });
+          }
         } else {
           reject(SocialAuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
         }
