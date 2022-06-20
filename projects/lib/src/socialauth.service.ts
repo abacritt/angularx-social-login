@@ -202,7 +202,7 @@ export class SocialAuthService {
         reject(SocialAuthService.ERR_NOT_INITIALIZED);
       } else {
         let providerObject = this.providers.get(providerId);
-        if (providerObject && providerObject.signIn) {
+        if (providerObject) {
           providerObject
             .signIn(signInOptions)
             .then((user: SocialUser) => {

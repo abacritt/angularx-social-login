@@ -1,6 +1,5 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/social-user';
-import { LoginProvider } from '../entities/login-provider';
 import { EventEmitter } from '@angular/core';
 import { BehaviorSubject, filter, skip, take } from 'rxjs';
 
@@ -21,7 +20,6 @@ const defaultInitOptions: GoogleInitOptions = {
 
 export class GoogleLoginProvider
   extends BaseLoginProvider
-  implements LoginProvider
 {
   public static readonly PROVIDER_ID: string = 'GOOGLE';
 
@@ -156,6 +154,10 @@ export class GoogleLoginProvider
         });
       }
     });
+  }
+
+  signIn(): Promise<SocialUser> {
+    return Promise.reject('You should not call this method, use "<asl-google-signin-button>"');
   }
 
   async signOut(): Promise<void> {
