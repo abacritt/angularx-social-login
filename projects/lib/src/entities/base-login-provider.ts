@@ -1,9 +1,10 @@
+import { EventEmitter } from '@angular/core';
 import { LoginProvider } from './login-provider';
 import { SocialUser } from './social-user';
 
 export abstract class BaseLoginProvider implements LoginProvider {
   constructor() {}
-
+  readonly changeUser?: EventEmitter<SocialUser>;
   abstract initialize(autoLogin?: boolean): Promise<void>;
   abstract getLoginStatus(refreshToken?: boolean): Promise<SocialUser>;
   abstract signIn(signInOptions?: object): Promise<SocialUser>;

@@ -6,13 +6,14 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DemoComponent } from './demo/demo.component';
 
-import { SocialLoginModule, SocialAuthServiceConfig } from 'lib';
 import {
   GoogleLoginProvider,
+  SocialLoginModule,
   FacebookLoginProvider,
   AmazonLoginProvider,
   VKLoginProvider,
   MicrosoftLoginProvider,
+  SocialAuthServiceConfig,
 } from 'lib';
 
 @NgModule({
