@@ -18,9 +18,7 @@ const defaultInitOptions: GoogleInitOptions = {
   oneTapEnabled: true,
 };
 
-export class GoogleLoginProvider
-  extends BaseLoginProvider
-{
+export class GoogleLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID: string = 'GOOGLE';
 
   public readonly changeUser = new EventEmitter<SocialUser | null>();
@@ -157,7 +155,11 @@ export class GoogleLoginProvider
   }
 
   signIn(): Promise<SocialUser> {
-    return Promise.reject('You should not call this method, use "<asl-google-signin-button>"');
+    return Promise.reject(
+      'You should not call this method directly for Google, use "<asl-google-signin-button>" wrapper ' +
+        'or generate the button yourself with "google.accounts.id.renderButton()" ' +
+        '(https://developers.google.com/identity/gsi/web/guides/display-button#javascript)'
+    );
   }
 
   async signOut(): Promise<void> {
