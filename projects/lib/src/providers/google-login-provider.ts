@@ -1,6 +1,5 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/social-user';
-import { LoginProvider } from '../entities/login-provider';
 import { EventEmitter } from '@angular/core';
 import { BehaviorSubject, filter, skip, take } from 'rxjs';
 
@@ -19,10 +18,7 @@ const defaultInitOptions: GoogleInitOptions = {
   oneTapEnabled: true,
 };
 
-export class GoogleLoginProvider
-  extends BaseLoginProvider
-  implements LoginProvider
-{
+export class GoogleLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID: string = 'GOOGLE';
 
   public readonly changeUser = new EventEmitter<SocialUser | null>();
@@ -101,24 +97,24 @@ export class GoogleLoginProvider
     });
   }
 
-  getLoginStatus(refreshToken?: boolean): Promise<SocialUser> {
+  getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
       if (this._socialUser.value) {
-        if (refreshToken) {
-          google.accounts.id.revoke(this._socialUser.value.id, (response) => {
-            if (response.error) {
-              reject(response.error);
-            }
-            resolve(this._socialUser.value);
-          });
-        } else {
-          resolve(this._socialUser.value);
-        }
+        resolve(this._socialUser.value);
       } else {
         reject(
           `No user is currently logged in with ${GoogleLoginProvider.PROVIDER_ID}`
         );
       }
+    });
+  }
+
+  refreshToken(): Promise<SocialUser | null> {
+    return new Promise((resolve, reject) => {
+      google.accounts.id.revoke(this._socialUser.value.id, (response) => {
+        if (response.error) reject(response.error);
+        else resolve(this._socialUser.value);
+      });
     });
   }
 
@@ -156,6 +152,14 @@ export class GoogleLoginProvider
         });
       }
     });
+  }
+
+  signIn(): Promise<SocialUser> {
+    return Promise.reject(
+      'You should not call this method directly for Google, use "<asl-google-signin-button>" wrapper ' +
+        'or generate the button yourself with "google.accounts.id.renderButton()" ' +
+        '(https://developers.google.com/identity/gsi/web/guides/display-button#javascript)'
+    );
   }
 
   async signOut(): Promise<void> {

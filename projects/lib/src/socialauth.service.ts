@@ -1,4 +1,4 @@
-import { Inject, Injectable, NgZone } from '@angular/core';
+import { Inject, Injectable, Injector, NgZone, Type } from '@angular/core';
 import { AsyncSubject, isObservable, Observable, ReplaySubject } from 'rxjs';
 import { LoginProvider } from './entities/login-provider';
 import { SocialUser } from './entities/social-user';
@@ -9,7 +9,7 @@ import { GoogleLoginProvider } from './providers/google-login-provider';
  */
 export interface SocialAuthServiceConfig {
   autoLogin?: boolean;
-  providers: { id: string; provider: LoginProvider }[];
+  providers: { id: string; provider: LoginProvider | Type<LoginProvider> }[];
   onError?: (error: any) => any;
 }
 
@@ -58,7 +58,8 @@ export class SocialAuthService {
   constructor(
     @Inject('SocialAuthServiceConfig')
     config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>,
-    private readonly _ngZone: NgZone
+    private readonly _ngZone: NgZone,
+    private readonly _injector: Injector
   ) {
     if (config instanceof Promise) {
       config.then((config: SocialAuthServiceConfig) => {
@@ -74,7 +75,12 @@ export class SocialAuthService {
     const { onError = console.error } = config;
 
     config.providers.forEach((item) => {
-      this.providers.set(item.id, item.provider);
+      this.providers.set(
+        item.id,
+        'prototype' in item.provider
+          ? this._injector.get(item.provider)
+          : item.provider
+      );
     });
 
     Promise.all(
@@ -92,10 +98,7 @@ export class SocialAuthService {
             loginStatusPromises.push(promise);
             promise
               .then((user: SocialUser) => {
-                user.provider = key;
-
-                this._user = user;
-                this._authState.next(user);
+                this.setUser(user, key);
                 loggedIn = true;
               })
               .catch(console.debug);
@@ -111,12 +114,8 @@ export class SocialAuthService {
         this.providers.forEach((provider, key) => {
           if (isObservable(provider.changeUser)) {
             provider.changeUser.subscribe((user) => {
-              if (user !== null) {
-                user.provider = key;
-              }
-              this._user = user;
               this._ngZone.run(() => {
-                this._authState.next(user);
+                this.setUser(user, key);
               });
             });
           }
@@ -149,22 +148,22 @@ export class SocialAuthService {
     return new Promise((resolve, reject) => {
       if (!this.initialized) {
         reject(SocialAuthService.ERR_NOT_INITIALIZED);
-      } else if (providerId !== GoogleLoginProvider.PROVIDER_ID) {
-        reject(SocialAuthService.ERR_NOT_SUPPORTED_FOR_REFRESH_TOKEN);
       } else {
         const providerObject = this.providers.get(providerId);
         if (providerObject) {
-          providerObject
-            .getLoginStatus(true)
-            .then((user: SocialUser) => {
-              user.provider = providerId;
-              this._user = user;
-              this._authState.next(user);
-              resolve();
-            })
-            .catch((err) => {
-              reject(err);
-            });
+          if (typeof providerObject.refreshToken !== 'function') {
+            reject(SocialAuthService.ERR_NOT_SUPPORTED_FOR_REFRESH_TOKEN);
+          } else {
+            providerObject
+              .refreshToken()
+              .then((user) => {
+                this.setUser(user, providerId);
+                resolve();
+              })
+              .catch((err) => {
+                reject(err);
+              });
+          }
         } else {
           reject(SocialAuthService.ERR_LOGIN_PROVIDER_NOT_FOUND);
         }
@@ -202,15 +201,12 @@ export class SocialAuthService {
         reject(SocialAuthService.ERR_NOT_INITIALIZED);
       } else {
         let providerObject = this.providers.get(providerId);
-        if (providerObject && providerObject.signIn) {
+        if (providerObject) {
           providerObject
             .signIn(signInOptions)
             .then((user: SocialUser) => {
-              user.provider = providerId;
+              this.setUser(user, providerId);
               resolve(user);
-
-              this._user = user;
-              this._authState.next(user);
             })
             .catch((err) => {
               reject(err);
@@ -242,9 +238,7 @@ export class SocialAuthService {
             .signOut(revoke)
             .then(() => {
               resolve();
-
-              this._user = null;
-              this._authState.next(null);
+              this.setUser(null);
             })
             .catch((err) => {
               reject(err);
@@ -254,5 +248,11 @@ export class SocialAuthService {
         }
       }
     });
+  }
+
+  private setUser(user: SocialUser | null, id?: string) {
+    if (user && id) user.provider = id;
+    this._user = user;
+    this._authState.next(user);
   }
 }
