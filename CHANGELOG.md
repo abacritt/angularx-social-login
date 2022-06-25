@@ -1,3 +1,7 @@
+# 1.2.1
+- Update Angular dependencies
+- Add custom injectable provider support
+
 # 1.2.0
 - New directive `GoogleSigninButtonDirective` (`<asl-google-signin-button></asl-google-signin-button>`)
 - `GoogleLoginProvider` accepts a `GoogleInitOptions` object as 2nd argument, it has 2 optional properties: `oneTapEnabled` and `scopes`

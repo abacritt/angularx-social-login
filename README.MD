@@ -241,6 +241,38 @@ export class DemoComponent implements OnInit {
 </div>
 ```
 
+## Custom Provider
+
+We can use a custom provider, implementing our own logic and needs like the following example:
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class MyCustomLoginProvider extends BaseLoginProvider {
+  public static readonly PROVIDER_ID = 'CUSTOM' as const;
+
+  constructor(/* infinite list of dependencies*/) {}
+}
+```
+```typescript
+@NgModule({
+  declarations: [AppComponent, NavbarComponent, DemoComponent],
+  imports: [BrowserModule, FormsModule, SocialLoginModule],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: true,
+        providers: [
+          {
+            id: MyCustomLoginProvider.PROVIDER_ID,
+            provider: MyCustomLoginProvider,
+          },
+        ],
+      } as SocialAuthServiceConfig,
+    },
+  ],
+```
+
 ## Specifying custom scopes, fields etc. on initialization
 
 ```javascript
