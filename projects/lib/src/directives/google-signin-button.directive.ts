@@ -7,14 +7,19 @@ import { SocialAuthService } from '../socialauth.service';
   selector: 'asl-google-signin-button',
 })
 export class GoogleSigninButtonDirective {
+  @Input()
+  type : 'icon' | 'standard' = 'icon';
+  
+  @Input()
+  size: 'small' | 'medium' | 'large' = 'medium'
   constructor(
     el: ElementRef,
     socialAuthService: SocialAuthService
   ) {
     socialAuthService.initState.pipe(take(1)).subscribe(() => {
       google.accounts.id.renderButton(el.nativeElement, {
-        type: 'icon',
-        size: 'medium',
+        type: this.type,
+        size: this.size,
       });
     })
   }
