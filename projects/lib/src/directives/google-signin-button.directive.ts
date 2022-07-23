@@ -11,7 +11,8 @@ export class GoogleSigninButtonDirective {
   type : 'icon' | 'standard' = 'icon';
   
   @Input()
-  size: 'small' | 'medium' | 'large' = 'medium'
+  size: 'small' | 'medium' | 'large' = 'medium';
+  
   constructor(
     el: ElementRef,
     socialAuthService: SocialAuthService
