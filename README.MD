@@ -106,8 +106,14 @@ Calling `SocialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)` will have no
 Instead make sure you [subscribed to the authentication state](#subscribe-to-the-authentication-state) and add the following `GoogleSigninButtonDirective` to your component template to wrap the 'Sign In With Google' button:
 
 ```html
-<asl-google-signin-button></asl-google-signin-button>
+<asl-google-signin-button type='icon' size='medium'></asl-google-signin-button>
 ```
+Options:
+|  Name | Type      | Value                             | Default   |   
+|-------|-----------|-----------------------------------|-----------|
+| type  | string    | 'icon' or 'standard'              | 'icon'    |
+| size  | string    |  'small', 'medium' or 'large'     | 'medium'  |
+
 
 This will only work if the `GoogleLoginProvider` is registered in [SocialAuthServiceConfig](#import-the-module).
 
