@@ -1,3 +1,8 @@
+# 1.2.2
+- Add UI configurations to Google Directive Button "Type and size"
+- Support `prompt_parent_id` in Google Directive
+- Update dependencies
+
 # 1.2.1
 - Update Angular dependencies
 - Add custom injectable provider support

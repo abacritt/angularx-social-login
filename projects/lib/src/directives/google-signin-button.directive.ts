@@ -1,4 +1,4 @@
-import { Directive, ElementRef} from '@angular/core';
+import {Directive, ElementRef, Input} from '@angular/core';
 import { take } from 'rxjs';
 import { SocialAuthService } from '../socialauth.service';
 
@@ -9,10 +9,10 @@ import { SocialAuthService } from '../socialauth.service';
 export class GoogleSigninButtonDirective {
   @Input()
   type : 'icon' | 'standard' = 'icon';
-  
+
   @Input()
   size: 'small' | 'medium' | 'large' = 'medium';
-  
+
   constructor(
     el: ElementRef,
     socialAuthService: SocialAuthService
