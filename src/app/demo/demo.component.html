@@ -5,8 +5,21 @@
       <h4 class="card-title">Not signed in</h4>
       <p class="card-text">Sign in with</p>
     </div>
+
+    <div class="card-block">
+      <asl-google-signin-button type='standard' text='signin_with'  size='large'></asl-google-signin-button>
+
+      <div class="mt-5"></div>
+
+      <asl-google-signin-button type='standard' text='signup_with' shape="circle"  size='large'></asl-google-signin-button>
+
+
+    </div>
+
     <div class="card-block d-flex justify-content-center">
-      <asl-google-signin-button class="mx-1"></asl-google-signin-button>
+
+      <asl-google-signin-button class="mx-5"></asl-google-signin-button>
+
       <button
         class="btn btn-social-icon btn-facebook mx-1"
         (click)="signInWithFB()"
