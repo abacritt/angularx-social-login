@@ -119,7 +119,7 @@ Options:
 | type  | string    | 'icon' or 'standard'                                      | 'icon'        |
 | size  | string    |  'small', 'medium' or 'large'                             | 'medium'      |
 | shape | string    |  'square','circle','pill' or 'rectangular'                | 'rectangular' | 
-| text  | string    |  'signin_with','signup_with'                              | 'signin_with' |
+| text  | string    |  'signin_with','signup_with'or 'continue_with'            | 'signin_with' |
 | width | string    |  '40 - 400 '                                              |               |
 
 
