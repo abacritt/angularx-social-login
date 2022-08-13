@@ -5,8 +5,13 @@
       <h4 class="card-title">Not signed in</h4>
       <p class="card-text">Sign in with</p>
     </div>
+
+    
+
     <div class="card-block d-flex justify-content-center">
-      <asl-google-signin-button class="mx-1"></asl-google-signin-button>
+
+      <asl-google-signin-button class="mx-5"></asl-google-signin-button>
+
       <button
         class="btn btn-social-icon btn-facebook mx-1"
         (click)="signInWithFB()"
@@ -32,6 +37,8 @@
         <span class="fab fa-microsoft"></span>
       </button>
     </div>
+
+    
   </div>
   <div *ngIf="user" class="card text-center">
     <h6 class="card-header">Social Login Demo</h6>
