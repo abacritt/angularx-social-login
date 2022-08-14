@@ -1,3 +1,7 @@
+# 1.2.3
+- Add new configurations to Google Button Directive
+- Update json token parsing
+
 # 1.2.2
 - Add UI configurations to Google Directive Button "Type and size"
 - Support `prompt_parent_id` in Google Directive
