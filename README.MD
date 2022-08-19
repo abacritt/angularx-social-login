@@ -124,7 +124,7 @@ Options:
 | width          | string    |  '200 - 400 '                                             |               |
 | theme          | string    |  'outline','filled_blue' or 'filled_black'                | 'outline'     |
 | logo_alignment | string    |  'left' or 'center'                                       | 'left'        |
-
+| itp_support    | boolean   |  true or false                                            | true          |
 
 
 
