@@ -26,9 +26,6 @@ export class GoogleSigninButtonDirective {
   logo_alignment: 'left' | 'center' = 'left';
 
   @Input()
-  itp_support: boolean = true;
-
-  @Input()
   width: string = '';
 
   @Input()
@@ -60,7 +57,6 @@ export class GoogleSigninButtonDirective {
             theme: this.theme,
             logo_alignment: this.logo_alignment,
             locale: this.locale,
-            itp_support: this.itp_support,
           });
         }
       });

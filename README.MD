@@ -115,16 +115,15 @@ Check out the [Google button generator](https://developers.google.com/identity/g
 <asl-google-signin-button type='icon' size='medium'></asl-google-signin-button>
 ```
 Options:
-|  Name          | Type      | Value                                                     | Default       |   
+|  Name          | Type      | Value                                                     | Default       |
 |----------------|-----------|-----------------------------------------------------------|---------------|
 | type           | string    | 'icon' or 'standard'                                      | 'icon'        |
 | size           | string    |  'small', 'medium' or 'large'                             | 'medium'      |
-| shape          | string    |  'square','circle','pill' or 'rectangular'                | 'rectangular' | 
+| shape          | string    |  'square','circle','pill' or 'rectangular'                | 'rectangular' |
 | text           | string    |  'signin_with','signup_with'or 'continue_with'            | 'signin_with' |
 | width          | string    |  '200 - 400 '                                             |               |
 | theme          | string    |  'outline','filled_blue' or 'filled_black'                | 'outline'     |
 | logo_alignment | string    |  'left' or 'center'                                       | 'left'        |
-| itp_support    | boolean   |  true or false                                            | true          |
 
 
 
