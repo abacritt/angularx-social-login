@@ -60,8 +60,9 @@ export class GoogleLoginProvider extends BaseLoginProvider {
               callback: ({ credential }) => {
                 const socialUser = this.createSocialUser(credential);
                 this._socialUser.next(socialUser);
-              }, 
-              prompt_parent_id: this.initOptions?.prompt_parent_id
+              },
+              prompt_parent_id: this.initOptions?.prompt_parent_id,
+              itp_support: this.initOptions.oneTapEnabled
             });
 
             if (this.initOptions.oneTapEnabled) {
