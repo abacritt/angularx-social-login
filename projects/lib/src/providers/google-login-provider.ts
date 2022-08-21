@@ -16,6 +16,20 @@ export interface GoogleInitOptions {
    * This attribute sets the DOM ID of the container element. If it's not set, the One Tap prompt is displayed in the top-right corner of the window.
    */
   prompt_parent_id?: string;
+
+  /**
+   * Optional, defaults to 'select_account'.
+   * A space-delimited, case-sensitive list of prompts to present the
+   * user.
+   * Possible values are:
+   * empty string The user will be prompted only the first time your
+   *     app requests access. Cannot be specified with other values.
+   * 'none' Do not display any authentication or consent screens. Must
+   *     not be specified with other values.
+   * 'consent' Prompt the user for consent.
+   * 'select_account' Prompt the user to select an account.
+   */
+  prompt? : '' | 'none' | 'consent' | 'select_account';
 }
 
 const defaultInitOptions: GoogleInitOptions = {
@@ -80,6 +94,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
               this._tokenClient = google.accounts.oauth2.initTokenClient({
                 client_id: this.clientId,
                 scope,
+                prompt : this.initOptions.prompt,
                 callback: (tokenResponse) => {
                   if (tokenResponse.error) {
                     this._accessToken.error({
