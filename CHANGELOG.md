@@ -1,3 +1,7 @@
+# 1.2.4
+- Update dependencies
+- Update required dependencies versioning 
+
 # 1.2.3
 - Add new configurations to Google Button Directive
 - Update json token parsing
