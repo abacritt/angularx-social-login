@@ -1,7 +1,8 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { SocialUser } from '../entities/social-user';
 import { EventEmitter } from '@angular/core';
-import { BehaviorSubject, filter, skip, take } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { filter, skip, take } from 'rxjs/operators';
 
 export interface GoogleInitOptions {
   /**

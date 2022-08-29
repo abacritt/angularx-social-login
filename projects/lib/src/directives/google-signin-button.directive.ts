@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Input } from '@angular/core';
-import { take } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { SocialAuthService } from '../socialauth.service';
 
 @Directive({
