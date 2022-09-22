@@ -1,3 +1,9 @@
+# 1.2.5
+## What's Changed
+* Auto stash before rebase of "feature/updateDependencies" by @Heatmanofurioso in https://github.com/abacritt/angularx-social-login/pull/594
+* console.log in ButtonDirective deleted by @JoseSolorzanoC in https://github.com/abacritt/angularx-social-login/pull/608
+* add: [Google]prompt property on initTokenClient by @kattoshi in https://github.com/abacritt/angularx-social-login/pull/588
+
 # 1.2.4
 - Update dependencies
 - Update required dependencies versioning 
