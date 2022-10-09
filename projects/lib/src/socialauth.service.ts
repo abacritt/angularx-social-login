@@ -109,6 +109,16 @@ export class SocialAuthService {
               this._authState.next(null);
             }
           });
+        } else {
+          // if autoLogin is not enabled, try to retrieve the Google SocialUser from localState
+          this.providers.get(GoogleLoginProvider.PROVIDER_ID).getLoginStatus().then((user: SocialUser) => {
+            if (user !== null) {
+              this.setUser(user, GoogleLoginProvider.PROVIDER_ID)
+            }
+          })
+          .catch(reason => {
+            // nobody logged in, nothing to do
+          })
         }
 
         this.providers.forEach((provider, key) => {

@@ -61,9 +61,46 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     this._accessToken.pipe(skip(1)).subscribe(this._receivedAccessToken);
   }
 
+  initializeTokenClient() {
+    if (this.initOptions.scopes) {
+      const scope =
+        this.initOptions.scopes instanceof Array
+          ? this.initOptions.scopes.filter((s) => s).join(' ')
+          : this.initOptions.scopes;
+
+      this._tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: this.clientId,
+        scope,
+        prompt : this.initOptions.prompt,
+        callback: (tokenResponse) => {
+          if (tokenResponse.error) {
+            this._accessToken.error({
+              code: tokenResponse.error,
+              description: tokenResponse.error_description,
+              uri: tokenResponse.error_uri,
+            });
+          } else {
+            this._accessToken.next(tokenResponse.access_token);
+          }
+        },
+      });
+    }
+  }
+
   initialize(autoLogin?: boolean): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
+        let socialUser = GoogleLoginProvider.retrieveSocialUser()
+        if (socialUser != null) {
+          this._socialUser.next(socialUser)
+
+          // refresh the token 10s before it expires
+          let idToken = JSON.parse(atob(socialUser.idToken.split(".")[1]))
+          let currentUnixTimestamp = Math.floor(Date.now() / 1000)
+          setTimeout(() => {
+            this.refreshToken()
+          }, (idToken["exp"] - currentUnixTimestamp - 10) * 1000)
+        }
         this.loadScript(
           GoogleLoginProvider.PROVIDER_ID,
           'https://accounts.google.com/gsi/client',
@@ -74,6 +111,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
               callback: ({ credential }) => {
                 const socialUser = this.createSocialUser(credential);
                 this._socialUser.next(socialUser);
+                GoogleLoginProvider.persistSocialUser(socialUser)
               },
               prompt_parent_id: this.initOptions?.prompt_parent_id,
               itp_support: this.initOptions.oneTapEnabled
@@ -85,29 +123,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                 .subscribe(() => google.accounts.id.prompt(console.debug));
             }
 
-            if (this.initOptions.scopes) {
-              const scope =
-                this.initOptions.scopes instanceof Array
-                  ? this.initOptions.scopes.filter((s) => s).join(' ')
-                  : this.initOptions.scopes;
-
-              this._tokenClient = google.accounts.oauth2.initTokenClient({
-                client_id: this.clientId,
-                scope,
-                prompt : this.initOptions.prompt,
-                callback: (tokenResponse) => {
-                  if (tokenResponse.error) {
-                    this._accessToken.error({
-                      code: tokenResponse.error,
-                      description: tokenResponse.error_description,
-                      uri: tokenResponse.error_uri,
-                    });
-                  } else {
-                    this._accessToken.next(tokenResponse.access_token);
-                  }
-                },
-              });
-            }
+            this.initializeTokenClient()
 
             resolve();
           }
@@ -120,6 +136,12 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
   getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
+      // retrieve social user from local storage, if stored
+      let storedUser = GoogleLoginProvider.retrieveSocialUser()
+      if (storedUser !== null) {
+        this._socialUser.next(storedUser)
+      }
+
       if (this._socialUser.value) {
         resolve(this._socialUser.value);
       } else {
@@ -186,6 +208,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
   async signOut(): Promise<void> {
     google.accounts.id.disableAutoSelect();
     this._socialUser.next(null);
+    GoogleLoginProvider.clearSocialUser();
   }
 
   private createSocialUser(idToken: string) {
@@ -213,5 +236,21 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         .join("")
     );
     return JSON.parse(jsonPayload);
+  }
+
+  private static persistSocialUser(socialUser: SocialUser): void {
+    localStorage.setItem(`${GoogleLoginProvider.PROVIDER_ID}_socialUser`, JSON.stringify(socialUser))
+  }
+
+  private static retrieveSocialUser(): SocialUser {
+    let socialUserJson = localStorage.getItem(`${GoogleLoginProvider.PROVIDER_ID}_socialUser`)
+    if (socialUserJson === null) {
+      return null
+    }
+    return JSON.parse(socialUserJson);
+  }
+
+  private static clearSocialUser(): void {
+    localStorage.removeItem(`${GoogleLoginProvider.PROVIDER_ID}_socialUser`);
   }
 }
