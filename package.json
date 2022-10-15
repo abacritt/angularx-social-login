@@ -1,5 +1,5 @@
 {
-  "name": "angularx-social-login-ws",
+  "name": "@abacritt/angularx-social-login-ws",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
