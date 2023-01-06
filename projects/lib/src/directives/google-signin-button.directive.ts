@@ -14,7 +14,7 @@ export class GoogleSigninButtonDirective {
   size: 'small' | 'medium' | 'large' = 'medium';
 
   @Input()
-  text: 'signin_with' | 'signup_with' = 'signin_with';
+  text: 'signin_with' | 'signup_with' | 'continue_with' = 'signin_with';
 
   @Input()
   shape: 'square' | 'circle' | 'pill' | 'rectangular' = 'rectangular';
