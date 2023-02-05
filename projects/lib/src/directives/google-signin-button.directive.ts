@@ -14,7 +14,7 @@ export class GoogleSigninButtonDirective {
   size: 'small' | 'medium' | 'large' = 'medium';
 
   @Input()
-  text: 'signin_with' | 'signup_with' = 'signin_with';
+  text: 'signin_with' | 'signup_with' | 'continue_with' = 'signin_with';
 
   @Input()
   shape: 'square' | 'circle' | 'pill' | 'rectangular' = 'rectangular';
@@ -33,14 +33,6 @@ export class GoogleSigninButtonDirective {
 
   constructor(el: ElementRef, socialAuthService: SocialAuthService) {
     socialAuthService.initState.pipe(take(1)).subscribe(() => {
-
-
-      Promise.resolve(this.locale).then((value) => {
-
-        console.log("value", value);
-      })
-
-
       Promise.resolve(this.width).then((value) => {
         if (value > '400' || (value < '200' && value != '')) {
           Promise.reject(
