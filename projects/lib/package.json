@@ -1,6 +1,6 @@
 {
   "name": "@abacritt/angularx-social-login",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Social login and authentication module for Angular 14. Supports authentication with Google, Facebook, Amazon, and VK. Can be extended to other providers also.",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "url": "https://github.com/abacritt/angularx-social-login/issues"
   },
   "dependencies": {
-    "tslib": ">=2.3.1"
+    "tslib": ">=2.5.0"
   },
   "peerDependencies": {
     "@angular/common": ">=13.0.0",
