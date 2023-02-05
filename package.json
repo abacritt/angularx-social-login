@@ -15,51 +15,56 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^14.2.0",
-    "@angular/common": "^14.2.0",
-    "@angular/compiler": "^14.2.0",
-    "@angular/core": "^14.2.0",
-    "@angular/forms": "^14.2.0",
-    "@angular/platform-browser": "^14.2.0",
-    "@angular/platform-browser-dynamic": "^14.2.0",
-    "@angular/router": "^14.2.0",
-    "rxjs": "~7.5.6",
-    "tslib": "^2.4.0",
-    "zone.js": "~0.11.8"
+    "@angular/animations": "^12.2.16",
+    "@angular/common": "^12.2.16",
+    "@angular/compiler": "^12.2.16",
+    "@angular/core": "^12.2.16",
+    "@angular/forms": "^12.2.16",
+    "@angular/platform-browser": "^12.2.16",
+    "@angular/platform-browser-dynamic": "^12.2.16",
+    "@angular/router": "^12.2.16",
+    "rxjs": "~6.5.3",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.2.0",
-    "@angular-eslint/builder": "14.0.3",
-    "@angular-eslint/eslint-plugin": "14.0.3",
-    "@angular-eslint/eslint-plugin-template": "14.0.3",
-    "@angular-eslint/schematics": "14.0.3",
-    "@angular-eslint/template-parser": "14.0.3",
-    "@angular/cli": "^14.2.0",
-    "@angular/compiler-cli": "^14.2.0",
-    "@angular/language-service": "^14.2.0",
+    "@angular-devkit/build-angular": "^12.2.1",
+    "@angular-eslint/builder": "^12.6.1",
+    "@angular-eslint/eslint-plugin": "^12.7.0",
+    "@angular-eslint/eslint-plugin-template": "^12.7.0",
+    "@angular-eslint/schematics": "^12.7.0",
+    "@angular-eslint/template-parser": "^12.7.0",
+
+    "@angular/cli": "^12.2.1",
+    "@angular/compiler-cli": "^12.2.1",
+    "@angular/language-service": "^12.2.1",
     "@types/google.accounts": "^0.0.2",
-    "@types/jasmine": "^4.3.0",
+    "@types/jasmine": "^3.6.11",
     "@types/jasminewd2": "^2.0.10",
-    "@types/node": "^18.7.13",
-    "@typescript-eslint/eslint-plugin": "^5.35.1",
-    "@typescript-eslint/parser": "^5.35.1",
-    "eslint": "^8.22.0",
-    "husky": "^8.0.1",
-    "jasmine-core": "~4.3.0",
-    "jasmine-spec-reporter": "~7.0.0",
-    "karma": "~6.4.0",
-    "karma-chrome-launcher": "~3.1.1",
-    "karma-coverage-istanbul-reporter": "~3.0.3",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "^2.0.0",
-    "lint-staged": "^13.0.3",
-    "ng-packagr": "^14.2.0",
+    "@types/node": "^12.20.16",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "eslint": "^7.26.0",
+    "husky": "^7.0.1",
+    
+    
+    "jasmine-core": "~3.8.0",
+    "karma": "~6.3.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage": "~2.0.3",
+    "karma-jasmine": "~4.0.0",
+    "karma-jasmine-html-reporter": "~1.7.0",
+    
+
+
+    "lint-staged": "^11.0.0",
+    "ng-packagr": "^12.1.1",
     "protractor": "~7.0.0",
     "ts-node": "~10.9.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.3.0"
   },
   "engines": {
-    "node": ">=18.7.0"
+    "node": ">=12.7.0"
   },
   "lint-staged": {
     "*.js": "npm run lint -- --cache --fix"
