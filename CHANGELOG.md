@@ -1,3 +1,11 @@
+# 1.3.0
+- Add Angular V15 support
+- Change minimum supported version to Angular 15
+
+# 1.2.6
+- Update several dependencies
+- Update Angular to the latest V14 support version
+
 # 1.2.5
 ## What's Changed
 * Auto stash before rebase of "feature/updateDependencies" by @Heatmanofurioso in https://github.com/abacritt/angularx-social-login/pull/594
