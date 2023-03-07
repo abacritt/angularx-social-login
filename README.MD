@@ -103,7 +103,7 @@ export class DemoComponent {
 `GoogleLoginProvider` has no `signIn()` method as other providers, the login flow is triggered by a button that the **gis client** is generating.
 Calling `SocialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)` will have no effect.
 
-Instead make sure you [subscribed to the authentication state](#subscribe-to-the-authentication-state) and add the following `GoogleSigninButtonDirective` to your component template to wrap the 'Sign In With Google' button:
+Instead make sure you [subscribed to the authentication state](#subscribe-to-the-authentication-state) and add the following `GoogleSigninButtonDirective` (exported from the `GoogleSigninButtonModule`) to your component template to wrap the 'Sign In With Google' button:
 
 ALSO
 

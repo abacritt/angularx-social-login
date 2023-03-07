@@ -1,3 +1,6 @@
+# 2.0.0
+- BREAKING CHANGE: export `GoogleSigninButtonDirective` from its own module (`GoogleSigninButtonModule`)
+
 # 1.3.0
 - Add Angular V15 support
 - Change minimum supported version to Angular 15
