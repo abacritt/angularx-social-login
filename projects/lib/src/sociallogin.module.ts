@@ -2,25 +2,21 @@ import {
   NgModule,
   Optional,
   SkipSelf,
-  ModuleWithProviders
+  ModuleWithProviders,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { SocialAuthService, SocialAuthServiceConfig } from './socialauth.service';
-import { GoogleSigninButtonDirective } from './directives/google-signin-button.directive';
+import {
+  SocialAuthService,
+  SocialAuthServiceConfig,
+} from './socialauth.service';
 
 /**
  * The main module of angularx-social-login library.
  */
 @NgModule({
-  declarations: [GoogleSigninButtonDirective],
-  imports: [
-    CommonModule
-  ],
-  providers: [
-    SocialAuthService
-  ],
-  exports: [GoogleSigninButtonDirective]
+  imports: [CommonModule],
+  providers: [SocialAuthService],
 })
 export class SocialLoginModule {
   public static initialize(config: SocialAuthServiceConfig): ModuleWithProviders<SocialLoginModule> {
