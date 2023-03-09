@@ -341,7 +341,7 @@ const googleLoginOptions: GoogleInitOptions = {
 
 const vkLoginOptions = {
   fields: 'photo_max,contacts', // Profile fields to return, see: https://vk.com/dev/objects/user
-  version: '5.124', // https://vk.com/dev/versions
+  version: '5.131', // https://vk.com/dev/versions
 }; // https://vk.com/dev/users.get
 
 let config = [
