@@ -3,12 +3,36 @@ import { SocialUser } from '../entities/social-user';
 
 declare let VK: any;
 
+const permissionTypes = {
+  notify: 1,
+  friends: 2,
+  photos: 4,
+  audio: 8,
+  video: 16,
+  offers: 32,
+  questions: 64,
+  pages: 128,
+  links: 256,
+  status: 1024,
+  notes: 2048,
+  messages: 4096,
+  wall: 8192,
+  ads: 32768,
+  offline: 65536, 
+  docs: 131072,
+  groups: 262144,
+  notifications: 524288,
+  stats: 1048576,
+  email: 4194304,
+  market: 134217728
+};
+
 export class VKLoginProvider extends BaseLoginProvider {
   constructor(
     private clientId: string,
-    private initOptions: any = {
+    private initOptions = {
       fields: 'photo_max,contacts',
-      version: '5.124',
+      version: '5.131',
     }
   ) {
     super();
@@ -40,26 +64,46 @@ export class VKLoginProvider extends BaseLoginProvider {
   }
 
   getLoginStatus(): Promise<SocialUser> {
-    return new Promise<SocialUser>((resolve: any, reject: any) =>
-      this.getLoginStatusInternal(resolve, reject)
+    return new Promise<SocialUser>((resolve: (value: SocialUser) => void) =>
+      this.getLoginStatusInternal(resolve)
     );
   }
 
-  signIn(): Promise<SocialUser> {
-    return new Promise<SocialUser>((resolve: any, reject: any) =>
-      this.signInInternal(resolve, reject)
+  signIn(permissions: string[]): Promise<SocialUser> {
+    if (permissions?.includes('offers')) {
+      console.warn('The "offers" permission is outdated.');
+    }
+
+    if (permissions?.includes('questions')) {
+      console.warn('The "questions" permission is outdated.');
+    }
+
+    if (permissions?.includes('messages')) {
+      console.warn('The "messages" permission is unavailable for non-standalone applications.');
+    }
+
+    const scope = permissions?.reduce((accumulator, current) => {
+        const index = Object.keys(permissionTypes).findIndex(pt => pt === current);
+        return index > -1 ? accumulator + permissionTypes[current] : 0;
+      }, 0);
+
+    return new Promise<SocialUser>((resolve: (value: SocialUser) => void) =>
+      this.signInInternal(resolve, scope)
     );
   }
 
   signOut(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      VK.Auth.logout((response: any) => {
+    return new Promise((resolve: (value: void | PromiseLike<void>) => void) => {
+      VK.Auth.logout(() => {
         resolve();
       });
     });
   }
 
-  private signInInternal(resolve: any, reject: any) {
+  private signInInternal(
+    resolve: (value: SocialUser) => void, 
+    scope:any
+  ) {
     VK.Auth.login((loginResponse: any) => {
       if (loginResponse.status === 'connected') {
         this.getUser(
@@ -68,10 +112,14 @@ export class VKLoginProvider extends BaseLoginProvider {
           resolve
         );
       }
-    });
+    }, scope);
   }
 
-  private getUser(userId: any, token: any, resolve: any) {
+  private getUser(
+    userId: number, 
+    token: string, 
+    resolve: (value: SocialUser) => void
+  ) {
     VK.Api.call(
       this.VK_API_GET_USER,
       {
@@ -89,7 +137,7 @@ export class VKLoginProvider extends BaseLoginProvider {
     );
   }
 
-  private getLoginStatusInternal(resolve: any, reject: any) {
+  private getLoginStatusInternal(resolve: (value: SocialUser) => void) {
     VK.Auth.getLoginStatus((loginResponse: any) => {
       if (loginResponse.status === 'connected') {
         this.getUser(

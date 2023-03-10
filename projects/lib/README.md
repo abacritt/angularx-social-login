@@ -71,7 +71,7 @@ import {
 export class AppModule { }
 ```
 
-### Sign in and out users
+### Sign in with Facebook
 
 ```javascript
 
@@ -89,6 +89,38 @@ export class DemoComponent {
 
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
+
+  signOut(): void {
+    this.authService.signOut();
+  }
+
+}
+```
+
+### Sign in with VK
+
+```javascript
+
+import { SocialAuthService } from "@abacritt/angularx-social-login";
+import { VKLoginProvider } from "@abacritt/angularx-social-login";
+
+@Component({
+  selector: 'app-demo',
+  templateUrl: './demo.component.html',
+  styleUrls: ['./demo.component.css']
+})
+export class DemoComponent {
+
+  constructor(private authService: SocialAuthService) { }
+
+  signInWithVK(): void {
+    // default usage without defining access level
+    this.authService.signIn(VKLoginProvider.PROVIDER_ID);
+
+    // define access level
+    // https://dev.vk.com/reference/access-rights
+    this.authService.signIn(VKLoginProvider.PROVIDER_ID, ['offline', 'email']);
   }
 
   signOut(): void {
@@ -309,7 +341,7 @@ const googleLoginOptions: GoogleInitOptions = {
 
 const vkLoginOptions = {
   fields: 'photo_max,contacts', // Profile fields to return, see: https://vk.com/dev/objects/user
-  version: '5.124', // https://vk.com/dev/versions
+  version: '5.131', // https://vk.com/dev/versions
 }; // https://vk.com/dev/users.get
 
 let config = [
