@@ -10,7 +10,7 @@ The configuration options for angularx-social-login are a subset of the MSAL con
   provider: new MicrosoftLoginProvider('__CLIENT_ID__', {
     redirect_uri: 'https://localhost:4200',
     logout_redirect_uri: 'https://localhost:4200/logout'
-  }),
+  })
 }
 ```
 

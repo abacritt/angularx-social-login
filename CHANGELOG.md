@@ -1,5 +1,7 @@
 # 2.0.0
 - BREAKING CHANGE: export `GoogleSigninButtonDirective` from its own module (`GoogleSigninButtonModule`)
+- Export VK Login scopes
+- Update dependencies
 
 # 1.3.0
 - Add Angular V15 support
