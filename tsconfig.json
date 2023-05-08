@@ -12,7 +12,7 @@
     "importHelpers": true,
     "target": "ES2022",
     "lib": [
-      "ES2021",
+      "ES2022",
       "dom"
     ],
     "paths": {

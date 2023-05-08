@@ -1,3 +1,7 @@
+# 2.1.0
+- Update to Angular 16
+- Update several dependencies
+
 # 2.0.0
 - BREAKING CHANGE: export `GoogleSigninButtonDirective` from its own module (`GoogleSigninButtonModule`)
 - Export VK Login scopes
