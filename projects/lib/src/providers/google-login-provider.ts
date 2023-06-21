@@ -72,8 +72,9 @@ export class GoogleLoginProvider extends BaseLoginProvider {
             google.accounts.id.initialize({
               client_id: this.clientId,
               auto_select: autoLogin,
-              callback: ({ credential }) => {
+              callback: async ({ credential }) => {
                 const socialUser = this.createSocialUser(credential);
+                socialUser.authToken = await this.getAccessToken(socialUser);
                 this._socialUser.next(socialUser);
               },
               prompt_parent_id: this.initOptions?.prompt_parent_id,
@@ -140,10 +141,36 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     });
   }
 
-  getAccessToken(): Promise<string> {
+  getAccessToken(socialUser?: SocialUser ): Promise<string> {
+    socialUser ||= this._socialUser.value;
+    const scope =
+      this.initOptions.scopes instanceof Array ?
+        this.initOptions.scopes.filter((s) => s).join(' ') :
+        (this.initOptions.scopes || 'email profile');
+
+    if (!socialUser) {
+      this._tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: this.clientId,
+        scope,
+        hint: socialUser?.email,
+        prompt : socialUser?.email? '' : this.initOptions.prompt,
+        callback: (tokenResponse) => {
+          if (tokenResponse.error) {
+            this._accessToken.error({
+              code: tokenResponse.error,
+              description: tokenResponse.error_description,
+              uri: tokenResponse.error_uri,
+            });
+          } else {
+            this._accessToken.next(tokenResponse.access_token);
+          }
+        },
+      });
+    }
+
     return new Promise((resolve, reject) => {
       if (!this._tokenClient) {
-        if (this._socialUser.value) {
+        if (socialUser) {
           reject(
             'No token client was instantiated, you should specify some scopes.'
           );
@@ -152,7 +179,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         }
       } else {
         this._tokenClient.requestAccessToken({
-          hint: this._socialUser.value?.email,
+          hint: socialUser?.email,
         });
         this._receivedAccessToken.pipe(take(1)).subscribe(resolve);
       }
