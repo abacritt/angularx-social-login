@@ -17,8 +17,9 @@
     ],
     "paths": {
       "lib": [
-        "dist/lib/lib",
-        "dist/lib"
+        "node_modules/lib",
+        "node_modules/lib/lib",
+
       ]
     },
     "types": [
