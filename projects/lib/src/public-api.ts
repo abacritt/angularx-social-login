@@ -11,9 +11,6 @@ export {
   GoogleInitOptions,
   GoogleLoginProvider,
 } from './providers/google-login-provider';
-export { FacebookLoginProvider } from './providers/facebook-login-provider';
-export { AmazonLoginProvider } from './providers/amazon-login-provider';
-export { VKLoginProvider } from './providers/vk-login-provider';
-export { MicrosoftLoginProvider } from './providers/microsoft-login-provider';
+
 export { GoogleSigninButtonDirective } from './directives/google-signin-button.directive';
 export { GoogleSigninButtonModule } from './directives/google-signin-button.module';
