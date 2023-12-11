@@ -67,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angularx-social-login-ws:build"
+            "buildTarget": "angularx-social-login-ws:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "angularx-social-login-ws:build:production"
+              "buildTarget": "angularx-social-login-ws:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angularx-social-login-ws:build"
+            "buildTarget": "angularx-social-login-ws:build"
           }
         },
         "test": {

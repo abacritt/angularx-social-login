@@ -10,13 +10,13 @@ Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 ### Compatibility Matrix
 
 | Library Version                       | Angular Version |
-|---------------------------------------|-------------|
-| @abacritt/angularx-social-login:2.1.X | 16          |
-| @abacritt/angularx-social-login:2.0.X | 15, 16      |
-| @abacritt/angularx-social-login:1     | 13, 14, 15  |
-| angularx-social-login:4               | 12, 13      |
-| angularx-social-login:3               | 9, 10, 11   |
-| angularx-social-login:2               | 5, 6, 7, 8  |
+|---------------------------------------|-----------------|
+| @abacritt/angularx-social-login:2.1.X | 16, 17          |
+| @abacritt/angularx-social-login:2.0.X | 15, 16          |
+| @abacritt/angularx-social-login:1     | 13, 14, 15      |
+| angularx-social-login:4               | 12, 13          |
+| angularx-social-login:3               | 9, 10, 11       |
+| angularx-social-login:2               | 5, 6, 7, 8      |
 
 ## Getting started
 

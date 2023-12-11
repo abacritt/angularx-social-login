@@ -26,7 +26,7 @@ export class GoogleSigninButtonDirective {
   logo_alignment: 'left' | 'center' = 'left';
 
   @Input()
-  width: string = '';
+  width: number = 0;
 
   @Input()
   locale: string = '';
@@ -34,7 +34,7 @@ export class GoogleSigninButtonDirective {
   constructor(el: ElementRef, socialAuthService: SocialAuthService) {
     socialAuthService.initState.pipe(take(1)).subscribe(() => {
       Promise.resolve(this.width).then((value) => {
-        if (value > '400' || (value < '200' && value != '')) {
+        if (value > 400 || (value < 200 && value != 0)) {
           Promise.reject(
             'Please note .. max-width 400 , min-width 200 ' +
               '(https://developers.google.com/identity/gsi/web/tools/configurator)'

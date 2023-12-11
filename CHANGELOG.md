@@ -1,3 +1,7 @@
+# 2.2.0
+- Update to Angular 17
+- Update several dependencies
+
 # 2.1.0
 - Update to Angular 16
 - Update several dependencies
