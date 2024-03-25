@@ -77,7 +77,8 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                 this._socialUser.next(socialUser);
               },
               prompt_parent_id: this.initOptions?.prompt_parent_id,
-              itp_support: this.initOptions.oneTapEnabled
+              itp_support: this.initOptions.oneTapEnabled,
+              use_fedcm_for_prompt: this.initOptions.oneTapEnabled
             });
 
             if (this.initOptions.oneTapEnabled) {
