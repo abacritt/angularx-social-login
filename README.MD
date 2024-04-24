@@ -50,6 +50,7 @@ import {
       provide: 'SocialAuthServiceConfig',
       useValue: {
         autoLogin: false,
+        lang: 'en',
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
@@ -284,6 +285,7 @@ export class MyCustomLoginProvider extends BaseLoginProvider {
       provide: 'SocialAuthServiceConfig',
       useValue: {
         autoLogin: true,
+        lang: 'en',
         providers: [
           {
             id: MyCustomLoginProvider.PROVIDER_ID,

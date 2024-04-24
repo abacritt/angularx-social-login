@@ -9,6 +9,7 @@ import { GoogleLoginProvider } from './providers/google-login-provider';
  */
 export interface SocialAuthServiceConfig {
   autoLogin?: boolean;
+  lang?: string;
   providers: { id: string; provider: LoginProvider | Type<LoginProvider> }[];
   onError?: (error: any) => any;
 }
@@ -34,6 +35,7 @@ export class SocialAuthService {
 
   private providers: Map<string, LoginProvider> = new Map();
   private autoLogin = false;
+  private lang: string = '';
 
   private _user: SocialUser | null = null;
   private _authState: ReplaySubject<SocialUser | null> = new ReplaySubject(1);
@@ -72,6 +74,7 @@ export class SocialAuthService {
 
   private initialize(config: SocialAuthServiceConfig) {
     this.autoLogin = config.autoLogin !== undefined ? config.autoLogin : false;
+    this.lang = config.lang !== undefined ? config.lang : '';
     const { onError = console.error } = config;
 
     config.providers.forEach((item) => {
@@ -85,7 +88,7 @@ export class SocialAuthService {
 
     Promise.all(
       Array.from(this.providers.values()).map((provider) =>
-        provider.initialize(this.autoLogin)
+        provider.initialize(this.autoLogin, this.lang),
       )
     )
       .then(() => {
