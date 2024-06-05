@@ -49,7 +49,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
   constructor(
     private clientId: string,
-    private readonly initOptions?: GoogleInitOptions
+    private readonly initOptions?: GoogleInitOptions,
   ) {
     super();
 
@@ -62,12 +62,12 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     this._accessToken.pipe(skip(1)).subscribe(this._receivedAccessToken);
   }
 
-  initialize(autoLogin?: boolean): Promise<void> {
+  initialize(autoLogin?: boolean, lang?: string): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
         this.loadScript(
           GoogleLoginProvider.PROVIDER_ID,
-          'https://accounts.google.com/gsi/client',
+          this.getGoogleLoginScriptSrc(lang),
           () => {
             google.accounts.id.initialize({
               client_id: this.clientId,
@@ -77,7 +77,8 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                 this._socialUser.next(socialUser);
               },
               prompt_parent_id: this.initOptions?.prompt_parent_id,
-              itp_support: this.initOptions.oneTapEnabled
+              itp_support: this.initOptions.oneTapEnabled,
+              use_fedcm_for_prompt: this.initOptions.oneTapEnabled
             });
 
             if (this.initOptions.oneTapEnabled) {
@@ -214,5 +215,11 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         .join("")
     );
     return JSON.parse(jsonPayload);
+  }
+
+  private getGoogleLoginScriptSrc(lang: string): string {
+    return lang ?
+           `https://accounts.google.com/gsi/client?hl=${lang}` :
+           'https://accounts.google.com/gsi/client';
   }
 }
