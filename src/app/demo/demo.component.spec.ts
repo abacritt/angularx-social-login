@@ -6,6 +6,7 @@ import createSpyObj = jasmine.createSpyObj;
 import SpyObj = jasmine.SpyObj;
 import {Observable} from 'rxjs';
 
+
 describe('DemoComponent', () => {
   let component: DemoComponent;
   let fixture: ComponentFixture<DemoComponent>;
