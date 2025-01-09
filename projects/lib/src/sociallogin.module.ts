@@ -35,7 +35,7 @@ export class SocialLoginModule {
   constructor(@Optional() @SkipSelf() parentModule: SocialLoginModule) {
     if (parentModule) {
       throw new Error(
-        'SocialLoginModule is already loaded. Import it in the AppModule only');
+        'SocialLoginModule is already loaded. Import it in the AppConfig only');
     }
   }
 }

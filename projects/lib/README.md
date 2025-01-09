@@ -2,7 +2,7 @@
 
 > Use [Discussions](https://github.com/abacritt/angularx-social-login/discussions) for questions.
 
-Social login and authentication module for Angular 16. Supports authentication with **Google**, **Facebook**, **Amazon**, **Microsoft**, and **VK** out of the box. Can be extended to other
+Social login and authentication module for Angular 19. Supports authentication with **Google**, **Facebook**, **Amazon**, **Microsoft**, and **VK** out of the box. Can be extended to other
 providers also.
 
 Check out the [demo](https://abacritt.github.io/angularx-social-login/).
@@ -10,13 +10,16 @@ Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 ### Compatibility Matrix
 
 | Library Version                       | Angular Version |
-|---------------------------------------|-------------|
-| @abacritt/angularx-social-login:2.1.X | 16          |
-| @abacritt/angularx-social-login:2.0.X | 15, 16      |
-| @abacritt/angularx-social-login:1     | 13, 14, 15  |
-| angularx-social-login:4               | 12, 13      |
-| angularx-social-login:3               | 9, 10, 11   |
-| angularx-social-login:2               | 5, 6, 7, 8  |
+|---------------------------------------|-----------------|
+| @abacritt/angularx-social-login:2.4.X | 19              |
+| @abacritt/angularx-social-login:2.3.X | 18              |
+| @abacritt/angularx-social-login:2.2.X | 17              |
+| @abacritt/angularx-social-login:2.1.X | 16, 17          |
+| @abacritt/angularx-social-login:2.0.X | 15, 16          |
+| @abacritt/angularx-social-login:1     | 13, 14, 15      |
+| angularx-social-login:4               | 12, 13          |
+| angularx-social-login:3               | 9, 10, 11       |
+| angularx-social-login:2               | 5, 6, 7, 8      |
 
 ## Getting started
 
@@ -28,7 +31,7 @@ npm i @abacritt/angularx-social-login
 
 ### Import the module
 
-In your `AppModule`, import the `SocialLoginModule`
+In your `AppConfig`, import the `SocialLoginModule`
 
 ```javascript
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
@@ -71,7 +74,7 @@ import {
   ],
   bootstrap: [...]
 })
-export class AppModule { }
+export class AppConfig { }
 ```
 
 ### Sign in with Facebook

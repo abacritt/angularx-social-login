@@ -1,24 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { GoogleLoginProvider, SocialAuthService } from 'lib';
-import { SocialUser } from 'lib';
+import {GoogleLoginProvider, SocialAuthService, SocialLoginModule, GoogleSigninButtonDirective} from 'lib';
+import {SocialUser} from 'lib';
 import {
   FacebookLoginProvider,
   AmazonLoginProvider,
   VKLoginProvider,
   MicrosoftLoginProvider,
 } from 'lib';
+import {FormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'lib-app-demo',
   templateUrl: './demo.component.html',
   styleUrls: ['./demo.component.css'],
+  imports: [CommonModule, FormsModule, SocialLoginModule, GoogleSigninButtonDirective],
+  standalone: true
 })
 export class DemoComponent implements OnInit {
   user: SocialUser | undefined;
   GoogleLoginProvider = GoogleLoginProvider;
 
-  constructor(private readonly _authService: SocialAuthService) {}
+  constructor(private readonly _authService: SocialAuthService) {
+  }
 
   ngOnInit() {
     this._authService.authState.subscribe((user) => {

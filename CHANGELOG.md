@@ -1,3 +1,9 @@
+# 2.4.0
+- Update to Angular 19
+- Update several dependencies
+- Standalone Demo
+- Standalone Google Sign-in Button Directive
+
 # 2.3.0
 - Update to Angular 18
 - Update several dependencies
