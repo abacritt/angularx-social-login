@@ -3,6 +3,7 @@ import { SocialUser } from '../entities/social-user';
 import { EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { filter, skip, take } from 'rxjs/operators';
+import { getGoogleAccountOrThrow, isGoogleAccountDefined } from '../utils/google';
 
 export interface GoogleInitOptions {
   /**
@@ -69,6 +70,8 @@ export class GoogleLoginProvider extends BaseLoginProvider {
           GoogleLoginProvider.PROVIDER_ID,
           this.getGoogleLoginScriptSrc(lang),
           () => {
+            if (!isGoogleAccountDefined()) return;
+
             google.accounts.id.initialize({
               client_id: this.clientId,
               auto_select: autoLogin,
@@ -134,7 +137,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
   refreshToken(): Promise<SocialUser | null> {
     return new Promise((resolve, reject) => {
-      google.accounts.id.revoke(this._socialUser.value.id, (response) => {
+      getGoogleAccountOrThrow().id.revoke(this._socialUser.value.id, (response) => {
         if (response.error) reject(response.error);
         else resolve(this._socialUser.value);
       });
@@ -169,7 +172,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
       } else if (!this._accessToken.value) {
         reject('No access token to revoke');
       } else {
-        google.accounts.oauth2.revoke(this._accessToken.value, () => {
+        getGoogleAccountOrThrow().oauth2.revoke(this._accessToken.value, () => {
           this._accessToken.next(null);
           resolve();
         });
@@ -186,7 +189,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
   }
 
   async signOut(): Promise<void> {
-    google.accounts.id.disableAutoSelect();
+    getGoogleAccountOrThrow().id.disableAutoSelect();
     this._socialUser.next(null);
   }
 
