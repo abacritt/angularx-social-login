@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Input } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { SocialAuthService } from '../socialauth.service';
-import { isGoogleAccountDefined } from '../utils/google';
+import { isGoogleAccountsDefined } from '../utils/google';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
@@ -40,7 +40,7 @@ export class GoogleSigninButtonDirective {
             'Please note .. max-width 400 , min-width 200 ' +
               '(https://developers.google.com/identity/gsi/web/tools/configurator)'
           );
-        } else if (isGoogleAccountDefined()) {
+        } else if (isGoogleAccountsDefined()) {
           google.accounts.id.renderButton(el.nativeElement, {
             type: this.type,
             size: this.size,
