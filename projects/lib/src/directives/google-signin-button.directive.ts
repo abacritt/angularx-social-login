@@ -4,8 +4,9 @@ import { SocialAuthService } from '../socialauth.service';
 import { isGoogleAccountsDefined } from '../utils/google';
 
 @Directive({
-  // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: 'asl-google-signin-button',
+    // eslint-disable-next-line @angular-eslint/directive-selector
+    selector: 'asl-google-signin-button',
+    standalone: true
 })
 export class GoogleSigninButtonDirective {
   @Input()

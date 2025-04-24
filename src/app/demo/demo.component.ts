@@ -10,9 +10,10 @@ import {
 } from 'lib';
 
 @Component({
-  selector: 'lib-app-demo',
-  templateUrl: './demo.component.html',
-  styleUrls: ['./demo.component.css'],
+    selector: 'lib-app-demo',
+    templateUrl: './demo.component.html',
+    styleUrls: ['./demo.component.css'],
+    standalone: true
 })
 export class DemoComponent implements OnInit {
   user: SocialUser | undefined;

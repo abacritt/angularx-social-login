@@ -8,7 +8,7 @@
     "types": ["google.accounts"],
     "lib": [
       "dom",
-      "ES2022"
+      "ES2024"
     ]
   },
   "angularCompilerOptions": {

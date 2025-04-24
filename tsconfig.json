@@ -4,15 +4,15 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
+    "esModuleInterop": true,
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
     "module": "ES2022",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2022",
+    "target": "ES2024",
     "lib": [
-      "ES2022",
+      "ES2024",
       "dom"
     ],
     "paths": {

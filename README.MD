@@ -11,6 +11,7 @@ Check out the [demo](https://abacritt.github.io/angularx-social-login/).
 
 | Library Version                       | Angular Version |
 |---------------------------------------|-----------------|
+| @abacritt/angularx-social-login:2.4.X | 19              |
 | @abacritt/angularx-social-login:2.3.X | 18              |
 | @abacritt/angularx-social-login:2.2.X | 17              |
 | @abacritt/angularx-social-login:2.1.X | 16, 17          |

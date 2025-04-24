@@ -13,12 +13,12 @@ import {
   AmazonLoginProvider,
   VKLoginProvider,
   MicrosoftLoginProvider,
-  SocialAuthServiceConfig,
+  SocialAuthServiceConfig, GoogleSigninButtonModule,
 } from 'lib';
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, DemoComponent],
-  imports: [BrowserModule, FormsModule, SocialLoginModule],
+  imports: [BrowserModule, FormsModule, SocialLoginModule, GoogleSigninButtonModule],
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
