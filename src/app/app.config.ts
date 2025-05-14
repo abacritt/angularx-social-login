@@ -1,24 +1,14 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
-import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { DemoComponent } from './demo/demo.component';
-
+import { ApplicationConfig } from '@angular/core';
 import {
-  GoogleLoginProvider,
-  SocialLoginModule,
-  FacebookLoginProvider,
   AmazonLoginProvider,
-  VKLoginProvider,
+  FacebookLoginProvider,
+  GoogleLoginProvider,
   MicrosoftLoginProvider,
-  SocialAuthServiceConfig, GoogleSigninButtonModule,
+  SocialAuthServiceConfig,
+  VKLoginProvider,
 } from 'lib';
 
-@NgModule({
-  declarations: [AppComponent, NavbarComponent, DemoComponent],
-  imports: [BrowserModule, FormsModule, SocialLoginModule, GoogleSigninButtonModule],
+export const appConfig: ApplicationConfig = {
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
@@ -55,6 +45,4 @@ import {
       } as SocialAuthServiceConfig,
     },
   ],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
+};
