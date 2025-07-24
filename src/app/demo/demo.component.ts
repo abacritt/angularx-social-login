@@ -1,6 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
-import { GoogleLoginProvider, SocialAuthService } from 'lib';
+import {
+  GoogleLoginProvider,
+  GoogleSigninButtonDirective,
+  SocialAuthService,
+} from 'lib';
 import { SocialUser } from 'lib';
 import {
   FacebookLoginProvider,
@@ -10,10 +15,11 @@ import {
 } from 'lib';
 
 @Component({
-    selector: 'lib-app-demo',
-    templateUrl: './demo.component.html',
-    styleUrls: ['./demo.component.css'],
-    standalone: true
+  selector: 'lib-app-demo',
+  imports: [CommonModule, GoogleSigninButtonDirective],
+  templateUrl: './demo.component.html',
+  styleUrls: ['./demo.component.css'],
+  standalone: true
 })
 export class DemoComponent implements OnInit {
   user: SocialUser | undefined;
