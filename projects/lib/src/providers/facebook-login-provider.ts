@@ -6,7 +6,7 @@ declare let FB: any;
 export class FacebookLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID: string = 'FACEBOOK';
 
-  private requestOptions = {
+  private readonly requestOptions = {
     scope: 'email,public_profile',
     locale: 'en_US',
     fields: 'name,email,picture,first_name,last_name',

@@ -98,7 +98,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
   private _instance: MSALClientApplication;
   public static readonly PROVIDER_ID: string = 'MICROSOFT';
 
-  private initOptions: MicrosoftOptions = {
+  private readonly initOptions: MicrosoftOptions = {
     authority: COMMON_AUTHORITY,
     scopes: ['openid', 'email', 'profile', 'User.Read'],
     knownAuthorities: [],

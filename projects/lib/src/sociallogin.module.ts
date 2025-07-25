@@ -1,15 +1,10 @@
-import {
-  NgModule,
-  Optional,
-  SkipSelf,
-  ModuleWithProviders,
-} from '@angular/core';
+import { NgModule, ModuleWithProviders, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
   SocialAuthService,
-  SocialAuthServiceConfig,
 } from './socialauth.service';
+import {SocialAuthServiceConfig} from "./utils/social-auth.tokens";
 
 /**
  * The main module of angularx-social-login library.
@@ -32,7 +27,9 @@ export class SocialLoginModule {
     };
   }
 
-  constructor(@Optional() @SkipSelf() parentModule: SocialLoginModule) {
+  constructor() {
+    const parentModule = inject(SocialLoginModule, { optional: true, skipSelf: true })!;
+
     if (parentModule) {
       throw new Error(
         'SocialLoginModule is already loaded. Import it in the AppModule only');

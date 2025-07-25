@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input } from '@angular/core';
+import { Directive, ElementRef, Input, inject } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { SocialAuthService } from '../socialauth.service';
 import { isGoogleAccountsDefined } from '../utils/google';
@@ -33,7 +33,10 @@ export class GoogleSigninButtonDirective {
   @Input()
   locale: string = '';
 
-  constructor(el: ElementRef, socialAuthService: SocialAuthService) {
+  constructor() {
+    const el = inject(ElementRef);
+    const socialAuthService = inject(SocialAuthService);
+
     socialAuthService.initState.pipe(take(1)).subscribe(() => {
       Promise.resolve(this.width).then((value) => {
         if (value > 400 || (value < 200 && value != 0)) {

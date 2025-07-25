@@ -1,18 +1,9 @@
-import { Inject, Injectable, Injector, NgZone, Type } from '@angular/core';
-import { AsyncSubject, isObservable, Observable, ReplaySubject } from 'rxjs';
-import { LoginProvider } from './entities/login-provider';
-import { SocialUser } from './entities/social-user';
-import { GoogleLoginProvider } from './providers/google-login-provider';
-
-/**
- * An interface to define the shape of the service configuration options.
- */
-export interface SocialAuthServiceConfig {
-  autoLogin?: boolean;
-  lang?: string;
-  providers: { id: string; provider: LoginProvider | Type<LoginProvider> }[];
-  onError?: (error: any) => any;
-}
+import {inject, Injectable, Injector, NgZone} from '@angular/core';
+import {AsyncSubject, isObservable, Observable, ReplaySubject} from 'rxjs';
+import {LoginProvider} from './entities/login-provider';
+import {SocialUser} from './entities/social-user';
+import {GoogleLoginProvider} from './providers/google-login-provider';
+import {SOCIAL_AUTH_CONFIG, SocialAuthServiceConfig} from "./utils/social-auth.tokens";
 
 /**
  * The service encapsulating the social login functionality. Exposes methods like
@@ -21,7 +12,7 @@ export interface SocialAuthServiceConfig {
  *
  * @dynamic
  */
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class SocialAuthService {
   private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND =
     'Login provider not found';
@@ -49,33 +40,26 @@ export class SocialAuthService {
     return this._authState.asObservable();
   }
 
+  private readonly _ngZone = inject(NgZone);
+  private readonly _injector = inject(Injector);
+  /**
+   * config A `SocialAuthServiceConfig` object or a `Promise` that resolves to a `SocialAuthServiceConfig` object
+   */
+  private readonly _config = inject(SOCIAL_AUTH_CONFIG);
+
   /** An `Observable` to communicate the readiness of the service and associated login providers */
   get initState(): Observable<boolean> {
     return this._initState.asObservable();
   }
 
-  /**
-   * @param config A `SocialAuthServiceConfig` object or a `Promise` that resolves to a `SocialAuthServiceConfig` object
-   */
-  constructor(
-    @Inject('SocialAuthServiceConfig')
-    config: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig>,
-    private readonly _ngZone: NgZone,
-    private readonly _injector: Injector
-  ) {
-    if (config instanceof Promise) {
-      config.then((config: SocialAuthServiceConfig) => {
-        this.initialize(config);
-      });
-    } else {
-      this.initialize(config);
-    }
+  constructor() {
+    Promise.resolve(this._config).then((config) => this.initialize(config));
   }
 
   private initialize(config: SocialAuthServiceConfig) {
     this.autoLogin = config.autoLogin !== undefined ? config.autoLogin : false;
     this.lang = config.lang !== undefined ? config.lang : '';
-    const { onError = console.error } = config;
+    const {onError = console.error} = config;
 
     config.providers.forEach((item) => {
       this.providers.set(

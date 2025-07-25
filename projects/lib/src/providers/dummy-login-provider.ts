@@ -46,7 +46,7 @@ export class DummyLoginProvider extends BaseLoginProvider {
     response: {},
   };
 
-  private dummy: SocialUser;
+  private readonly dummy: SocialUser;
 
   private loggedIn: boolean;
 

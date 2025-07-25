@@ -8,7 +8,7 @@
     "declaration": false,
     "experimentalDecorators": true,
     "module": "ES2022",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2024",
     "lib": [
@@ -16,9 +16,20 @@
       "dom"
     ],
     "paths": {
-      "lib": [
-        "dist/lib/lib",
+      "angularx-social-login": [
         "dist/lib"
+      ],
+      "angularx-social-login/*": [
+        "dist/lib/*"
+      ],
+      "@angular/*": [
+        "./node_modules/@angular/*"
+      ],
+      "rxjs": [
+        "./node_modules/rxjs"
+      ],
+      "rxjs/*": [
+        "./node_modules/rxjs/*"
       ]
     },
     "types": [
@@ -28,6 +39,7 @@
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "strictInjectionParameters": true,
+    "strictTemplates": true
   }
 }

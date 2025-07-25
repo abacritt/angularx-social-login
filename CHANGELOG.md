@@ -1,3 +1,7 @@
+# 2.5.0
+- Update to Angular 20
+- Update several dependencies
+
 # 2.4.0
 - Update to Angular 19
 - Update several dependencies

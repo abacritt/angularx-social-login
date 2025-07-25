@@ -1,7 +1,9 @@
 export {
   SocialAuthService,
-  SocialAuthServiceConfig,
 } from './socialauth.service';
+export {
+  SocialAuthServiceConfig,
+} from './utils/social-auth.tokens';
 export { SocialLoginModule } from './sociallogin.module';
 export { SocialUser } from './entities/social-user';
 export { LoginProvider } from './entities/login-provider';

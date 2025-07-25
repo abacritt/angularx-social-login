@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+
+import {Component, inject, OnInit} from '@angular/core';
 
 import {
   GoogleLoginProvider,
@@ -16,7 +16,7 @@ import {
 
 @Component({
   selector: 'lib-app-demo',
-  imports: [CommonModule, GoogleSigninButtonDirective],
+  imports: [GoogleSigninButtonDirective],
   templateUrl: './demo.component.html',
   styleUrls: ['./demo.component.css'],
   standalone: true
@@ -24,8 +24,7 @@ import {
 export class DemoComponent implements OnInit {
   user: SocialUser | undefined;
   GoogleLoginProvider = GoogleLoginProvider;
-
-  constructor(private readonly _authService: SocialAuthService) {}
+  _authService = inject(SocialAuthService)!;
 
   ngOnInit() {
     this._authService.authState.subscribe((user) => {

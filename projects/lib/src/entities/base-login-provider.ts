@@ -3,7 +3,7 @@ import { LoginProvider } from './login-provider';
 import { SocialUser } from './social-user';
 
 export abstract class BaseLoginProvider implements LoginProvider {
-  constructor() {}
+  protected constructor() {}
   readonly changeUser?: EventEmitter<SocialUser>;
   abstract initialize(autoLogin?: boolean, lang?: string): Promise<void>;
   abstract getLoginStatus(): Promise<SocialUser>;
