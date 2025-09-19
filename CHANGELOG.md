@@ -1,3 +1,7 @@
+# 2.5.1
+- Update build
+- Migrate to JEST
+
 # 2.5.0
 - Update to Angular 20
 - Update several dependencies

@@ -1,27 +1,28 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DemoComponent } from './demo.component';
-import {SocialAuthService} from 'lib';
-import createSpyObj = jasmine.createSpyObj;
-import SpyObj = jasmine.SpyObj;
-import {Observable} from 'rxjs';
+import { SocialAuthService } from 'angularx-social-login';
+import { Observable } from 'rxjs';
 
-describe('DemoComponent', () => {
+describe('DemoComponent (Jest)', () => {
   let component: DemoComponent;
   let fixture: ComponentFixture<DemoComponent>;
-  let socialAuthServiceMock: SpyObj<SocialAuthService>;
+  let socialAuthServiceMock: jest.Mocked<SocialAuthService>;
 
-  socialAuthServiceMock = createSpyObj('socialAuthService', ['authState', 'initState', 'refreshAuthToken', 'signIn', 'signOut']);
+  beforeEach(async () => {
+    // Create mock with jest.fn()
+    socialAuthServiceMock = {
+      authState: new Observable(),
+      initState: jest.fn(),
+      refreshAuthToken: jest.fn(),
+      signIn: jest.fn(),
+      signOut: jest.fn()
+    } as unknown as jest.Mocked<SocialAuthService>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ DemoComponent ],
-      providers: [{ provide: SocialAuthService, useValue: {...socialAuthServiceMock, authState: new Observable()} }]
-    })
-    .compileComponents();
-  }));
+    await TestBed.configureTestingModule({
+      imports: [DemoComponent],
+      providers: [{ provide: SocialAuthService, useValue: socialAuthServiceMock }]
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(DemoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

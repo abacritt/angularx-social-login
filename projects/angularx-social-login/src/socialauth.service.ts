@@ -37,6 +37,7 @@ export class SocialAuthService {
 
   /** An `Observable` that one can subscribe to get the current logged in user information */
   get authState(): Observable<SocialUser> {
+    // @ts-ignore
     return this._authState.asObservable();
   }
 
@@ -77,7 +78,7 @@ export class SocialAuthService {
     )
       .then(() => {
         if (this.autoLogin) {
-          const loginStatusPromises = [];
+          const loginStatusPromises: any = [];
           let loggedIn = false;
 
           this.providers.forEach((provider: LoginProvider, key: string) => {
@@ -218,7 +219,7 @@ export class SocialAuthService {
       } else if (!this._user) {
         reject(SocialAuthService.ERR_NOT_LOGGED_IN);
       } else {
-        let providerId = this._user.provider;
+        let providerId: any = this._user.provider;
         let providerObject = this.providers.get(providerId);
         if (providerObject) {
           providerObject

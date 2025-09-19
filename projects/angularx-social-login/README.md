@@ -387,6 +387,6 @@ this.authService.signIn(FacebookLoginProvider.PROVIDER_ID, fbLoginOptions);
 ## Running the demo app
 
 ```sh
-ng build lib
+ng build angularx-social-login
 ng serve
 ```

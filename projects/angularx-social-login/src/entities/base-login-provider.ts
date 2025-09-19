@@ -15,7 +15,7 @@ export abstract class BaseLoginProvider implements LoginProvider {
     id: string,
     src: string,
     onload: any,
-    parentElement = null
+    parentElement: any = null
   ): void {
     // get document if platform is only browser
     if (typeof document !== 'undefined' && !document.getElementById(id)) {

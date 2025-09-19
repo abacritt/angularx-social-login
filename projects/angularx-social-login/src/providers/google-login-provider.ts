@@ -41,16 +41,16 @@ const defaultInitOptions: GoogleInitOptions = {
 export class GoogleLoginProvider extends BaseLoginProvider {
   public static readonly PROVIDER_ID: string = 'GOOGLE';
 
-  public readonly changeUser = new EventEmitter<SocialUser | null>();
+  public readonly changeUser: any = new EventEmitter<SocialUser | null>();
 
   private readonly _socialUser = new BehaviorSubject<SocialUser | null>(null);
   private readonly _accessToken = new BehaviorSubject<string | null>(null);
-  private readonly _receivedAccessToken = new EventEmitter<string>();
+  private readonly _receivedAccessToken: any = new EventEmitter<string>();
   private _tokenClient: google.accounts.oauth2.TokenClient | undefined;
 
   constructor(
     private clientId: string,
-    private readonly initOptions?: GoogleInitOptions,
+    private readonly initOptions?: GoogleInitOptions | any,
   ) {
     super();
 
@@ -68,7 +68,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
       try {
         this.loadScript(
           GoogleLoginProvider.PROVIDER_ID,
-          this.getGoogleLoginScriptSrc(lang),
+          this.getGoogleLoginScriptSrc(lang || ''),
           () => {
             if (!isGoogleAccountsDefined()) return;
 
@@ -93,14 +93,14 @@ export class GoogleLoginProvider extends BaseLoginProvider {
             if (this.initOptions.scopes) {
               const scope =
                 this.initOptions.scopes instanceof Array
-                  ? this.initOptions.scopes.filter((s) => s).join(' ')
+                  ? this.initOptions.scopes.filter((s: any) => s).join(' ')
                   : this.initOptions.scopes;
 
               this._tokenClient = google.accounts.oauth2.initTokenClient({
                 client_id: this.clientId,
                 scope,
                 prompt : this.initOptions.prompt,
-                callback: (tokenResponse) => {
+                callback: (tokenResponse: any) => {
                   if (tokenResponse.error) {
                     this._accessToken.error({
                       code: tokenResponse.error,
@@ -137,6 +137,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
   refreshToken(): Promise<SocialUser | null> {
     return new Promise((resolve, reject) => {
+      // @ts-ignore
       getGoogleAccountsOrThrow().id.revoke(this._socialUser.value.id, (response) => {
         if (response.error) reject(response.error);
         else resolve(this._socialUser.value);
@@ -194,7 +195,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
   }
 
   private createSocialUser(idToken: string) {
-    const user = new SocialUser();
+    const user: any = new SocialUser();
     user.idToken = idToken;
     const payload = this.decodeJwt(idToken);
     user.id = payload.sub;

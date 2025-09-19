@@ -31,7 +31,7 @@ jobs:
       # Builds the Angular app
       - name: Build Angular
         run: |
-          ng build lib
+          ng build angularx-social-login
           ng build --configuration production --output-path docs --base-href /angularx-social-login/
 
       - uses: EndBug/add-and-commit@v7

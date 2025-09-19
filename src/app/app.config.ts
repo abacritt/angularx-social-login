@@ -6,7 +6,7 @@ import {
   MicrosoftLoginProvider,
   SocialAuthServiceConfig,
   VKLoginProvider,
-} from 'lib';
+} from 'angularx-social-login';
 
 export const appConfig: ApplicationConfig = {
   providers: [

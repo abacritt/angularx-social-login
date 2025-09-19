@@ -95,6 +95,7 @@ const COMMON_AUTHORITY: string = 'https://login.microsoftonline.com/common/';
  * Microsoft Authentication using MSAL v2: https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-browser
  */
 export class MicrosoftLoginProvider extends BaseLoginProvider {
+  // @ts-ignore
   private _instance: MSALClientApplication;
   public static readonly PROVIDER_ID: string = 'MICROSOFT';
 
@@ -150,7 +151,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
     });
   }
 
-  private getSocialUser(loginResponse): Promise<SocialUser> {
+  private getSocialUser(loginResponse: MSALLoginResponse): Promise<SocialUser> {
     return new Promise<SocialUser>((resolve, reject) => {
       //After login, use Microsoft Graph API to get user info
       let meRequest = new XMLHttpRequest();
@@ -195,7 +196,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
   async getLoginStatus(): Promise<SocialUser> {
     const accounts = this._instance.getAllAccounts();
     if (accounts?.length > 0) {
-      const loginResponse = await this._instance.ssoSilent({
+      const loginResponse: MSALLoginResponse = await this._instance.ssoSilent({
         scopes: this.initOptions.scopes,
         loginHint: accounts[0].username
       });

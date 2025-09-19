@@ -2,25 +2,34 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "declaration": false,
-    "experimentalDecorators": true,
-    "module": "ES2022",
-    "moduleResolution": "bundler",
     "importHelpers": true,
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "target": "ES2024",
+    "strictNullChecks": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
       "ES2024",
       "dom"
     ],
     "paths": {
       "angularx-social-login": [
-        "dist/lib"
+        "dist/angularx-social-login"
       ],
       "angularx-social-login/*": [
-        "dist/lib/*"
+        "dist/angularx-social-login/*"
       ],
       "@angular/*": [
         "./node_modules/@angular/*"
@@ -40,6 +49,7 @@
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
     "strictTemplates": true
   }
 }

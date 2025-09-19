@@ -33,14 +33,8 @@ export class AmazonLoginProvider extends BaseLoginProvider {
 
     return new Promise((resolve, reject) => {
       try {
-        this.loadScript(
-          'amazon-login-sdk',
-          'https://assets.loginwithamazon.com/sdk/na/login1.js',
-          () => {
-            resolve();
-          },
-          amazonRoot
-        );
+        // @ts-ignore
+        this.loadScript('amazon-login-sdk', 'https://assets.loginwithamazon.com/sdk/na/login1.js', () => {resolve();}, amazonRoot);
       } catch (err) {
         reject(err);
       }
@@ -52,7 +46,7 @@ export class AmazonLoginProvider extends BaseLoginProvider {
       let token = this.retrieveToken();
 
       if (token) {
-        amazon.Login.retrieveProfile(token, (response) => {
+        amazon.Login.retrieveProfile(token, (response: any) => {
           if (response.success) {
             let user: SocialUser = new SocialUser();
 
@@ -75,13 +69,13 @@ export class AmazonLoginProvider extends BaseLoginProvider {
   signIn(signInOptions?: any): Promise<SocialUser> {
     const options = { ...this.initOptions, ...signInOptions };
     return new Promise((resolve, reject) => {
-      amazon.Login.authorize(options, (authResponse) => {
+      amazon.Login.authorize(options, (authResponse: any) => {
         if (authResponse.error) {
           reject(authResponse.error);
         } else {
           amazon.Login.retrieveProfile(
             authResponse.access_token,
-            (response) => {
+            (response: any) => {
               let user: SocialUser = new SocialUser();
 
               user.id = response.profile.CustomerId;
@@ -107,7 +101,7 @@ export class AmazonLoginProvider extends BaseLoginProvider {
 
         this.clearToken();
         resolve();
-      } catch (err) {
+      } catch (err: any) {
         reject(err.message);
       }
     });
@@ -118,7 +112,7 @@ export class AmazonLoginProvider extends BaseLoginProvider {
   }
 
   private retrieveToken(): string {
-    return localStorage.getItem(`${AmazonLoginProvider.PROVIDER_ID}_token`);
+    return localStorage.getItem(`${AmazonLoginProvider.PROVIDER_ID}_token`) || '';
   }
 
   private clearToken(): void {

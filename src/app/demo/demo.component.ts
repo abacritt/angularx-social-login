@@ -1,18 +1,17 @@
-
 import {Component, inject, OnInit} from '@angular/core';
 
 import {
   GoogleLoginProvider,
   GoogleSigninButtonDirective,
   SocialAuthService,
-} from 'lib';
-import { SocialUser } from 'lib';
+} from 'angularx-social-login';
+import { SocialUser } from 'angularx-social-login';
 import {
   FacebookLoginProvider,
   AmazonLoginProvider,
   VKLoginProvider,
   MicrosoftLoginProvider,
-} from 'lib';
+} from 'angularx-social-login';
 
 @Component({
   selector: 'lib-app-demo',
