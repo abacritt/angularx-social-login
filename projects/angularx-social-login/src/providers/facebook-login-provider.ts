@@ -38,10 +38,19 @@ export class FacebookLoginProvider extends BaseLoginProvider {
             });
 
             resolve();
-          }
+          },
+        null,
+        () => {
+          this.hasError = true;
+          this.onHasErrorChange.emit(this.hasError);
+          reject(`There was an issue loading the ${FacebookLoginProvider.PROVIDER_ID} authentication script.`);
+        }
         );
       } catch (err) {
         reject(err);
+      } finally {
+        this.isLoaded = true;
+        this.onIsLoadedChange.emit(this.isLoaded);
       }
     });
   }

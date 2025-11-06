@@ -10,12 +10,17 @@ export abstract class BaseLoginProvider implements LoginProvider {
   abstract signIn(signInOptions?: object): Promise<SocialUser>;
   abstract signOut(revoke?: boolean): Promise<void>;
   refreshToken?(): Promise<SocialUser | null>;
+  readonly onHasErrorChange: EventEmitter<boolean> = new EventEmitter();
+  readonly onIsLoadedChange: EventEmitter<boolean> = new EventEmitter();
+  hasError: boolean = false;
+  isLoaded: boolean = false;
 
   protected loadScript(
     id: string,
     src: string,
     onload: any,
-    parentElement: any = null
+    parentElement: any = null,
+    onError: any = null
   ): void {
     // get document if platform is only browser
     if (typeof document !== 'undefined' && !document.getElementById(id)) {
@@ -24,6 +29,7 @@ export abstract class BaseLoginProvider implements LoginProvider {
       signInJS.async = true;
       signInJS.src = src;
       signInJS.onload = onload;
+      signInJS.onerror = onError;
 
       if (!parentElement) {
         parentElement = document.head;

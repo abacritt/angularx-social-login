@@ -122,6 +122,7 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
 
   initialize(): Promise<void> {
     return new Promise((resolve, reject) => {
+      try {
       this.loadScript(
         MicrosoftLoginProvider.PROVIDER_ID,
         'https://alcdn.msauth.net/browser/2.13.1/js/msal-browser.min.js',
@@ -146,8 +147,20 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
           } catch (e) {
             reject(e);
           }
+        },
+        null,
+        () => {
+          this.hasError = true;
+          this.onHasErrorChange.emit(this.hasError);
+          reject(`There was an issue loading the ${MicrosoftLoginProvider.PROVIDER_ID} authentication script.`);
         }
       );
+      } catch (err) {
+        reject(err);
+      } finally {
+        this.isLoaded = true;
+        this.onIsLoadedChange.emit(this.isLoaded);
+      }
     });
   }
 
@@ -206,8 +219,8 @@ export class MicrosoftLoginProvider extends BaseLoginProvider {
     }
   }
 
-  async signIn(): Promise<SocialUser> {
-    const loginResponse = await this._instance.loginPopup({
+  async signIn(options: MSALLoginRequest | undefined = undefined): Promise<SocialUser> {
+    const loginResponse = await this._instance.loginPopup(options ? options : {
       scopes: this.initOptions.scopes,
       prompt: this.initOptions.prompt,
     });

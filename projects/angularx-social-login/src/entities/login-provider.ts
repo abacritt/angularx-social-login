@@ -8,4 +8,8 @@ export interface LoginProvider {
   signIn(signInOptions?: object): Promise<SocialUser>;
   signOut(revoke?: boolean): Promise<void>;
   refreshToken?(): Promise<SocialUser | null>;
+  readonly onHasErrorChange: EventEmitter<boolean>;
+  readonly onIsLoadedChange: EventEmitter<boolean>;
+  hasError: boolean;
+  isLoaded: boolean;
 }

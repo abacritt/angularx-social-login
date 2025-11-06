@@ -390,3 +390,34 @@ this.authService.signIn(FacebookLoginProvider.PROVIDER_ID, fbLoginOptions);
 ng build angularx-social-login
 ng serve
 ```
+
+## Error & Loading Handling
+To handle errors and loaded events you can use the `BaseLoginProvider` object from your `SocialAuthServiceConfig`
+
+
+``` typescript
+// inject the SOCIAL_AUTH_CONFIG into your component
+providerConfig: SocialAuthServiceConfig | Promise<SocialAuthServiceConfig> = inject(SOCIAL_AUTH_CONFIG);
+
+...
+
+async SetUpProviderHandling() {
+  // get the injected providerConfig as a SocialAuthServiceConfig.
+  const providerConfig = await this.providerConfig;
+  // get your provider config based on the ProviderId
+  const foundProviderConfig = providerConfig.providers.find(x => x.id == MyProvider.PROVIDER_ID);
+  if(foundProviderConfig && foundProviderConfig.provider) {
+    foundProviderConfig.provider.onHasErrorChange.subscribe(value => {
+      // handle errors on change here
+    });
+    // set the base has error result here.
+    const hasError = foundProviderConfig.provider.hasError;
+
+    foundProviderConfig.provider.onIsLoadedChange.subscribe(value => {
+      // handle isLoading on change here
+    });
+    // set the base isLoaded result here.
+    const hasError = foundProviderConfig.provider.isLoaded;
+  }
+}
+```

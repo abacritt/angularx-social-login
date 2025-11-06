@@ -34,9 +34,17 @@ export class AmazonLoginProvider extends BaseLoginProvider {
     return new Promise((resolve, reject) => {
       try {
         // @ts-ignore
-        this.loadScript('amazon-login-sdk', 'https://assets.loginwithamazon.com/sdk/na/login1.js', () => {resolve();}, amazonRoot);
+        this.loadScript('amazon-login-sdk', 'https://assets.loginwithamazon.com/sdk/na/login1.js', () => {resolve();}, amazonRoot,
+        () => {
+          this.hasError = true;
+          this.onHasErrorChange.emit(this.hasError);
+          reject(`There was an issue loading the ${AmazonLoginProvider.PROVIDER_ID} authentication script.`);
+        });
       } catch (err) {
         reject(err);
+      } finally {
+        this.isLoaded = true;
+        this.onIsLoadedChange.emit(this.isLoaded);
       }
     });
   }

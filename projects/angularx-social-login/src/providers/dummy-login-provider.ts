@@ -64,6 +64,8 @@ export class DummyLoginProvider extends BaseLoginProvider {
 
   getLoginStatus(): Promise<SocialUser> {
     return new Promise((resolve, reject) => {
+      this.isLoaded = true;
+      this.onIsLoadedChange.emit(this.isLoaded);
       if (this.loggedIn) {
         resolve(this.dummy);
       } else {
