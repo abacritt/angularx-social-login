@@ -1,4 +1,3 @@
-import {name} from "ts-jest/dist/transformers/hoist-jest";
 
 export class SocialUser {
 
