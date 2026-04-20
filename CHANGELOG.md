@@ -1,3 +1,6 @@
+# 2.6.0
+- Update to Angular 21
+
 # 2.5.1
 - Update build
 - Migrate to JEST
