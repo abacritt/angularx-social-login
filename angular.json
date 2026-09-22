@@ -98,11 +98,9 @@
           "builder": "@angular-builders/jest:run",
           "options": {
             "tsConfig": "tsconfig.spec.json",
-            "styles": ["src/styles.scss"],
-            "scripts": [],
-            "assets": ["src/favicon.ico", "src/assets"],
-            "configPath": "jest-config.js",
-            "watch": false
+            "watch": false,
+            "config": "jest-config.js",
+            "zoneless": false
           }
         },
         "lint": {
@@ -154,7 +152,8 @@
           "builder": "@angular-builders/jest:run",
           "options": {
             "tsConfig": "tsconfig.spec.json",
-            "configPath": "jest-config.js"
+            "config": "jest-config.js",
+            "passWithNoTests": true
           }
         },
         "lint": {

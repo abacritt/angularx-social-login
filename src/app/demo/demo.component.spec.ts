@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DemoComponent } from './demo.component';
 import { SocialAuthService } from 'angularx-social-login';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 describe('DemoComponent (Jest)', () => {
   let component: DemoComponent;
@@ -12,7 +12,7 @@ describe('DemoComponent (Jest)', () => {
     // Create mock with jest.fn()
     socialAuthServiceMock = {
       authState: new Observable(),
-      initState: jest.fn(),
+      initState: of(true),
       refreshAuthToken: jest.fn(),
       signIn: jest.fn(),
       signOut: jest.fn()
