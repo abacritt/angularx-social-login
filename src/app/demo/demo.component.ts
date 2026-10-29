@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {
   GoogleLoginProvider,
@@ -18,6 +18,7 @@ import {
   imports: [GoogleSigninButtonDirective],
   templateUrl: './demo.component.html',
   styleUrls: ['./demo.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class DemoComponent implements OnInit {

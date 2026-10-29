@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "importHelpers": true,
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -26,10 +25,10 @@
     ],
     "paths": {
       "angularx-social-login": [
-        "dist/angularx-social-login"
+        "./dist/angularx-social-login"
       ],
       "angularx-social-login/*": [
-        "dist/angularx-social-login/*"
+        "./dist/angularx-social-login/*"
       ],
       "@angular/*": [
         "./node_modules/@angular/*"

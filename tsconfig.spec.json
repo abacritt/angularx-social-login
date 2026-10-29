@@ -1,6 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "isolatedModules": true,
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "outDir": "../out-tsc/spec",
     "types": [
       "jest",
@@ -19,5 +22,13 @@
     "projects/**/*.spec.ts",
     "projects/**/*.d.ts",
     "src/global.d.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
+  }
 }
